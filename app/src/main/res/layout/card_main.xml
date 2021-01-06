@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_5sdp"
+    android:background="@color/colorBack"
+    android:layoutDirection="ltr"
+    android:elevation="@dimen/_30sdp"
+    app:cardCornerRadius="@dimen/_8sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:background="@color/colorBack"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtProvider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/yellow"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="Esh7nly"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/linToFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/colorBack"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/orderto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_4sdp"
+                android:layout_marginRight="@dimen/_4sdp"
+                android:fontFamily="@font/_markazi"
+                android:gravity="center"
+                android:text="القاهرة - عين شمس"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="normal" />
+
+            <ImageView
+                android:id="@+id/icTrans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="0dp"
+                app:srcCompat="@drawable/ic_vespa" />
+
+            <TextView
+                android:id="@+id/OrderFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_4sdp"
+                android:layout_marginRight="@dimen/_4sdp"
+                android:fontFamily="@font/_markazi"
+                android:gravity="center"
+                android:text="الجيزة - الدقي"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtPostDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_8sdp" />
+
+        <LinearLayout
+            android:id="@+id/linOrderInfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/_5sdp"
+            android:paddingRight="@dimen/_5sdp"
+            android:paddingBottom="@dimen/_5sdp">
+
+            <LinearLayout
+                android:id="@+id/linInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/round_background"
+                android:backgroundTint="@color/colorBack"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/ordercash"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:drawableRight="@drawable/ic_add_money"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:fontFamily="@font/_markazi"
+                    android:gravity="center|right"
+                    android:paddingRight="@dimen/_5sdp"
+                    android:text="سعر الشحنة  1200 ج"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/_12sdp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/date3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|right"
+                        android:fontFamily="@font/_markazi"
+                        android:gravity="center|right"
+                        android:text="2020-10-15"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|right"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/ic_date"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:fontFamily="@font/_markazi"
+                        android:paddingRight="@dimen/_5sdp"
+                        android:text="تاريخ الاستلام"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linerDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|right"
+                        android:fontFamily="@font/_markazi"
+                        android:gravity="center|right"
+                        android:text="2020-10-15"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|right"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_weight="1"
+                        android:drawableRight="@drawable/ic_date"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:fontFamily="@font/_markazi"
+                        android:paddingRight="@dimen/_5sdp"
+                        android:text="تاريخ التسليـم"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnMore"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_24sdp"
+                        android:layout_gravity="bottom"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_bad_square"
+                        android:fontFamily="@font/_markazi"
+                        android:text="المزيد +"
+                        android:textColor="#000000"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="visible"
+                        tools:layout_editor_absoluteX="373dp" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnAccept"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_24sdp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/btn_defult_square"
+                        android:fontFamily="@font/_markazi"
+                        android:foregroundGravity="bottom"
+                        android:text="توصيل"
+                        android:textColor="#FFFFFF"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linAgree"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_weight="1.5"
+                android:gravity="bottom"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/linGGet"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="مصاريف التوصيل"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorAccent" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|top"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:background="@drawable/round_background"
+                        android:backgroundTint="@color/colorBack"
+                        android:gravity="center|top"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/fees"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="65"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/_22sdp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="جنية"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/_12sdp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnBid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="2dp"
+                    android:layout_weight="1"
+                    android:background="@color/yellow"
+                    android:fontFamily="@font/_markazi"
+                    android:foregroundGravity="bottom"
+                    android:text="تقديم طلب"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:background="@color/red_500"
+            android:text="الاوردر تم قبولة بالفعل من مندوب اخر"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+
+
+</androidx.cardview.widget.CardView>
+
+
+
+

@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_5sdp"
+    android:background="@color/colorBack"
+    android:layoutDirection="ltr"
+    app:cardCornerRadius="@dimen/_10sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBack"
+        android:elevation="@dimen/_5sdp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/btnInfo"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_gravity="center|top|left"
+                android:layout_marginLeft="@dimen/_5sdp"
+                app:srcCompat="@drawable/ic_info"
+                app:tint="@color/ic_profile_background"
+                tools:ignore="ContentDescription,RtlHardcoded" />
+
+            <TextView
+                android:id="@+id/txtUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|right"
+                android:layout_marginRight="@dimen/_30sdp"
+                android:gravity="center|right"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp"
+                tools:ignore="RtlHardcoded" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/orderto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="0dp"
+                android:contentDescription="Vespa"
+                app:srcCompat="@drawable/ic_vespa"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/OrderFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtPostDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_8sdp" />
+
+        <TextView
+            android:id="@+id/ordercash"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            android:layout_marginBottom="@dimen/_5sdp"
+
+            android:drawableRight="@drawable/ic_add_money"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center|right"
+            android:paddingRight="@dimen/_5sdp"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_12sdp"
+            tools:ignore="RtlCompat" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/pickDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|right"
+                android:gravity="center|right"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp"
+                tools:ignore="RtlCompat" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|right"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_date"
+                android:drawablePadding="@dimen/_5sdp"
+                android:paddingRight="@dimen/_5sdp"
+                android:text="تاريخ الاستلام "
+                android:textAlignment="viewEnd"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linerDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginBottom="@dimen/_5sdp"
+
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|right"
+                android:layout_marginRight="@dimen/_2sdp"
+                android:gravity="center|right"
+                android:textAlignment="viewEnd"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|right"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_date"
+                android:drawablePadding="@dimen/_5sdp"
+                android:paddingRight="@dimen/_5sdp"
+                android:text="تاريخ التسليم "
+                android:textAlignment="viewEnd"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="22dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/item_detail"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@null"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:src="@drawable/ic_baseline_outlined_flag_24"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linerAll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnChat"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_defult_square"
+                    android:text="تواصل مع الكابتن"
+                    android:textColor="@color/colorBack"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="gone" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnRecived"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_alignParentTop="false"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_defult_square"
+                    android:text="تم تسليم الشحنه للكابتن"
+                    android:textColor="@color/colorBack"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnDelete"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_alignParentTop="false"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_black_square"
+                    android:text="الغاء الشحنه"
+                    android:textColor="@color/colorBack"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="visible" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnDeleteCaptin"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_alignParentTop="false"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_black_square"
+                    android:text="الغاء الكابتن"
+                    android:textColor="@color/colorBack"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="gone" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnOrderBack"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_alignParentTop="false"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_bad_square"
+                    android:text="تم استلام المرتجع"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="gone" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_alignParentTop="false"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_bad_square"
+                    android:text="تعديل الشحنه"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnRate"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_alignParentTop="false"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_defult_square"
+                    android:text="تقييم الشحنه"
+                    android:textColor="@color/colorBack"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/requestRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:background="@color/background"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dsToolbar" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/ic_profile_background">
+
+                <TextView
+                    android:id="@+id/txtStatue"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="@color/colorBack"
+                    android:drawableRight="@drawable/ic_error"
+                    android:gravity="center"
+                    android:paddingRight="16dp"
+                    android:text="TextView"
+                    android:textColor="@color/red_500"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/icnArrowDown"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_down_black" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/fees"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            android:background="@color/ic_profile_background"
+            android:gravity="center|right"
+            android:paddingRight="@dimen/_5sdp"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_12sdp" />
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

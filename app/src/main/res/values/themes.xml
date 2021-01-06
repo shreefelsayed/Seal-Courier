@@ -1,0 +1,80 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.RayaShipping" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:alertDialogTheme">@style/AppTheme.SpinnerDialog</item>
+        <item name="otpViewStyle">@style/OtpWidget.OtpView</item>
+        <item name="material_dialog_background">@color/background</item>
+        <item name="material_dialog_title_text_color">@color/colorAccent</item>
+        <item name="material_dialog_message_text_color">@color/colorPrimary</item>
+        <item name="material_dialog_positive_button_color">@color/ic_profile_background</item>
+        <item name="material_dialog_positive_button_text_color">@color/colorAccent</item>
+        <item name="material_dialog_negative_button_text_color">@color/colorAccent</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:navigationBarColor">@color/ic_profile_background</item>
+        <item name="android:textViewStyle">@style/Markazia</item>
+        <item name="buttonStyle">@style/MarkaziaButton</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorBack</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="Message" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorAccent</item>
+    </style>
+
+    <style name="Markazia" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/_markazi</item>
+        <item name="android:textSize">@dimen/_14sdp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="MarkaziaButton" parent="android:Widget.Holo.Button">
+        <item name="android:fontFamily">@font/_markazi</item>
+        <item name="android:textSize">@dimen/_14sdp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="error" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/red_500</item>
+        <item name="android:textSize">@dimen/_12sdp</item>
+        <item name="android:gravity">right</item>
+    </style>
+
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">#D3D3D3</item>
+        <item name="colorControlActivated">#ffc922</item>
+    </style>
+
+    <style name="AppTheme.SpinnerDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:background">@color/colorBack</item>
+    </style>
+</resources>

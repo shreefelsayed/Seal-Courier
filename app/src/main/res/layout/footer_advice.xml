@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginRight="@dimen/_8sdp"
+        android:layout_weight="0"
+        android:text="نصائح للامان :"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_14sdp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_marginRight="@dimen/_8sdp"
+        android:layout_weight="0"
+        android:text="* استلام الاوردرات من بيت او محل عمل التاجر"
+        android:textColor="@color/colorAccent"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_marginRight="@dimen/_8sdp"
+        android:layout_weight="0"
+        android:text="* اذا كان المقدم مبلغ كبير لا تتردد في اخذ صورة بطاقة التاجر"
+        android:textColor="@color/colorAccent"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_8sdp"
+        android:layout_marginRight="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:layout_weight="0"
+        android:text="* في حاله حدوث اي مشكلة يمكنك التواصل معنا"
+        android:textColor="@color/colorAccent"
+        android:textSize="15sp" />
+
+</LinearLayout>

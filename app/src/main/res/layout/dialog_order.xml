@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/buttomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner_top"
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingTop="15dp"
+    android:paddingRight="15dp"
+    android:paddingBottom="40dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="شكرا"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_32sdp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/ic_thanks"
+        app:srcCompat="@drawable/ic_thanks" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="لقد قمت بأضافه اول شحنه لك"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_18sdp" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="سيقوم الكابتن بتقديم طلبات علي شحنتك في اقرب وقت و سيصلك اشعار عند ارسال احد الكابتن طلب للشحنه الخاصه بك."
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_18sdp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="و يمكنك اختيار احد الكابتن من قائمه اوردراتي بعد مشاهده التعليقات و التقيمات الخاصه به"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/_18sdp" />
+
+</LinearLayout>

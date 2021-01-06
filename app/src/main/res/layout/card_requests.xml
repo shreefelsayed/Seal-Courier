@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    android:layoutDirection="ltr">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+
+        <LinearLayout
+            android:id="@+id/linButtons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/_4sdp"
+                android:layout_weight="1"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/btnAccept"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_tick_green" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="قبول"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_weight="1"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/btnDecline"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/ic_close_red" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="رفض"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/reltiveBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:layout_weight="2"
+            android:background="@color/background">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                app:cardCornerRadius="@dimen/_20sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/imgCaptin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@color/colorWhite" />
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_toStartOf="@+id/cardView"
+                android:gravity="right"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/linName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/icTrans"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_car" />
+
+                    <TextView
+                        android:id="@+id/txtName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:gravity="right"
+                        android:text="Name"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <RatingBar
+                    android:id="@+id/rbUser"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:clickable="false"
+                    android:focusableInTouchMode="false"
+                    android:foregroundGravity="center"
+                    android:isIndicator="true"
+                    android:scaleX="1"
+                    android:scaleY="1"
+                    android:theme="@style/RatingBar"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:gravity="right"
+                    android:text="Date"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtNotes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:gravity="right"
+                    android:text="الملاحظات"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+
+
+
+

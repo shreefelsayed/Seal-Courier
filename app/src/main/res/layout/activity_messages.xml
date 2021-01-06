@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:layoutDirection="ltr"
+
+    android:orientation="vertical"
+    tools:context=".Chat.Messages">
+
+    <include
+        android:id="@+id/toolbar_home"
+        layout="@layout/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:gravity="center|right"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar_home"
+        app:layout_constraintEnd_toStartOf="@+id/cardView"
+        app:layout_constraintStart_toEndOf="@+id/btnBack"
+        app:layout_constraintTop_toTopOf="@+id/toolbar_home">
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorBack"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/txtType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorBack" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btnCall"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar_home"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar_home"
+        app:srcCompat="@drawable/ic_call_24"
+        app:tint="@color/colorBack" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginEnd="25dp"
+        app:cardCornerRadius="@dimen/_15sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar_home"
+        app:layout_constraintEnd_toStartOf="@+id/btnCall"
+        app:layout_constraintTop_toTopOf="@+id/toolbar_home">
+
+        <ImageView
+            android:id="@+id/imgPPP"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@color/colorWhite"
+            tools:srcCompat="@color/colorWhite" />
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar_home"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar_home"
+        app:srcCompat="@drawable/ic_back_black"
+        app:tint="@color/colorBack" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerMsg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_above="@id/line"
+        android:background="@color/background"
+        app:layout_constraintBottom_toTopOf="@+id/line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_home">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/EmptyPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/line"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerMsg"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/recyclerMsg"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_home">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginLeft="@dimen/_50sdp"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginRight="@dimen/_50sdp"
+            android:alpha="0.5"
+            android:scaleType="fitCenter"
+
+            android:src="@drawable/ic_no_message" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginBottom="@dimen/_30sdp"
+            android:text="لا يوجد رسائل قديمة ابدء المحادثه الأن"
+            android:textColor="@android:color/tertiary_text_light"
+            android:textSize="@dimen/_18sdp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/colorGrey"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/editWriteMessage"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_toStartOf="@id/btnSend"
+            android:layout_weight="4"
+            android:background="@drawable/round_edittext"
+            android:gravity="center|start"
+            android:hint="Aa"
+            android:inputType="textLongMessage"
+            android:maxLines="1"
+            android:padding="7dip"
+            android:textColor="@color/colorAccent"
+            android:textColorHint="@color/colorPrimary"
+            android:textSize="@dimen/_12sdp" />
+
+        <ImageView
+            android:id="@+id/imgMsg"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="0.25"
+            android:padding="@dimen/_4sdp"
+            app:srcCompat="@drawable/ic_baseline_camera_enhance_24"
+            app:tint="@color/ic_profile_background" />
+
+        <ImageButton
+            android:id="@+id/btnSend"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:background="#00000000"
+            android:foregroundGravity="center"
+            android:padding="@dimen/_4sdp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_send" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,123 @@
+{
+  "project_info": {
+    "project_number": "1086969546941",
+    "firebase_url": "https://shipply-fc7a0.firebaseio.com",
+    "project_id": "shipply-fc7a0",
+    "storage_bucket": "shipply-fc7a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086969546941:android:12ff0969e6644773f88fd4",
+        "android_client_info": {
+          "package_name": "com.armjld.rayashipping"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086969546941-a0vmcumsu6ibtnd9it4eflsdfll4k410.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPGN2USqg7bCNaM9VBVYUAADbOK9m7JTc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086969546941-a0vmcumsu6ibtnd9it4eflsdfll4k410.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1086969546941-j9jhkih4toct680h9ovtqm689p74n90n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.armjld.shipply"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086969546941:android:7f737e5cc53e3ecef88fd4",
+        "android_client_info": {
+          "package_name": "com.armjld.shipply"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086969546941-44u8psfp9nv6pga2vnj7qf8eu502hvg4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.armjld.shipply",
+            "certificate_hash": "29000d06a080468725c058a684b4c21c87f2576f"
+          }
+        },
+        {
+          "client_id": "1086969546941-6hk7ctlctbsnv6hqn68aefrv53liqvuk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.armjld.shipply",
+            "certificate_hash": "c1abc05951833aa36e6c07aa76e37dcdf20d8787"
+          }
+        },
+        {
+          "client_id": "1086969546941-hqsepm9ufiurg01po7cc7sc9nl9lj37b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.armjld.shipply",
+            "certificate_hash": "3be18bb9551e1360ce1483f1fc6ce216faf29f6a"
+          }
+        },
+        {
+          "client_id": "1086969546941-jebtgmh77u30k0tn145taeh5juck5m1d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.armjld.shipply",
+            "certificate_hash": "ef3b390dc210764f2876aeed7813adf199c795e0"
+          }
+        },
+        {
+          "client_id": "1086969546941-v93aib9m3oelma63s8oqmnp59jn7uj6c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.armjld.shipply",
+            "certificate_hash": "891f663a3964e3bf572e8948a07fc5b6f3e05009"
+          }
+        },
+        {
+          "client_id": "1086969546941-a0vmcumsu6ibtnd9it4eflsdfll4k410.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPGN2USqg7bCNaM9VBVYUAADbOK9m7JTc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086969546941-a0vmcumsu6ibtnd9it4eflsdfll4k410.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1086969546941-j9jhkih4toct680h9ovtqm689p74n90n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.armjld.shipply"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

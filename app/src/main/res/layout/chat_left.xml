@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_gravity="left"
+    android:layout_margin="@dimen/_4sdp"
+    android:background="@color/background"
+    android:foregroundGravity="left"
+    android:gravity="left"
+    android:layoutDirection="ltr">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/shape_bg_incoming_bubble"
+            android:backgroundTint="@color/com_facebook_blue"
+            android:gravity="left"
+            android:orientation="vertical"
+            android:paddingLeft="20dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp">
+
+            <ImageView
+                android:id="@+id/imgMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/txtMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="@dimen/_8sdp"
+                android:layout_weight="1"
+                android:foregroundGravity="center"
+                android:gravity="center|left"
+                android:inputType="textMultiLine"
+                android:text="Hello World"
+                android:textAlignment="viewStart"
+                android:textColor="@color/colorBack"
+                android:textSize="@dimen/_14sdp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/_4sdp"
+            android:layout_weight="1"
+            android:text="13:20"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_12sdp" />
+    </LinearLayout>
+
+</LinearLayout>
+
+
+
+

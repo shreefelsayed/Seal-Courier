@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:layoutDirection="ltr"
+    android:textAlignment="center"
+    tools:context=".Login.New_SignUp">
+
+    <include
+        android:id="@+id/toolbar_home"
+        layout="@layout/toolbar_white"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar_home"
+        app:srcCompat="@drawable/ic_back_black" />
+
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_home">
+
+        <ScrollView
+            android:id="@+id/captinExtra"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:gravity="center"
+                    android:text="اختار منطقتك"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/_18sdp" />
+
+                <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+                    android:id="@+id/spnGov"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layoutDirection="rtl"
+                    app:smsp_arrowPaddingLeft="10dp"
+                    app:smsp_dismissSearchText="اغلاق"
+                    app:smsp_enableDismissSearch="true"
+                    app:smsp_floatingLabelText="المحافظه"
+                    app:smsp_hint="الرجاء اختيار محافظتك"
+                    app:smsp_hintColor="@color/colorAccent"
+                    app:smsp_isRtl="true"
+                    app:smsp_isSearchable="true"
+                    app:smsp_itemColor="@color/colorAccent"
+                    app:smsp_itemListBackgroundColor="@color/background"
+                    app:smsp_itemListColor="@color/colorAccent"
+                    app:smsp_itemListHintBackgroundColor="@color/colorPrimary"
+                    app:smsp_itemListHintColor="@color/colorBack"
+                    app:smsp_searchHeaderBackgroundColor="@color/ic_profile_background"
+                    app:smsp_searchHeaderText="الرجاء اختيار محافظتك"
+                    app:smsp_searchHint="بحث"
+                    app:smsp_selectedItemListColor="@color/ic_profile_background" />
+
+                <com.chivorn.smartmaterialspinner.SmartMaterialSpinner
+                    android:id="@+id/spnCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    app:smsp_arrowPaddingLeft="10dp"
+                    app:smsp_dismissSearchText="اغلاق"
+                    app:smsp_enableDismissSearch="true"
+                    app:smsp_floatingLabelColor="@color/colorAccent"
+                    app:smsp_floatingLabelText="المدينه"
+                    app:smsp_hint="الرجاء اختيار مدينتك"
+                    app:smsp_hintColor="@color/colorAccent"
+                    app:smsp_isRtl="true"
+                    app:smsp_isSearchable="true"
+                    app:smsp_itemColor="@color/colorAccent"
+                    app:smsp_itemListBackgroundColor="@color/background"
+                    app:smsp_itemListColor="@color/colorAccent"
+                    app:smsp_itemListHintBackgroundColor="@color/colorPrimary"
+                    app:smsp_itemListHintColor="@color/colorBack"
+                    app:smsp_searchHeaderBackgroundColor="@color/ic_profile_background"
+                    app:smsp_searchHeaderText="الرجاء اختيار مدينتك"
+                    app:smsp_searchHint="بحث"
+                    app:smsp_selectedItemListColor="@color/ic_profile_background" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:gravity="center"
+                    android:text="اختار طريقة توصيلك"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/_18sdp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/_60sdp"
+                    android:gravity="center|left"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_40sdp"
+                            android:orientation="vertical">
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btnMotor"
+                                android:layout_width="@dimen/_75sdp"
+                                android:layout_height="@dimen/_75sdp"
+                                android:background="@drawable/btn_bad"
+                                android:drawableStart="@drawable/ic_vespa"
+                                android:drawableTint="@color/colorAccent"
+                                android:paddingStart="@dimen/_30sdp"
+                                android:scaleX="2.5"
+                                android:scaleY="2.5"
+                                android:visibility="visible"
+
+                                tools:ignore="RtlSymmetry" />
+
+                            <RadioButton
+                                android:id="@+id/rdMotor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:clickable="false"
+                                android:enabled="true"
+                                android:foregroundGravity="center"
+                                android:gravity="center"
+                                android:text="موتسكل"
+                                android:textSize="@dimen/_12sdp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btnCar"
+                                android:layout_width="@dimen/_75sdp"
+                                android:layout_height="@dimen/_75sdp"
+                                android:background="@drawable/btn_bad"
+                                android:drawableStart="@drawable/ic_car"
+                                android:drawableTint="@color/colorAccent"
+                                android:paddingStart="@dimen/_30sdp"
+                                android:scaleX="2.6"
+                                android:scaleY="2.6"
+                                android:visibility="visible" />
+
+                            <RadioButton
+                                android:id="@+id/rdCar"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:clickable="false"
+                                android:enabled="true"
+                                android:foregroundGravity="center"
+                                android:gravity="center"
+                                android:text="سيارة"
+                                android:textSize="@dimen/_12sdp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <ScrollView
+            android:id="@+id/putInfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|top"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_40sdp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView"
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_100sdp"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="@dimen/_50sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/imgCaptin"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@color/colorWhite" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_gravity="center"
+                        android:foregroundGravity="center"
+                        app:cardCornerRadius="@dimen/_50sdp"
+                        app:layout_constraintBottom_toBottomOf="@+id/cardView"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <ImageView
+                            android:layout_width="@dimen/_15sdp"
+                            android:layout_height="@dimen/_15sdp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_baseline_camera_enhance_24"
+                            tools:srcCompat="@drawable/ic_baseline_camera_enhance_24" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tlFirstName"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/_6sdp"
+                    android:hint="الاسم الاول"
+                    android:textColorHint="@color/colorPrimary"
+                    app:endIconMode="none"
+                    app:errorIconDrawable="@null">
+
+                    <EditText
+                        android:id="@+id/txtFirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:fontFamily="@font/_markazi"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tlLastName"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/_6sdp"
+                    android:hint="الاسم الاخير"
+
+                    android:textColorHint="@color/colorPrimary"
+                    app:errorIconDrawable="@null"
+                    app:errorTextAppearance="@style/error"
+                    app:hintTextColor="@color/colorAccent"
+                    tools:ignore="HardcodedText">
+
+                    <EditText
+                        android:id="@+id/txtLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="0dp"
+                        android:ems="10"
+                        android:fontFamily="@font/_markazi"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tlEmail"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/_6sdp"
+                    android:hint="البريد الالكتروني"
+                    android:textColorHint="@color/colorPrimary"
+                    app:errorIconDrawable="@null"
+                    app:errorTextAppearance="@style/error"
+                    app:hintTextColor="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/txtEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="0dp"
+                        android:ems="10"
+                        android:fontFamily="@font/_markazi"
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/_6sdp"
+                    android:orientation="horizontal">
+
+                    <com.rilixtech.widget.countrycodepicker.CountryCodePicker
+                        android:id="@+id/ccp"
+                        android:layout_width="@dimen/_47sdp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:foregroundGravity="center"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:visibility="gone"
+                        app:ccp_arrowSize="24sp"
+                        app:ccp_countryPreference="EG"
+                        app:ccp_customMasterCountries="BH,CY,IQ,IR,EG,JO,KW,LB,OM,QA,SA,SY,TR,AE,YE"
+                        app:ccp_defaultNameCode="EG"
+                        app:ccp_dialogTextColor="@color/colorAccent"
+                        app:ccp_hideNameCode="true"
+                        app:ccp_hidePhoneCode="true"
+                        app:ccp_keyboardAutoPopOnSearch="false"
+                        app:ccp_selectionDialogShowSearch="false"
+                        app:ccp_showFullName="false"
+                        app:ccp_textColor="@color/colorAccent"
+                        app:flow_horizontalAlign="center"
+                        app:flow_verticalAlign="center">
+
+                    </com.rilixtech.widget.countrycodepicker.CountryCodePicker>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tlPhone"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="right"
+                        android:hint="رقم الهاتف"
+                        android:textColorHint="@color/colorPrimary"
+                        app:errorIconDrawable="@null"
+                        app:errorTextAppearance="@style/error"
+                        app:hintTextColor="@color/colorAccent">
+
+                        <EditText
+                            android:id="@+id/txtPhone"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:backgroundTint="@android:color/secondary_text_dark"
+                            android:ems="10"
+                            android:fontFamily="@font/_markazi"
+                            android:inputType="number"
+                            android:textAlignment="viewStart"
+                            android:textColor="@color/colorAccent"
+                            android:textColorHint="@android:color/secondary_text_dark"
+                            android:textSize="@dimen/_12sdp"
+                            tools:ignore="MissingConstraints,RtlCompat,RtlHardcoded,TextFields" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tlPass1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/_6sdp"
+                    android:hint="انشاء كلمة مرور"
+                    android:textColorHint="@color/colorPrimary"
+                    app:errorIconDrawable="@null"
+                    app:errorTextAppearance="@style/error"
+                    app:hintTextColor="@color/colorAccent"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/txtPass1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="0dp"
+                        android:ems="10"
+                        android:fontFamily="@font/_markazi"
+                        android:inputType="textPassword"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp"
+                        tools:ignore="RtlCompat" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tlPass2"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:hint="اعد ادخال كلمة المرور"
+                    android:textColorHint="@color/colorPrimary"
+                    app:errorIconDrawable="@null"
+                    app:errorTextAppearance="@style/error"
+                    app:hintTextColor="@color/colorAccent"
+                    app:passwordToggleEnabled="true"
+                    app:passwordToggleTint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/txtPass2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="0dp"
+                        android:ems="10"
+                        android:fontFamily="@font/_markazi"
+                        android:inputType="textPassword"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp"
+                        tools:ignore="RtlCompat" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tlSuperVisor"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:hint="كود المشرف"
+                    android:textColorHint="@color/colorPrimary"
+                    app:errorTextAppearance="@style/error"
+                    app:hintTextColor="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/txtSuperVisor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="0dp"
+                        android:ems="10"
+                        android:fontFamily="@font/_markazi"
+                        android:inputType="number"
+                        android:maxEms="8"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_12sdp"
+                        tools:ignore="RtlCompat" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:text="يجب ان يكون الرقم السري 6 ارقام علي الاقل"
+                    android:textColor="@color/colorAccent" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:layout_marginRight="@dimen/_20sdp"
+                    android:layout_marginBottom="80dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtPrivacy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="بأنشائي حساب جديد, فانا اوافق عل كافة الشروط و الاحكام."
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_10sdp" />
+
+                    <CheckBox
+                        android:id="@+id/chkPrivacy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:buttonTint="@color/colorAccent"
+                        android:fontFamily="@font/_markazi"
+                        android:gravity="center"
+                        android:layoutDirection="rtl" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/code"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|top"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtMyPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="ادخل الكود الذي ارسل اليك"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_14sdp" />
+
+            <com.mukesh.OtpView
+                android:id="@+id/txtCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:inputType="number"
+                android:itemBackground="@color/colorBack"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp"
+                app:OtpItemCount="6"
+                app:OtpLineColor="@color/colorPrimary"
+                app:OtpViewType="line" />
+
+            <TextView
+                android:id="@+id/txtResend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/_50sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginRight="@dimen/_50sdp"
+                android:text="TextView"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp" />
+
+        </LinearLayout>
+
+    </ViewFlipper>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnNext"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/btndesign"
+        android:backgroundTint="@color/ic_profile_background"
+        android:cropToPadding="false"
+        android:src="@drawable/ic_baseline_navigate_next_24"
+        app:backgroundTint="@color/colorBack"
+        app:ensureMinTouchTargetSize="false"
+        app:fabCustomSize="50dp"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@color/colorBack" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

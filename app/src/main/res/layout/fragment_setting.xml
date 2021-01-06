@@ -1,0 +1,517 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/colorWhite"
+    android:gravity="center"
+    android:layoutDirection="ltr"
+    android:orientation="vertical"
+    tools:context=".Settings.SettingFragment">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scrollbarSize="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/ic_profile_background"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/toolbar_home"
+                    layout="@layout/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/toolbar_home"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/toolbar_home"
+                    app:srcCompat="@drawable/ic_back_black"
+                    app:tint="@color/colorBack" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/userInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@color/ic_profile_background"
+                android:foregroundGravity="top"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardView"
+                        android:layout_width="@dimen/_100sdp"
+                        android:layout_height="@dimen/_100sdp"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="@dimen/_50sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/imgPPP"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:srcCompat="@color/colorWhite" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:foregroundGravity="center"
+                        app:cardCornerRadius="50dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/cardView"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_baseline_camera_enhance_24"
+                            app:tint="@color/ic_profile_background"
+                            tools:srcCompat="@drawable/ic_baseline_camera_enhance_24" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="1"
+                        android:text="UserName"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBack"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="1"
+                        android:text="Account Type"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBack"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <TextView
+                        android:id="@+id/txtPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="1"
+                        android:text="Phone Number"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBack"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linSettings"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_corner_top"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/linStatics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:orientation="vertical"
+                    android:paddingRight="@dimen/_16sdp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_5sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/ic_vespa"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:drawableTint="@color/colorAccent"
+                            android:gravity="center|right"
+                            android:text="عدد الشحنات"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/_18sdp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/txtCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center|right"
+                            android:text="20 شحنه"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/_18sdp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linMainSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:background="@drawable/bold_round_bg"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_15sdp"
+                        android:text="الاعدادت الاساسية"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_18sdp" />
+
+                    <TextView
+                        android:id="@+id/txtPassSettings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:drawableRight="@drawable/ic_add_key"
+                        android:drawablePadding="@dimen/_8sdp"
+                        android:gravity="center|right"
+                        android:text="تغيير الرقم السري"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_18sdp" />
+
+                    <TextView
+                        android:id="@+id/txtChangePhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:drawableRight="@drawable/ic_add_phone"
+                        android:drawablePadding="@dimen/_8sdp"
+                        android:gravity="center|right"
+                        android:text="تغيير رقم الهاتف"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_18sdp" />
+
+
+                    <LinearLayout
+                        android:id="@+id/linWallet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_8sdp"
+                            android:layout_weight="1"
+                            android:gravity="center|right"
+
+                            android:text="المحفظة"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/_18sdp" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="50dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/imageView7"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:layout_gravity="center|right"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_add_money"
+                                android:textAlignment="viewEnd"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:tint="@color/colorAccent"
+                                tools:ignore="RtlCompat" />
+
+                            <TextView
+                                android:id="@+id/txtWalletMoney"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@drawable/round_shape"
+                                android:backgroundTint="@color/red_500"
+                                android:foregroundGravity="top"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/_2sdp"
+                                android:paddingRight="@dimen/_2sdp"
+                                android:text="5"
+                                android:textColor="#000000"
+                                android:textSize="@dimen/_6sdp"
+                                android:translationZ="90dp"
+                                app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+                                app:layout_constraintStart_toStartOf="parent" />
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/txtReports"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:drawableRight="@drawable/ic_info"
+                        android:drawablePadding="@dimen/_8sdp"
+                        android:gravity="center|right"
+                        android:text="التقارير"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_18sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linNoti"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:background="@drawable/bold_round_bg"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_15sdp"
+                        android:text="الاشعارات"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_18sdp" />
+
+                    <Switch
+                        android:id="@+id/switchNotiGov"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:backgroundTint="@color/colorAccent"
+                        android:buttonTint="@color/colorAccent"
+                        android:checked="true"
+                        android:drawableRight="@drawable/ic_notifications"
+                        android:drawablePadding="16dp"
+                        android:layoutDirection="rtl"
+                        android:switchMinWidth="56dp"
+                        android:switchPadding="8dp"
+                        android:text="استلام اشعار عند وجود اوردر بمحافظتك"
+                        android:textColor="@color/colorAccent"
+                        android:textOff="لا"
+                        android:textOn="نعم"
+                        android:textSize="@dimen/_10sdp"
+                        android:thumbTint="@color/colorAccent"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                    <Switch
+                        android:id="@+id/switchNotiCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:backgroundTint="@color/colorAccent"
+                        android:buttonTint="@color/colorAccent"
+                        android:checked="true"
+                        android:drawableRight="@drawable/ic_notifications"
+                        android:drawablePadding="16dp"
+                        android:layoutDirection="rtl"
+                        android:switchMinWidth="56dp"
+                        android:switchPadding="8dp"
+                        android:text="استلام اشعار عند وجود اوردر بمدينتك"
+                        android:textColor="@color/colorAccent"
+                        android:textOff="لا"
+                        android:textOn="نعم"
+                        android:textSize="@dimen/_10sdp"
+                        android:thumbTint="@color/colorAccent"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:background="@drawable/bold_round_bg"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_15sdp"
+                        android:text="اخري"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_18sdp"
+                        android:textAlignment="center" />
+
+                    <TextView
+                        android:id="@+id/txtContact"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:drawableRight="@drawable/ic_add_email"
+                        android:drawablePadding="@dimen/_8sdp"
+                        android:gravity="center|right"
+                        android:text="رسائل المساعدة و الدعم"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_18sdp" />
+
+                    <TextView
+                        android:id="@+id/txtAbout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:drawableRight="@drawable/ic_info"
+                        android:drawablePadding="@dimen/_8sdp"
+                        android:gravity="center|right"
+                        android:text="عن البرنامج"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_18sdp"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/txtRate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:drawableTint="@color/colorAccent"
+                        android:drawableRight="@drawable/ic_star"
+                        android:drawablePadding="@dimen/_8sdp"
+                        android:gravity="center|right"
+                        android:text="قيمنا علي متجر جوجل"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_18sdp"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/txtPrivacy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:drawableRight="@drawable/ic_info"
+                        android:drawablePadding="@dimen/_8sdp"
+                        android:gravity="center|right"
+                        android:text="الشروط و الاحكام"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_18sdp" />
+
+                    <TextView
+                        android:id="@+id/txtShare"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_16sdp"
+                        android:layout_marginRight="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:drawableRight="@drawable/ic_share"
+                        android:drawablePadding="@dimen/_8sdp"
+                        android:gravity="center|right"
+                        android:text="مشاركة البرنامج"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_18sdp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtSignOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_16sdp"
+                    android:layout_marginRight="@dimen/_16sdp"
+                    android:layout_marginBottom="@dimen/_16sdp"
+                    android:drawableRight="@drawable/ic_exit"
+                    android:drawablePadding="@dimen/_8sdp"
+                    android:gravity="center|right"
+                    android:text="تسجيل الخروج"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/_18sdp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

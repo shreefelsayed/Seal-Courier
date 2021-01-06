@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Settings.ChangePhone">
+
+    <include
+        android:id="@+id/toolbar_home"
+        layout="@layout/toolbar_white"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar_home"
+        app:srcCompat="@drawable/ic_back_black"
+        tools:ignore="ContentDescription" />
+
+    <ViewFlipper
+        android:id="@+id/viewFlipper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:inAnimation="@android:anim/fade_in"
+        android:outAnimation="@android:anim/fade_out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_home">
+
+        <LinearLayout
+            android:id="@+id/linPhone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                android:layout_marginBottom="@dimen/_6sdp"
+                android:orientation="horizontal"
+                tools:ignore="UselessParent">
+
+                <com.rilixtech.widget.countrycodepicker.CountryCodePicker
+                    android:id="@+id/ccp"
+                    android:layout_width="@dimen/_47sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    app:ccp_arrowSize="24sp"
+                    app:ccp_countryPreference="EG"
+                    app:ccp_customMasterCountries="BH,CY,IQ,IR,EG,JO,KW,LB,OM,QA,SA,SY,TR,AE,YE"
+                    app:ccp_defaultNameCode="EG"
+                    app:ccp_dialogTextColor="@color/colorAccent"
+                    app:ccp_hideNameCode="true"
+                    app:ccp_hidePhoneCode="true"
+                    app:ccp_keyboardAutoPopOnSearch="false"
+                    app:ccp_selectionDialogShowSearch="false"
+                    app:ccp_showFullName="false"
+                    app:ccp_textColor="@color/colorAccent"
+                    app:flow_horizontalAlign="center"
+                    app:flow_verticalAlign="center">
+
+                </com.rilixtech.widget.countrycodepicker.CountryCodePicker>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tlPhone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:foregroundGravity="center"
+                    android:gravity="center|right"
+                    android:hint="رقم الهاتف"
+                    android:textColorHint="@color/colorPrimary"
+                    app:endIconMode="none"
+                    app:errorEnabled="true"
+                    app:errorTextAppearance="@style/error"
+                    app:hintTextColor="@color/colorPrimary"
+                    tools:ignore="HardcodedText,RtlHardcoded">
+
+                    <EditText
+                        android:id="@+id/txtPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:fontFamily="@font/_markazi"
+                        android:importantForAutofill="no"
+                        android:inputType="number"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHint="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp"
+                        tools:ignore="LabelFor,MissingConstraints,RtlCompat,RtlHardcoded,TextFields" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linOTP"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center|top"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtMyPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="ادخل الكود الذي ارسل اليك"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_14sdp"
+                tools:ignore="HardcodedText" />
+
+            <com.mukesh.OtpView
+                android:id="@+id/txtCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:inputType="number"
+                android:itemBackground="@color/colorBack"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp"
+                app:OtpItemCount="6"
+                app:OtpLineColor="@color/colorPrimary"
+                app:OtpViewType="line" />
+
+            <TextView
+                android:id="@+id/txtResend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/_50sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginRight="@dimen/_30sdp"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_12sdp"
+                tools:ignore="RtlHardcoded" />
+        </LinearLayout>
+
+    </ViewFlipper>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnNext"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/btndesign"
+        android:backgroundTint="@color/ic_profile_background"
+        android:cropToPadding="false"
+        android:src="@drawable/ic_baseline_navigate_next_24"
+        app:backgroundTint="@color/colorBack"
+        app:ensureMinTouchTargetSize="false"
+        app:fabCustomSize="50dp"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@color/colorBack"
+        tools:ignore="ContentDescription" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBack"
+    android:layoutDirection="ltr">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/_8sdp"
+        android:padding="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            android:layout_weight="1"
+            android:text="العنوان"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold"
+            tools:ignore="RtlCompat" />
+
+        <TextView
+            android:id="@+id/txtBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="تم التسليم"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/txtID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="_mdsmos_fdi2"
+            android:textAlignment="viewEnd"
+            android:textSize="@dimen/_12sdp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/colorAccent"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+
+

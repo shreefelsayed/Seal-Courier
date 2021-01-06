@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="ltr"
+    android:background="@color/background"
+    tools:context=".Filters">
+
+    <include
+        android:id="@+id/dsToolbar"
+        layout="@layout/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/dsToolbar"
+        app:layout_constraintStart_toStartOf="@+id/dsToolbar"
+        app:layout_constraintTop_toTopOf="@+id/dsToolbar"
+        app:srcCompat="@drawable/ic_back_black" />
+
+    <LinearLayout
+        android:id="@+id/linSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner_bottom"
+        android:backgroundTint="@color/ic_profile_background"
+
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dsToolbar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="right"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/_12sdp"
+            android:paddingRight="@dimen/_12sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/linChecks"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/chkPick"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:backgroundTint="@color/colorBack"
+                    android:buttonTint="@color/colorBack"
+                    android:checked="true"
+                    android:drawableTint="@color/colorBack"
+                    android:fontFamily="@font/_markazi"
+                    android:layoutDirection="rtl"
+                    android:text="كل المدن"
+                    android:textColor="@color/colorBack" />
+
+                <CheckBox
+                    android:id="@+id/chkDrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:backgroundTint="@color/colorBack"
+                    android:buttonTint="@color/colorBack"
+                    android:checked="true"
+                    android:drawableTint="@color/colorBack"
+                    android:fontFamily="@font/_markazi"
+                    android:layoutDirection="rtl"
+                    android:text="كل المدن"
+                    android:textColor="@color/colorBack" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linBoxes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/linFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tlPickCity"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="@dimen/_8sdp"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:hint="من مدينة ؟"
+                        android:textColorHint="@color/colorBack"
+                        android:visibility="gone"
+                        app:endIconMode="none"
+                        app:hintTextColor="@color/background">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCityPick"
+                            style="@style/Base.Widget.MaterialComponents.AutoCompleteTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:backgroundTint="@color/colorWhite"
+                            android:completionThreshold="1"
+                            android:drawableRight="@drawable/ic_add_location"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:fontFamily="@font/_markazi"
+                            android:inputType="textShortMessage"
+                            android:textColor="@color/colorBack"
+                            android:textSize="@dimen/_12sdp"
+                            tools:ignore="RtlHardcoded" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:gravity="center"
+                        android:hint="من محافظة ؟"
+                        android:textColorHint="@color/colorBack"
+
+                        app:endIconMode="none"
+                        app:hintTextColor="@color/background">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autoComp"
+                            style="@style/Base.Widget.MaterialComponents.AutoCompleteTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:backgroundTint="@color/colorWhite"
+                            android:completionThreshold="1"
+                            android:drawableRight="@drawable/ic_add_location"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:fontFamily="@font/_markazi"
+                            android:inputType="textShortMessage"
+                            android:textColor="@color/colorBack"
+                            android:textSize="@dimen/_12sdp"
+                            tools:ignore="RtlHardcoded" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tlDropCity"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/_8sdp"
+                        android:layout_weight="2"
+                        android:hint="الي مدينة ؟"
+                        android:textColorHint="@color/colorBack"
+                        android:visibility="gone"
+                        app:endIconMode="none"
+                        app:hintTextColor="@color/background">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCityDrop"
+                            style="@style/Base.Widget.MaterialComponents.AutoCompleteTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/colorWhite"
+                            android:completionThreshold="1"
+                            android:drawableRight="@drawable/ic_add_location"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:fontFamily="@font/_markazi"
+                            android:inputType="textShortMessage"
+                            android:textColor="@color/colorBack"
+                            android:textSize="@dimen/_12sdp"
+                            tools:ignore="RtlHardcoded" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:hint="الي محافظة ؟"
+                        android:textColorHint="@color/colorBack"
+                        app:endIconMode="none"
+                        app:hintTextColor="@color/background">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompDrop"
+                            style="@style/Base.Widget.MaterialComponents.AutoCompleteTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/colorWhite"
+                            android:completionThreshold="1"
+                            android:drawableRight="@drawable/ic_add_location"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:fontFamily="@font/_markazi"
+                            android:inputType="textShortMessage"
+                            android:textColor="@color/colorBack"
+                            android:textSize="@dimen/_12sdp"
+                            tools:ignore="RtlHardcoded" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tlMoney"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:hint="اعلي سعر للشحنة"
+                android:visibility="gone"
+                app:endIconMode="none">
+
+                <EditText
+                    android:id="@+id/txtFilterMoney"
+                    android:layout_width="@dimen/_120sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:drawableEnd="@drawable/ic_add_money"
+                    android:drawablePadding="@dimen/_8sdp"
+                    android:fontFamily="@font/_markazi"
+                    android:inputType="none|number"
+                    android:textColor="@color/colorBack"
+                    android:textSize="@dimen/_12sdp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtOrderCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@color/ic_profile_background"
+            android:drawableRight="@drawable/ic_counter"
+            android:drawablePadding="@dimen/_8sdp"
+            android:gravity="center"
+            android:text="هناك 0 شحنة في خط سيرك"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/rounded_corner_top"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linSearch" />
+
+
+    <LinearLayout
+        android:id="@+id/EmptyPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:layout_marginLeft="@dimen/_50sdp"
+            android:layout_marginRight="@dimen/_50sdp"
+            android:alpha="0.5"
+            android:scaleType="fitCenter"
+
+            android:src="@drawable/ic_no_package" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:text="لا يوجد شحنات بتلك المواصفات"
+            android:textColor="@android:color/tertiary_text_light"
+            android:textSize="@dimen/_18sdp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
