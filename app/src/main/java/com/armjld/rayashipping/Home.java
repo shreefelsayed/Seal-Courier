@@ -1,34 +1,32 @@
-package com.armjld.rayashipping.SuperVisor;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+package com.armjld.rayashipping;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import com.armjld.rayashipping.Captin.capAvillable;
 import com.armjld.rayashipping.Captin.captinRecived;
 import com.armjld.rayashipping.Chat.ChatFragmet;
+import com.armjld.rayashipping.Login.LoadingScreen;
 import com.armjld.rayashipping.Login.LoginManager;
 import com.armjld.rayashipping.Login.StartUp;
 import com.armjld.rayashipping.Notifications.NotificationFragment;
-import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.Settings.SettingFragment;
-import com.armjld.rayashipping.getRefrence;
-import com.armjld.rayashipping.models.Captins;
+import com.armjld.rayashipping.SuperCaptins.MyCaptins;
+import com.armjld.rayashipping.SuperVisor.AllOrders;
+import com.armjld.rayashipping.SuperVisor.SuperAvillable;
+import com.armjld.rayashipping.SuperVisor.SuperRecived;
 import com.armjld.rayashipping.models.ChatsData;
 import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.notiData;
-import com.armjld.rayashipping.rquests;
+import com.armjld.rayashipping.models.userData;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -36,26 +34,29 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.hypertrack.sdk.HyperTrack;
+import com.hypertrack.sdk.TrackingError;
+import com.hypertrack.sdk.TrackingStateObserver;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import timber.log.Timber;
 
-public class SuperVisorHome extends AppCompatActivity {
-
-    private static DatabaseReference mDatabase;
-
+@SuppressLint("SimpleDateFormat")
+public class Home extends AppCompatActivity implements TrackingStateObserver.OnTrackingStateChangeListener {
 
     // ---------- Super Visor Data ----------- \\
     public static ArrayList<Data> mm = new ArrayList<>(); // Avillable Orders Data
     public static ArrayList<String> avillableIDS = new ArrayList<>(); // Avillable Orders IDS
-    public static ArrayList<Captins> mCaptins = new ArrayList<>(); // My Captins Data
+    public static ArrayList<userData> mCaptins = new ArrayList<>(); // My Captins Data
     public static ArrayList<String> mCaptinsIDS = new ArrayList<>(); // My Captins IDS
     public static ArrayList<Data> delvOrders = new ArrayList<>(); // To Deliver Orders Data
 
@@ -66,6 +67,7 @@ public class SuperVisorHome extends AppCompatActivity {
     // ---------- Common Data ----------- \\
     public static ArrayList<notiData> notiList = new ArrayList<>(); // Notifications Data
     public static ArrayList<ChatsData> mChat = new ArrayList<>(); // Chats Data
+
 
     public static int notiCount = 0;
     public static int msgCount = 0;
@@ -78,6 +80,9 @@ public class SuperVisorHome extends AppCompatActivity {
     static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     public static BadgeDrawable badge, chatsBadge;
+
+    String htID = "00F4wm01NAr4ZHVE4gjrtQiQw8BxYC9dJNjeoM0LE4eEpm928geMz-2Tt8bZgOzJnTlE64SKDs_ZUEYyBJE4wQ";
+    HyperTrack sdkInstance;
 
     @Override
     public void onBackPressed() {
@@ -105,6 +110,20 @@ public class SuperVisorHome extends AppCompatActivity {
             finish();
             startActivity(new Intent(this, StartUp.class));
         }
+
+        if (sdkInstance.isRunning()) {
+            onTrackingStart();
+        } else {
+            onTrackingStop();
+        }
+
+        sdkInstance.requestPermissionsIfNecessary();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sdkInstance.removeTrackingListener(this);
     }
 
     @Override
@@ -112,12 +131,26 @@ public class SuperVisorHome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supervisor_home);
 
+        HyperTrack.enableDebugLogging();
+        sdkInstance = HyperTrack
+                .getInstance(htID)
+                .addTrackingListener(Home.this);
+
+        sdkInstance.setDeviceName(UserInFormation.getUserName());
+        Map<String,Object> myMetadata = new HashMap<>();
+        myMetadata.put("vehicle_type", UserInFormation.getTrans());
+        myMetadata.put("group_id", UserInFormation.getAccountType());
+
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("trackId").setValue(sdkInstance.getDeviceID());
+
+        sdkInstance.setDeviceMetadata(myMetadata);
+        sdkInstance.start();
+
         if (UserInFormation.getId() == null) {
             finish();
             startActivity(new Intent(this, StartUp.class));
         }
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("orders");
         bottomNavigationView = findViewById(R.id.bottomNav);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
 
@@ -143,7 +176,6 @@ public class SuperVisorHome extends AppCompatActivity {
         if(UserInFormation.getAccountType().equals("Delivery Worker")) {
             bottomNavigationView.getMenu().removeItem(R.id.profile);
         }
-
     }
 
     private Fragment whichFrag() {
@@ -257,6 +289,8 @@ public class SuperVisorHome extends AppCompatActivity {
     }
 
     public static void getOrdersByLatest() {
+        getRefrence ref = new getRefrence();
+        DatabaseReference mDatabase = ref.getRef("Esh7nly");
         mDatabase.orderByChild("statue").equalTo("placed").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -281,12 +315,10 @@ public class SuperVisorHome extends AppCompatActivity {
                         assert orderDate != null;
                         assert myDate != null;
 
-                        if (orderDate.compareTo(myDate) >= 0 && orderData.getStatue().equals("placed")) {
-                            if(orderData.getProvider().equals("Esh7nly") || orderData.getProvider().equals("Raya")) {
-                                mm.add(orderData);
-                                avillableIDS.add(orderData.getId());
-                                Timber.i(orderData.getId());
-                            }
+                        if (orderDate.compareTo(myDate) >= 0 && LoadingScreen.cities.contains(orderData.getmPRegion()) && LoadingScreen.cities.contains(orderData.getmDRegion())) {
+                            mm.add(orderData);
+                            avillableIDS.add(orderData.getId());
+                            Timber.i(orderData.getId());
                         }
 
                         mm.sort((o1, o2) -> {
@@ -319,13 +351,11 @@ public class SuperVisorHome extends AppCompatActivity {
                         Data orderData = ds.getValue(Data.class);
                         assert orderData != null;
 
-                        if(orderData.getProvider().equals("Raya") && orderData.getStatue().equals("placed")) {
-                            SuperVisorHome.mm.add(orderData);
-                            SuperVisorHome.avillableIDS.add(orderData.getId());
-                        }
+                        Home.mm.add(orderData);
+                        Home.avillableIDS.add(orderData.getId());
                     }
                     // ------- Sort According to Date
-                    SuperVisorHome.mm.sort((o1, o2) -> {
+                    Home.mm.sort((o1, o2) -> {
                         String one = o1.getDate();
                         String two = o2.getDate();
                         return one.compareTo(two);
@@ -340,26 +370,24 @@ public class SuperVisorHome extends AppCompatActivity {
         });
     }
 
-    public static void getCaptins(Context mContext) {
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("captins").addListenerForSingleValueEvent(new ValueEventListener() {
+    public static void getCaptins() {
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").orderByChild("mySuper").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                SuperVisorHome.mCaptins.clear();
-                SuperVisorHome.mCaptins.trimToSize();
-                if(snapshot.exists()) {
+                Home.mCaptins.clear();
+                Home.mCaptins.trimToSize();
+                if (snapshot.exists()) {
                     // ------ Get my Captins Data
-                    for(DataSnapshot captin : snapshot.getChildren()) {
-                        Captins captins = captin.getValue(Captins.class);
-                        assert captins != null;
-                        SuperVisorHome.mCaptins.add(captins); // Add the Captin data
-                        SuperVisorHome.mCaptinsIDS.add(captins.getId()); // Add the id to id List
+                    for (DataSnapshot captin : snapshot.getChildren()) {
+                        userData user = captin.getValue(userData.class);
+                        assert user != null;
+                        Home.mCaptinsIDS.add(user.getId()); // Add the id to id List
+                        Home.mCaptins.add(user); // Add the Captin data
                     }
                 }
 
-                // ------ Send data to captins fragment
                 MyCaptins.getCaptins();
-                rquests _req = new rquests(mContext);
-                _req.ImportCuurentRequests();
+
             }
 
             @Override
@@ -379,6 +407,7 @@ public class SuperVisorHome extends AppCompatActivity {
                 if(allOrders.exists()) {
                     for(DataSnapshot notDelv : allOrders.getChildren()) {
                         Data orderData = notDelv.getValue(Data.class);
+                        assert orderData != null;
                         if(orderData.getStatue().equals("supD")) {
                             delvOrders.add(orderData);
                         }
@@ -404,6 +433,7 @@ public class SuperVisorHome extends AppCompatActivity {
                 if(allOrders.exists()) {
                     for(DataSnapshot notDelv : allOrders.getChildren()) {
                         Data orderData = notDelv.getValue(Data.class);
+                        assert orderData != null;
                         if(orderData.getStatue().equals("supD")) {
                             delvOrders.add(orderData);
                         }
@@ -513,7 +543,7 @@ public class SuperVisorHome extends AppCompatActivity {
                         if(orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             // ------ Add to Avillabe
                             captinAvillable.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD")) {
+                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied")) {
                             // ------ Add to to Delivered
                             captinDelv.add(orderData);
                         }
@@ -540,7 +570,7 @@ public class SuperVisorHome extends AppCompatActivity {
                         assert orderData != null;
                         if(orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             captinAvillable.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD")) {
+                        } else if (orderData.getStatue().equals("readyD")|| orderData.getStatue().equals("denied")) {
                             captinDelv.add(orderData);
                         }
                     }
@@ -557,9 +587,23 @@ public class SuperVisorHome extends AppCompatActivity {
     }
 
 
-    public void openWebURL(String inURL) {
-        Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse(inURL));
-        startActivity(browse);
+    @Override
+    public void onError(TrackingError trackingError) {
+
     }
 
+    @Override
+    public void onTrackingStart() {
+
+    }
+
+    @Override
+    public void onTrackingStop() {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 }

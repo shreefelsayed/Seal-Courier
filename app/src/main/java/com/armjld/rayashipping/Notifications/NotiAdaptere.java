@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.Filters;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.notiData;
@@ -92,7 +92,7 @@ public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder
                     break;
                 }*/
                 case "home" : {
-                    context.startActivity(new Intent(context, SuperVisorHome.class));
+                    context.startActivity(new Intent(context, Home.class));
                     break;
                 }
                 case "facebook" : {
@@ -160,8 +160,8 @@ public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder
     }
 
     private void whichProfile () {
-        SuperVisorHome.whichFrag = "Profile";
-        context.startActivity(new Intent(context, SuperVisorHome.class));
+        Home.whichFrag = "Profile";
+        context.startActivity(new Intent(context, Home.class));
     }
 
 

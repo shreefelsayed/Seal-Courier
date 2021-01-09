@@ -30,6 +30,10 @@ public class userData {
     private String mySuper = "";
     private String mySuperId = "";
     private String supervisor_code = "";
+    private String packMoney = "0";
+
+    private String trackId = "";
+
 
     public userData(String name, String phone, String email, String date, String id, String accountType, String ppURL, String ssnURL, String mpass, String canceled, String ssnNum, String device, String app_version, String unique_id, String active, String device_token, String userState, String userCity, String ordersType, String currentDate, String sendOrderNoti, String sendOrderNotiCity, int walletmoney, String isConfirmed, String provider) {
         this.name = name;
@@ -283,5 +287,21 @@ public class userData {
 
     public void setSupervisor_code(String supervisor_code) {
         this.supervisor_code = supervisor_code;
+    }
+
+    public String getTrackId() {
+        return trackId;
+    }
+
+    public void setTrackId(String trackId) {
+        this.trackId = trackId;
+    }
+
+    public String getPackMoney() {
+        return packMoney;
+    }
+
+    public void setPackMoney(String packMoney) {
+        this.packMoney = packMoney;
     }
 }

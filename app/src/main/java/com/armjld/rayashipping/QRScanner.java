@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
 import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.github.ybq.android.spinkit.SpinKitView;
@@ -43,9 +42,9 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
     @Override
     public void onBackPressed() {
         if(UserInFormation.getAccountType().equals("Supervisor")) {
-            SuperVisorHome.getRayaDelv();
+            Home.getRayaDelv();
         } else {
-            SuperVisorHome.getDeliveryOrders();
+            Home.getDeliveryOrders();
         }
         finish();
     }
@@ -61,9 +60,9 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
 
         btnBack.setOnClickListener(v-> {
             if(UserInFormation.getAccountType().equals("Supervisor")) {
-                SuperVisorHome.getRayaDelv();
+                Home.getRayaDelv();
             } else {
-                SuperVisorHome.getDeliveryOrders();
+                Home.getDeliveryOrders();
             }
             finish();
         });
@@ -126,7 +125,7 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
                         Data orderData = ds.getValue(Data.class);
                         if(orderData.getStatue().equals("supD") && ds.child("dSupervisor").getValue().toString().equals(UserInFormation.getMySup())) {
                             OrdersClass ordersClass = new OrdersClass(QRScanner.this);
-                            ordersClass.asignDelv(UserInFormation.getId(), orderData.getId(), orderData.getuId(), orderData.getProvider());
+                            ordersClass.asignDelv(orderData, UserInFormation.getId());
                         } else {
                             Toast.makeText(QRScanner.this, "لا يمكنك استلام تلك الشحنه من المشرف", Toast.LENGTH_SHORT).show();
                         }
@@ -154,8 +153,8 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
         String strF = String.valueOf(trackID.charAt(0));
         DatabaseReference mDatabase;
 
-        Long tsLong = System.currentTimeMillis()/1000;
-        String logC = tsLong.toString();
+        long tsLong = System.currentTimeMillis()/1000;
+        String logC = Long.toString(tsLong);
 
         // ------------ Check for order Refrence
         getRefrence ref = new getRefrence();
@@ -173,7 +172,8 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
                     Timber.i("Track Id Exists");
                     for(DataSnapshot ds : snapshot.getChildren()) {
                         Data orderData = ds.getValue(Data.class);
-                        if(orderData.getStatue().equals("hubD")) {
+                        assert orderData != null;
+                        if(orderData.getStatue().equals("hubD") || orderData.getStatue().equals("deniedD")) {
                             // --------- Update Values
                             mDatabase.child(orderData.getId()).child("statue").setValue("supD");
                             mDatabase.child(orderData.getId()).child("supDScanTime").setValue(datee);
@@ -211,7 +211,7 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
             @Override
             public void onTick(long l) {
                 txtCounter.setVisibility(View.VISIBLE);
-                txtCounter.setText( + l / secDelay + "");
+                txtCounter.setText( (l / 1000) + "");
             }
 
             @Override

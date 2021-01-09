@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AsignOrder;
 import com.armjld.rayashipping.SuperVisor.OrderInfo;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.getRefrence;
 import com.armjld.rayashipping.models.Data;
@@ -33,24 +33,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Objects;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
      Context context;
      ArrayList<Data>filtersData;
-     public static caculateTime _cacu = new caculateTime();
+     String from;
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
-    String datee = sdf.format(new Date());
+    public static caculateTime _cacu = new caculateTime();
 
-    public MyAdapter(Context context, ArrayList<Data> filtersData) {
+    public MyAdapter(Context context, ArrayList<Data> filtersData, String from) {
         this.context = context;
         this.filtersData =filtersData;
+        this.from = from;
     }
 
     @NonNull
@@ -79,8 +75,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.setFee(filtersData.get(position).getGGet());
         holder.setPostDate(filtersData.get(position).getDate());
         holder.setBid(type);
-
         holder.switchLayout(filtersData.get(position).getProvider());
+        holder.setState(filtersData.get(position).getProvider(), filtersData.get(position).getStatue());
+
 
         // ----------- Listener to Hide Buttons when order deleted or became accepted ------------ //
         mDatabase.child(orderID).addValueEventListener(new ValueEventListener() {
@@ -89,7 +86,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 Data orderData = snapshot.getValue(Data.class);
 
                 // ------- if some other supervisor accepted the order
-                if (!orderData.getStatue().equals("placed") && !orderData.getStatue().equals("supD")) {
+                assert orderData != null;
+                if (!orderData.getStatue().equals("placed") && !orderData.getStatue().equals("supD") && !orderData.getStatue().equals("supDenied")) {
                     holder.btnBid.setVisibility(View.GONE);
                     holder.btnAccept.setVisibility(View.GONE);
                     holder.btnMore.setVisibility(View.GONE);
@@ -98,17 +96,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                     holder.txtWarning.setText("الاوردر تم قبولة بالفعل من مشرف اخر");
 
                     if(snapshot.child("dSupervisor").exists() && orderData.getStatue().equals("supD")) {
-                        if(snapshot.child("dSupervisor").getValue().toString().equals(UserInFormation.getId())) {
+                        if(orderData.getdSupervisor().equals(UserInFormation.getId())) {
                             holder.btnAccept.setVisibility(View.VISIBLE);
                             holder.btnMore.setVisibility(View.VISIBLE);
                             holder.txtWarning.setVisibility(View.GONE);
                         }
                     }
+
                     // ------- if i accepted the order but didn't refresh
-                    if(SuperVisorHome.mCaptinsIDS.contains(Objects.requireNonNull(snapshot.child("uAccepted").getValue()).toString())) {
-                        holder.txtWarning.setText("تم قبول الاوردر");
+                    if(Home.mCaptinsIDS.contains(orderData.getuAccepted())) {
+                        holder.txtWarning.setText("تم ارسال بيانات الشحنه للمندوب");
                         holder.txtWarning.setBackgroundColor(Color.GREEN);
                     }
+
                 }
             }
 
@@ -128,28 +128,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             Intent intent = new Intent(context, OrderInfo.class);
             OrderInfo.orderData = filtersData.get(position);
             intent.putExtra("position", position);
-            OrderInfo.cameFrom = "Home Activity";
+            intent.putExtra("from", from);
             ((Activity) context).startActivityForResult(intent, 1);
         });
 
 
         holder.btnAccept.setOnClickListener(v-> {
             Intent intent = new Intent(context, AsignOrder.class);
-            intent.putExtra("orderId", orderID);
-            intent.putExtra("orderOwner", owner);
-            intent.putExtra("dName", filtersData.get(position).getDName());
-            intent.putExtra("provider", filtersData.get(position).getProvider());
-
-            // ------- Check what action to take --------- \\
-            if(filtersData.get(position).getStatue().equals("supD")) {
-                intent.putExtra("type", "delv");
-
-            } else if (filtersData.get(position).getStatue().equals("placed")) {
-                intent.putExtra("type", "accept");
-            }
-
+            AsignOrder.assignToCaptin.clear();
+            AsignOrder.assignToCaptin.add(filtersData.get(position));
             ((Activity) context).startActivityForResult(intent, 1);
-
         });
 
         holder.btnBid.setOnClickListener(v1 -> {
@@ -167,13 +155,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             mBottomSheetDialog.show();
         } else {
             Intent intent = new Intent(context, AsignOrder.class);
-            intent.putExtra("orderId", orderID);
-            intent.putExtra("orderOwner", owner);
-            intent.putExtra("type", "bid");
-            intent.putExtra("dName", filtersData.get(position).getDName());
-            intent.putExtra("position", position);
-            intent.putExtra("provider", filtersData.get(position).getProvider());
-
+            AsignOrder.assignToCaptin.clear();
+            AsignOrder.assignToCaptin.add(filtersData.get(position));
             ((Activity) context).startActivityForResult(intent, 1);
             }
         });
@@ -255,25 +238,51 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             txtPostDate.setText(_cacu.setPostDate(startDate));
         }
 
+        @SuppressLint("SetTextI18n")
         public void switchLayout(String provider) {
             if(provider.equals("Esh7nly")) {
                 linAgree.setVisibility(View.VISIBLE);
-                btnAccept.setVisibility(View.GONE);
                 txtgMoney.setVisibility(View.VISIBLE);
-                txtProvider.setVisibility(View.VISIBLE);
+
                 txtProvider.setText("Esh7nly");
                 txtProvider.setBackgroundColor(context.getResources().getColor(R.color.yellow));
             } else if (provider.equals("Raya")) {
                 linAgree.setVisibility(View.GONE);
-                btnAccept.setVisibility(View.VISIBLE);
                 txtgMoney.setVisibility(View.GONE);
-                txtProvider.setVisibility(View.VISIBLE);
-                txtProvider.setText("Raya");
+
+                txtProvider.setText("Envio");
                 txtProvider.setBackgroundColor(context.getResources().getColor(R.color.ic_profile_background));
 
             }
         }
 
+        public void setState(String provider, String statue) {
+            switch (statue) {
+                case "placed" :
+                    if(!provider.equals("Esh7nly")) {
+                        btnAccept.setVisibility(View.VISIBLE);
+                        btnBid.setVisibility(View.GONE);
+                    } else {
+                        btnAccept.setVisibility(View.GONE);
+                        btnBid.setVisibility(View.VISIBLE);
+                    }
+                    btnMore.setVisibility(View.VISIBLE);
+                    break;
+
+                case "supDenied" :
+                case "supD" :
+                    btnAccept.setVisibility(View.VISIBLE);
+                    btnBid.setVisibility(View.GONE);
+                    btnMore.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    btnAccept.setVisibility(View.GONE);
+                    btnBid.setVisibility(View.GONE);
+                    btnMore.setVisibility(View.GONE);
+                    break;
+            }
+
+        }
     }
 
 }

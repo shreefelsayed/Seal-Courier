@@ -2,20 +2,13 @@ package com.armjld.rayashipping.SuperVisor;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -23,22 +16,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.armjld.rayashipping.Home;
+import com.armjld.rayashipping.MapsActivity;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.Ratings.Ratings;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.getRefrence;
 import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.notiData;
-import com.armjld.rayashipping.models.requestsData;
-import com.armjld.rayashipping.myCaptReqs;
 import com.armjld.rayashipping.rquests;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +38,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -61,7 +52,6 @@ public class OrderInfo extends AppCompatActivity {
     DatabaseReference uDatabase,nDatabase;
     String owner;
     public static Data orderData;
-    public static String cameFrom = "Home Activity";
     TextView date3, date, orderto, OrderFrom,txtPack,txtWeight,ordercash2,fees2,txtPostDate2;
     TextView dsUsername;
     TextView txtTitle;
@@ -89,6 +79,7 @@ public class OrderInfo extends AppCompatActivity {
     String dPhone = "";
     String ownerPhone;
     private boolean hasMore = false;
+    private boolean toClick = true;
     boolean isBid = false;
     int position = 0;
 
@@ -113,6 +104,9 @@ public class OrderInfo extends AppCompatActivity {
         owner = orderData.getuId();
 
         position = getIntent().getIntExtra("position", 0);
+        String _from = getIntent().getStringExtra("from");
+
+        toClick = !_from.equals("SameUser");
 
         uDatabase = getInstance().getReference().child("Pickly").child("users");
         nDatabase = getInstance().getReference().child("Pickly").child("notificationRequests");
@@ -198,6 +192,12 @@ public class OrderInfo extends AppCompatActivity {
 
         if(orderData.getNotes().equals("")) txtNotes.setVisibility(View.GONE);
 
+        boolean toPick = orderData.getStatue().equals("placed") || orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived");
+        boolean toDelv = orderData.getStatue().equals("readyD") || orderData.getStatue().equals("supD")  || orderData.getStatue().equals("capDenied") || orderData.getStatue().equals("supDenied");
+
+
+        if(toPick || toDelv) btnOrderMap.setVisibility(View.VISIBLE);
+
         // ----------- Set the Bidding Statue
         isBid = rquests.getRequests().stream().anyMatch(x -> x.getOrderId().equals(orderID));
 
@@ -228,16 +228,10 @@ public class OrderInfo extends AppCompatActivity {
 
         // ------ Accept for Raya Orders
         btnAccept.setOnClickListener(v-> {
+
             Intent intent = new Intent(this, AsignOrder.class);
-            intent.putExtra("orderId", orderID);
-            intent.putExtra("orderOwner", owner);
-            intent.putExtra("provider", orderData.getProvider());
-            if(orderState.equals("placed")) {
-                intent.putExtra("type", "accept");
-            } else if(orderState.equals("supD")) {
-                intent.putExtra("type", "delv");
-            }
-            intent.putExtra("dName", orderData.getDName());
+            AsignOrder.assignToCaptin.clear();
+            AsignOrder.assignToCaptin.add(orderData);
             startActivityForResult(intent, 1);
         });
 
@@ -268,17 +262,24 @@ public class OrderInfo extends AppCompatActivity {
             }
         });
 
-        /*btnOrderMap.setOnClickListener(v -> {
-            MapOneOrder.orderData = orderData;
-            Intent map = new Intent(this, MapOneOrder.class);
+        btnOrderMap.setOnClickListener(v -> {
+            ArrayList<Data> order = new ArrayList<>();
+            order.add(orderData);
+
+            MapsActivity.filterList = order;
+            Intent map = new Intent(this, MapsActivity.class);
             startActivity(map);
-        });*/
+        });
 
         supPP.setOnClickListener(v -> {
-            if(hasMore) {
+            if(hasMore && toClick) {
                 Intent otherOrders = new Intent(this, OrdersBySameUser.class);
                 otherOrders.putExtra("userid", owner);
                 otherOrders.putExtra("name", ownerName);
+
+                OrdersBySameUser.filterList.clear();
+                OrdersBySameUser.filterList.addAll(Home.mm);
+
                 startActivity(otherOrders);
             } else {
                 Toast.makeText(this, "لا يوجد شحنات متاحة اخري لهذا المستخدم", Toast.LENGTH_SHORT).show();

@@ -28,7 +28,17 @@ public class UserInFormation {
     private static String mySup = "";
     private static String supId = "";
 
+    private static String packMoney = "";
+
     public UserInFormation() { }
+
+    public static String getPackMoney() {
+        return packMoney;
+    }
+
+    public static void setPackMoney(String packMoney) {
+        UserInFormation.packMoney = packMoney;
+    }
 
     public static String getUserCity() {
         return userCity;

@@ -14,6 +14,46 @@
         android:background="@color/colorBack"
         android:orientation="vertical">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtProvider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:background="@color/yellow"
+                android:gravity="left"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="Esh7nly"
+                android:textColor="#FFFFFF"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtStatue"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:background="@color/yellow"
+                android:foregroundGravity="right"
+                android:gravity="right"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="TextView"
+                android:textColor="@color/colorAccent"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <TextView
             android:id="@+id/txtUsername"
             android:layout_width="match_parent"
@@ -218,6 +258,22 @@
                     android:visibility="gone" />
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnDenied"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_alignParentTop="false"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_defult_square"
+                    android:text="لم يستلم العميل"
+
+                    android:textColor="@color/colorBack"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="visible" />
+
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnDelivered"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_32sdp"
@@ -232,7 +288,7 @@
 
                     android:textColor="@color/colorBack"
                     android:textSize="@dimen/_12sdp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnRecived"
@@ -267,7 +323,6 @@
                     android:layout_height="@dimen/_32sdp"
                     android:layout_alignParentTop="false"
                     android:layout_gravity="center"
-                    android:layout_marginRight="@dimen/_5sdp"
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:layout_weight="0.5"
                     android:background="@drawable/btn_bad_square"
@@ -275,7 +330,7 @@
                     android:textColor="#000000"
 
                     android:textSize="@dimen/_12sdp"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnOrderBack"
@@ -310,16 +365,6 @@
                 android:textColor="@color/colorBack"
                 android:textSize="@dimen/_12sdp"
 
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/txtStatue"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_32sdp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="TextView"
-                android:textColor="@color/colorAccent"
                 android:visibility="gone" />
 
         </LinearLayout>

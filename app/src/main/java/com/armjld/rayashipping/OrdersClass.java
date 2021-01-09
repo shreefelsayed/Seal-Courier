@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.armjld.rayashipping.Chat.chatListclass;
+import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.notiData;
 import com.armjld.rayashipping.models.requestsData;
@@ -25,134 +26,247 @@ public class OrdersClass {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
     String datee = sdf.format(new Date());
 
-    Long tsLong = System.currentTimeMillis()/1000;
-    String logC = tsLong.toString();
-
     public OrdersClass(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void assignToCaptin(String captinId, String orderId, String owner, String provider) {
+    // ----------------------------- Captins Actions ------------------------- \\
+
+    // ------- When Captin Recived an Order from a Supplier
+    public void orderRecived (Data orderData) {
         getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef(provider);
-        // -------- Set changes in Order Data
-        mDatabase.child(orderId).child("uAccepted").setValue(captinId);
-        mDatabase.child(orderId).child("pSupervisor").setValue(UserInFormation.getSup_code());
-        mDatabase.child(orderId).child("statue").setValue("accepted");
-        mDatabase.child(orderId).child("acceptedTime").setValue(datee);
+        Wallet wallet = new Wallet();
+        DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
 
-        // --------- Set Changes in User Data
-        uDatabase.child(UserInFormation.getId()).child("orders").child(orderId).child("captin").setValue(captinId);
-        uDatabase.child(captinId).child("orders").child(orderId).child("statue").setValue("accepted");
+        // ---- Update Database Value
+        mDatabase.child(orderData.getId()).child("statue").setValue("recived2");
+        mDatabase.child(orderData.getId()).child("recived2Time").setValue(datee);
 
+        // ---- Send Notification to Supervisor
+        String message = "قام " + UserInFormation.getUserName() + " بتأكيد استلام شحنه " + orderData.getOwner();
+        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(),message,datee,"false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        nDatabase.child(orderData.getuId()).push().setValue(Noti);
 
-        // ------------------ Send Notification To Captin ------------------ //
-        String msg = "قام " + UserInFormation.getUserName() + " بتسليمك شحنه جديده لاستلامها.";
-        notiData Noti = new notiData(UserInFormation.getId(), captinId, orderId,msg,datee,"false","orderinfo",UserInFormation.getUserName(), UserInFormation.getUserURL());
-        nDatabase.child(captinId).push().setValue(Noti);
-
-        // ------------------ Send Notification To Supplier
-        msg = "تمت مراجعه شحنتك و سيتم استلامها في اقرب وقت";
-        Noti = new notiData(UserInFormation.getId(), owner, orderId,msg,datee,"false","orderinfo",UserInFormation.getUserName(), UserInFormation.getUserURL());
-        nDatabase.child(owner).push().setValue(Noti);
-
-        // ---------------- Add Log
-        String Log = "تم تسليم الشحنه من المشرف " + UserInFormation.getSup_code() + " الي المندوب" + captinId;
-        mDatabase.child(orderId).child("logs").child(logC).setValue(Log);
-
-        Toast.makeText(mContext, "تم تسليم الاوردر للمندوب", Toast.LENGTH_SHORT).show();
-        Timber.i("Order Assigned Succefully");
-    }
-
-    public void bidOnOrder (String owner, String orderID, String dName, String capId, String provider) {
-        // ------------------- Send Request -------------------- //
-        String notiKey = nDatabase.child(owner).push().getKey();
-
-        requestsData _reqData = new requestsData(capId, datee, "N/A", "",owner, notiKey, orderID, UserInFormation.getId());
-        rquests _rquests = new rquests(mContext);
-        _rquests.addrequest(_reqData, capId, provider);
-
-        // ------------------ Notificatiom ------------------ //
-        String message = "قامت شركه الرايه بطلب لتوصيل شحنه " + dName;
-        notiData Noti = new notiData(capId, owner,orderID,message,datee,"false","orderinfo", "الرايه", UserInFormation.getUserURL());
-        assert notiKey != null;
-        nDatabase.child(owner).child(notiKey).setValue(Noti);
-        Toast.makeText(mContext, "تم تقديم طلب التوصيل", Toast.LENGTH_SHORT).show();
-        Timber.i("Order Requested Sent Succefully");
-    }
-
-    public void orderRecived (String provider, String orderId, String owner) {
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef(provider);
-
-        mDatabase.child(orderId).child("statue").setValue("recived2");
-        mDatabase.child(orderId).child("recived2Time").setValue(datee);
-
-        /*String message = "قام " + UserInFormation.getUserName() + " بتأكيد استلام شحنه";
-        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderID,message,datee,"false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
-        nDatabase.child(owner).push().setValue(Noti);*/
-
-        // -------- in Case of Esh7nly Add money to Esh7nly Wallet
-        if(provider.equals("Esh7nly")) {
-            Wallet wallet = new Wallet();
-            wallet.addMoneyToShreef(orderId);
+        // ---- in Case of Esh7nly Add money to Esh7nly Wallet
+        if(orderData.getProvider().equals("Esh7nly")) {
+            wallet.addMoneyToShreef(orderData.getId(), orderData.getTrackid());
         }
 
-        // ---------------- Add Log
-        String Log = "قام المندوب " + UserInFormation.getId() + " بتأكيد استلام الشحنه من التاجر " + owner;
-        mDatabase.child(orderId).child("logs").child(logC).setValue(Log);
+        
+        // --- Add Money to Captin 
+        boolean toPay = true;
+        for(int i = 0; i < Home.captinAvillable.size(); i++) {
+            Data oData = Home.captinAvillable.get(i);
+            if(oData.getStatue().equals("recived2") && oData.getuId().equals(orderData.getuId())) {
+                toPay = false;
+                break;
+            }
+        }
+        
+        if(toPay) wallet.addRecivedMoney(UserInFormation.getId());
+        
+        // --- Add Log
+        String Log = "قام المندوب " + UserInFormation.getId() + " بتأكيد استلام الشحنه من التاجر " + orderData.getuId();
+        logOrder(mDatabase, orderData.getId(), Log);
 
+        // -- Toast
         Toast.makeText(mContext, "تم تأكيد استلام الشحنة", Toast.LENGTH_SHORT).show();
     }
 
-    public void orderDelvered(String provider, String orderId, String dName, String owner, String delvId) {
+    // ----- When Captin say the client didn't deliver the order
+    public void orderDenied (Data orderData) {
+        getRefrence ref = new getRefrence();
+        DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
+
+        int tries = Integer.parseInt(orderData.getTries()) + 1;
+
+        // -- Set Action
+        mDatabase.child(orderData.getId()).child("statue").setValue("denied");
+        mDatabase.child(orderData.getId()).child("tries").setValue(tries + "");
+        mDatabase.child(orderData.getId()).child("deniedTime").setValue(datee);
+
+        // --- Send notification to Supervisor
+        String message = "قام " + UserInFormation.getUserName() + " بفشل في تسليم شحنه " + orderData.getDName();
+        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(),message,datee,"false", "nothing", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        nDatabase.child(orderData.getuId()).push().setValue(Noti);
+
+        // ---- Add Log
+        String Log = "قام المندوب " + UserInFormation.getUserName() + " بفشل تسليم الشحنه " + orderData.getuId();
+        logOrder(mDatabase, orderData.getId(), Log);
+
+        // --- Toast
+        Toast.makeText(mContext, "تم تسجيل الشحنه كمرتجع الرجاء تسليمها للمخزن", Toast.LENGTH_SHORT).show();
+    }
+
+    // ------ When Captin deliver a denied order back to Supplier
+    public void returnOrder (Data orderData) {
+        getRefrence ref = new getRefrence();
+        DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
+
+        // ---- Set Action
+        mDatabase.child(orderData.getId()).child("statue").setValue("deniedback");
+        mDatabase.child(orderData.getId()).child("deniedbackTime").setValue(datee);
+
+        // --- Send notification to Supervisor
+        String message = "قام " + UserInFormation.getUserName() + " بتسليم المرتجع الي " + orderData.getOwner();
+        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(),message,datee,"false", "nothing", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        nDatabase.child(orderData.getuId()).push().setValue(Noti);
+
+        // ---- Add Log
+        String Log = "قام المندوب " + UserInFormation.getId() + " بتسليم المرتجع الي " + orderData.getOwner();
+        logOrder(mDatabase, orderData.getId(), Log);
+
+        // --- Add Money on Deliver Denied
+
+
+        // --- Update Chat Data
+        chatListclass _ch = new chatListclass();
+        _ch.dlevarychat(orderData.getuId());
+
+        // --- Toast
+        Toast.makeText(mContext, "تم تأكيد تسليم المرتجع", Toast.LENGTH_SHORT).show();
+    }
+
+    // ----- When a Captin Deliver an Order
+    public void orderDelvered(Data orderData) {
         getRefrence ref = new getRefrence();
         Wallet wallet = new Wallet();
-        DatabaseReference mDatabase = ref.getRef(provider);
+        DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
 
-        mDatabase.child(orderId).child("statue").setValue("delivered");
-        mDatabase.child(orderId).child("dilverTime").setValue(datee);
+        mDatabase.child(orderData.getId()).child("statue").setValue("delivered");
+        mDatabase.child(orderData.getId()).child("dilverTime").setValue(datee);
 
-        // --------------------------- Add Money to Both Delivery & Esh7nly Wallets
-        wallet.addDelvMoney(delvId);
-        wallet.addMoneyToShreef(orderId);
+        // -- Add Money to Delivery
+        wallet.addDelvMoney(orderData.getuAccepted());
 
-        // --------------------------- Send Notifications ---------------------//
-        String message =  "تم تسليم شحنه " + dName + " بنجاح";
-        notiData Noti = new notiData(delvId, owner,orderId,message,datee,"false","orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
-        nDatabase.child(owner).push().setValue(Noti);
+        // ---- Send Notifications to Supplier
+        String message =  "تم تسليم شحنه " + orderData.getDName() + " بنجاح";
+        notiData Noti = new notiData(orderData.getuAccepted(), orderData.getuId(),orderData.getId(),message,datee,"false","orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        nDatabase.child(orderData.getuId()).push().setValue(Noti);
 
-        // ---------------- Add Log
-        String Log = "قام المندوب " + delvId + " بتسليم الشحنه للعميل " + dName + " و تم اضافه ١٥ جنيه في حسابه" + " و تم تحويل ٥ جنيه في حساب شركه إشحنلي";
-        mDatabase.child(orderId).child("logs").child(logC).setValue(Log);
+        // --- Add Money to Supplier Wallet
+        if(!orderData.getProvider().equals("Esh7nly")) wallet.addToSupplier(orderData.getGMoney(), orderData.getuId());
 
+        // --- Add Money to Captins PackMoney
+        int CurrentPackMoney = Integer.parseInt(UserInFormation.getPackMoney());
+        int finalMoney = CurrentPackMoney + Integer.parseInt(orderData.getGMoney());
+
+        uDatabase.child(UserInFormation.getId()).child("packMoney").setValue(finalMoney + "");
+        UserInFormation.setPackMoney(finalMoney + "");
+
+        // -- Update Chat Data
+        chatListclass _ch = new chatListclass();
+        _ch.dlevarychat(orderData.getuId());
+
+        // -- Add Log
+        String Log = "قام المندوب " + orderData.getuAccepted() + " بتسليم الشحنه للعميل " + orderData.getDName() + " و تم اضافه ١٥ جنيه في حسابه" + " و تم تحويل ٥ جنيه في حساب شركه إشحنلي";
+        logOrder(mDatabase, orderData.getId(), Log);
+
+        // -- Toast
         Toast.makeText(mContext, "تم توصيل الشحنة", Toast.LENGTH_SHORT).show();
     }
 
+    // ----------------------------- SuperVisors Actions ------------------------- \\
 
-    public void asignDelv(String captinId, String orderId, String owner, String provider) {
+    // ---- When a Supervisor asign Captin to Pick ORder
+    public void assignToCaptin(Data orderData, String capID) {
         getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef(provider);
+        DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
+        // --- Set changes in Order Data
+        mDatabase.child(orderData.getId()).child("uAccepted").setValue(capID);
+        mDatabase.child(orderData.getId()).child("pSupervisor").setValue(UserInFormation.getSup_code());
+        mDatabase.child(orderData.getId()).child("statue").setValue("accepted");
+        mDatabase.child(orderData.getId()).child("acceptedTime").setValue(datee);
 
-        // -------- Set changes in Order Data
-        mDatabase.child(orderId).child("uAccepted").setValue(captinId);
-        mDatabase.child(orderId).child("statue").setValue("readyD");
-        mDatabase.child(orderId).child("readyDTime").setValue(datee);
+        // --- Set Changes in User Data
+        uDatabase.child(UserInFormation.getId()).child("orders").child(orderData.getId()).child("captin").setValue(capID);
+        uDatabase.child(capID).child("orders").child(orderData.getId()).child("statue").setValue("assignToPick");
 
-        // --------- Set Changes in User Data
-        uDatabase.child(UserInFormation.getId()).child("orders").child(orderId).child("captin").setValue(captinId);
-        uDatabase.child(captinId).child("orders").child(orderId).child("statue").setValue("readyD");
 
-        // ------------------ Send Notification To Captin ------------------ //
+        // ----- Send Notification To Captin
+        String msg = "قام " + UserInFormation.getUserName() + " بتسليمك شحنه جديده لاستلامها.";
+        notiData Noti = new notiData(UserInFormation.getId(), capID, orderData.getId(),msg,datee,"false","orderinfo",UserInFormation.getUserName(), UserInFormation.getUserURL());
+        nDatabase.child(capID).push().setValue(Noti);
+
+        // -- Send Notification To Supplier
+        msg = "تمت مراجعه شحنتك و سيتم استلامها في اقرب وقت";
+        Noti = new notiData(UserInFormation.getId(), orderData.getuId(), orderData.getId(),msg,datee,"false","orderinfo", "Envio", UserInFormation.getUserURL());
+        nDatabase.child(orderData.getuId()).push().setValue(Noti);
+
+        // ----- Add Log
+        String Log = "تم تسليم الشحنه من المشرف " + UserInFormation.getSup_code() + " الي المندوب" + capID;
+        logOrder(mDatabase, orderData.getId(), Log);
+
+        Toast.makeText(mContext, "تم تسليم الاوردر للمندوب", Toast.LENGTH_SHORT).show();
+    }
+
+    // ----- When a Supervsior Asign Captin on Esh7nly Order to Pick
+    public void bidOnOrder (Data orderData, String capID) {
+        // ----Send Request
+        String notiKey = nDatabase.child(orderData.getuId()).push().getKey();
+        requestsData _reqData = new requestsData(capID, datee, "N/A", "",orderData.getuId(), notiKey, orderData.getId(), UserInFormation.getId());
+        rquests _rquests = new rquests(mContext);
+        _rquests.addrequest(_reqData, capID, orderData.getProvider());
+
+        // --- Notification to Supplier
+        String message = "قامت شركه Envio بطلب لتوصيل شحنه " + orderData.getDName();
+        notiData Noti = new notiData(capID, orderData.getuId(),orderData.getId(),message,datee,"false","orderinfo", "Envio", UserInFormation.getUserURL());
+        assert notiKey != null;
+        nDatabase.child(orderData.getuId()).child(notiKey).setValue(Noti);
+
+        // --- Toast
+        Toast.makeText(mContext, "تم تقديم طلب التوصيل", Toast.LENGTH_SHORT).show();
+    }
+
+    // ----- When Supervisor Asign a returned order to a Captin to Deliver to Supplier
+    public void asignDenied(Data orderData, String captinId) {
+        getRefrence ref = new getRefrence();
+        DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
+
+        // ----- Set Action
+        mDatabase.child(orderData.getId()).child("statue").setValue("capDenied");
+        mDatabase.child(orderData.getId()).child("uAccepted").setValue(captinId);
+
+        // ---- Add Log
+        String Log = "قام المشرف " + UserInFormation.getUserName() + " بتسليم المرتجع الي " + captinId;
+        logOrder(mDatabase, orderData.getId(), Log);
+
+        // ---- Toast
+        Toast.makeText(mContext, "تم اختيار المندوب لتسليم المرتجع", Toast.LENGTH_SHORT).show();
+    }
+
+    // ----- When SuperVisor Asign an order to Captin to Deliver
+    public void asignDelv(Data orderData, String capID) {
+        getRefrence ref = new getRefrence();
+        DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
+
+        // --- Set changes in Order Data
+        mDatabase.child(orderData.getId()).child("uAccepted").setValue(capID);
+        mDatabase.child(orderData.getId()).child("statue").setValue("readyD");
+        mDatabase.child(orderData.getId()).child("readyDTime").setValue(datee);
+
+        // ----- Set Changes in User Data
+        uDatabase.child(UserInFormation.getId()).child("orders").child(orderData.getId()).child("captin").setValue(capID);
+        uDatabase.child(capID).child("orders").child(orderData.getId()).child("statue").setValue("readyD");
+
+        // --- Send Notification To Captin
         String msg = "قام " + UserInFormation.getUserName() + " بتسليمك شحنه جديده لتسليمها.";
-        notiData Noti = new notiData(UserInFormation.getId(), captinId, orderId,msg,datee,"false","orderinfo",UserInFormation.getUserName(), UserInFormation.getUserURL());
-        nDatabase.child(captinId).push().setValue(Noti);
+        notiData Noti = new notiData(UserInFormation.getId(), capID, orderData.getId(),msg,datee,"false","orderinfo",UserInFormation.getUserName(), UserInFormation.getUserURL());
+        nDatabase.child(capID).push().setValue(Noti);
 
-        // --------- Add Log
-        String Log = "قام المشرف بتسليم الشحنه للكابتن " + captinId + " لتسليمها للعميل";
-        mDatabase.child(orderId).child("logs").child(logC).setValue(Log);
+        // --- Add Log
+        String Log = "قام المشرف بتسليم الشحنه للكابتن " + capID + " لتسليمها للعميل";
+        logOrder(mDatabase, orderData.getId(), Log);
 
+        // ---- Toast
         Toast.makeText(mContext, "تم تسليم الشحنه للمندوب", Toast.LENGTH_SHORT).show();
         Timber.i("Order Assigned Succefully");
+    }
+
+    // ------- Add Logs to Order
+    public void logOrder(DatabaseReference mDatabase, String id, String message) {
+        long tsLong = System.currentTimeMillis()/1000;
+        String logC = Long.toString(tsLong);
+        mDatabase.child(id).child("logs").child(logC).setValue(message);
     }
 }

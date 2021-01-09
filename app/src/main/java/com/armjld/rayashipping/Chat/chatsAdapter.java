@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.models.Chat;
 import com.armjld.rayashipping.models.ChatsData;
@@ -68,11 +68,11 @@ public class chatsAdapter extends RecyclerView.Adapter<chatsAdapter.MyViewHolder
             Messages.cameFrom = "Chats";
             ChatFragmet.cameFrom = "Chat";
             if(unRead) {
-                SuperVisorHome.msgCount --;
-                if(SuperVisorHome.msgCount != 0) {
-                    SuperVisorHome.chatsBadge.setNumber(SuperVisorHome.msgCount);
+                Home.msgCount --;
+                if(Home.msgCount != 0) {
+                    Home.chatsBadge.setNumber(Home.msgCount);
                 } else {
-                    SuperVisorHome.bottomNavigationView.removeBadge(R.id.chats);
+                    Home.bottomNavigationView.removeBadge(R.id.chats);
                 }
             }
         });

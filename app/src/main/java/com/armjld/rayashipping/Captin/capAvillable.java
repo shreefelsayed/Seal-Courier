@@ -15,9 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.armjld.rayashipping.Adapters.MyAdapter;
+import com.armjld.rayashipping.Adapters.DeliveryAdapter;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.models.Data;
 
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class capAvillable extends Fragment {
         // ------------------------ Refresh the recycler view ------------------------------- //
         mSwipeRefreshLayout.setOnRefreshListener(() -> {
             mSwipeRefreshLayout.setRefreshing(true);
-            SuperVisorHome.getDeliveryOrders();
+            Home.getDeliveryOrders();
             mSwipeRefreshLayout.setRefreshing(false);
         });
 
@@ -72,9 +72,16 @@ public class capAvillable extends Fragment {
 
     public static void getOrders(){
         Timber.i("Setting orders in Home Fragment");
-        filterList = SuperVisorHome.captinAvillable;
+        filterList = Home.captinAvillable;
+
+        filterList.sort((o1, o2) -> {
+            String one = o1.getStatue();
+            String two = o2.getStatue();
+            return two.compareTo(one);
+        });
+
         if(mContext!= null) {
-            orderAdapter = new DeliveryAdapter(mContext, filterList);
+            orderAdapter = new DeliveryAdapter(mContext, filterList, "Home");
         }
         if(recyclerView != null) {
             recyclerView.setAdapter(orderAdapter);

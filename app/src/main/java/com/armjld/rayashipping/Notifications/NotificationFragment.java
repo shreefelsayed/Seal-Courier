@@ -18,7 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AllOrders;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.notiData;
 import com.google.firebase.database.DatabaseReference;
@@ -84,7 +84,7 @@ public class NotificationFragment extends Fragment {
         refresh.setOnRefreshListener(() -> {
             refresh.setRefreshing(true);
             recyclerView.setAdapter(null);
-            SuperVisorHome.getNoti();
+            Home.getNoti();
             refresh.setRefreshing(false);
         });
 
@@ -95,8 +95,8 @@ public class NotificationFragment extends Fragment {
                 nDatabase.child(uId).removeValue();
                 recyclerView.setAdapter(null);
                 filterList.clear();
-                SuperVisorHome.notiList.clear();
-                SuperVisorHome.bottomNavigationView.removeBadge(R.id.noti);
+                Home.notiList.clear();
+                Home.bottomNavigationView.removeBadge(R.id.noti);
                 EmptyPanel.setVisibility(View.VISIBLE);
                 dialogInterface.dismiss();
             }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
@@ -105,27 +105,27 @@ public class NotificationFragment extends Fragment {
 
         setNoti();
 
-        SuperVisorHome.bottomNavigationView.removeBadge(R.id.noti);
+        Home.bottomNavigationView.removeBadge(R.id.noti);
 
         btnBack.setOnClickListener(v->{
-            SuperVisorHome.whichFrag = "Home";
+            Home.whichFrag = "Home";
             assert getFragmentManager() != null;
-            getFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), SuperVisorHome.whichFrag).addToBackStack("Home").commit();
-            SuperVisorHome.bottomNavigationView.setSelectedItemId(R.id.home);
+            getFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), Home.whichFrag).addToBackStack("Home").commit();
+            Home.bottomNavigationView.setSelectedItemId(R.id.home);
         });
         
         return view;
     }
 
     public static void setNoti() {
-            filterList = SuperVisorHome.notiList;
+            filterList = Home.notiList;
             notiAdaptere = new NotiAdaptere(mContext, filterList, mContext, filterList.size());
             if(recyclerView != null) {
                 recyclerView.setAdapter(notiAdaptere);
                 updateNone(filterList.size());
-                for(int i = 0; i < SuperVisorHome.notiList.size(); i++) {
+                for(int i = 0; i < Home.notiList.size(); i++) {
                     if(filterList.get(i).getIsRead().equals("false") && !filterList.get(i).getNotiID().equals("")) {
-                        nDatabase.child(UserInFormation.getId()).child(SuperVisorHome.notiList.get(i).getNotiID()).child("isRead").setValue("true");
+                        nDatabase.child(UserInFormation.getId()).child(Home.notiList.get(i).getNotiID()).child("isRead").setValue("true");
                     }
                 }
             }

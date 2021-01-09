@@ -34,7 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.armjld.rayashipping.Login.StartUp;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.models.Chat;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.google.firebase.database.DataSnapshot;
@@ -459,8 +459,8 @@ public class Messages extends AppCompatActivity {
     private void getBack() {
         switch (cameFrom) {
             case "Chats" : {
-                SuperVisorHome.whichFrag = "Chats";
-                startActivity(new Intent(this, SuperVisorHome.class));
+                Home.whichFrag = "Chats";
+                startActivity(new Intent(this, Home.class));
                 break;
             }
             case "Profile" : {

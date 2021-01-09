@@ -18,7 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AllOrders;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.models.ChatsData;
 
 import java.util.ArrayList;
@@ -68,20 +68,20 @@ public class ChatFragmet extends Fragment {
         tbTitle.setText("المحادثات");
 
         btnBack.setOnClickListener(v-> {
-            SuperVisorHome.whichFrag = "Home";
+            Home.whichFrag = "Home";
             assert getFragmentManager() != null;
-            getFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), SuperVisorHome.whichFrag).addToBackStack("Home").commit();
-            SuperVisorHome.bottomNavigationView.setSelectedItemId(R.id.home);
+            getFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), Home.whichFrag).addToBackStack("Home").commit();
+            Home.bottomNavigationView.setSelectedItemId(R.id.home);
         });
 
-        mChat = SuperVisorHome.mChat;
+        mChat = Home.mChat;
         _chatsAdapter = new chatsAdapter(getActivity(), mChat);
         recyclerChat.setAdapter(_chatsAdapter);
 
         // ------------ Refresh View ---------- //
         refresh.setOnRefreshListener(() -> {
             refresh.setRefreshing(true);
-            SuperVisorHome.getMessage();
+            Home.getMessage();
             refresh.setRefreshing(false);
         });
 
@@ -96,7 +96,7 @@ public class ChatFragmet extends Fragment {
 
 public static void getMessages() {
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-        mChat = SuperVisorHome.mChat;
+        mChat = Home.mChat;
         _chatsAdapter = new chatsAdapter(mContext, mChat);
         if(recyclerChat != null) {
             recyclerChat.setAdapter(_chatsAdapter);

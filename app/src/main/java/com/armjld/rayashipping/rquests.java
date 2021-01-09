@@ -1,11 +1,9 @@
 package com.armjld.rayashipping;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.requestsData;
 import com.google.firebase.database.DataSnapshot;
@@ -143,13 +141,13 @@ public class rquests {
         requests.clear();
         requests.trimToSize();
 
-        if(SuperVisorHome.mCaptinsIDS.size() == 0) {
+        if(Home.mCaptinsIDS.size() == 0) {
             return;
         }
 
         // ------- Get requests assigned to all of my captins
-        for(int i = 0; i < SuperVisorHome.mCaptinsIDS.size(); i++) {
-            String myCaptinID = SuperVisorHome.mCaptinsIDS.get(i);
+        for(int i = 0; i < Home.mCaptinsIDS.size(); i++) {
+            String myCaptinID = Home.mCaptinsIDS.get(i);
             FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(myCaptinID).child("requests").orderByChild("statue").equalTo("N/A").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -161,7 +159,7 @@ public class rquests {
                             requests.add(reqs);
 
                             // ------ Delete Outdated Requests
-                            if(!req.getDate().substring(0 , 10).equals(datee.substring(0 ,10)) && !SuperVisorHome.avillableIDS.contains(req.getOrderId())) {
+                            if(!req.getDate().substring(0 , 10).equals(datee.substring(0 ,10)) && !Home.avillableIDS.contains(req.getOrderId())) {
                                 String owner = req.getOwner();
                                 deleteReq(req.getOrderId(), owner, "Esh7nly");
                             }

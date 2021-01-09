@@ -22,6 +22,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/btnAsignAll"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar_home"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_asign"
+            app:tint="@color/ic_profile_background" />
+
+        <ImageView
             android:id="@+id/btnBack"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"

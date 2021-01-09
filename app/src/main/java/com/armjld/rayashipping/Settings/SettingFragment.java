@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
@@ -37,7 +36,7 @@ import androidx.fragment.app.Fragment;
 import com.armjld.rayashipping.Login.LoginManager;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AllOrders;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -50,13 +49,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static android.content.Context.MODE_PRIVATE;
-
 
 public class SettingFragment extends Fragment {
 
     TextView txtName,txtType,txtPhone;
-
     TextView txtPassSettings,txtReports,txtSignOut,txtContact,txtAbout,txtShare,txtPrivacy,txtWalletMoney, txtRate,txtChangePhone;
     TextView txtCount;
     ImageView imgPPP,btnBack;
@@ -85,7 +81,9 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
         mAuth = FirebaseAuth.getInstance();
+
         uDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users");
+
         uId =  UserInFormation.getId();
         mdialog = new ProgressDialog(getActivity());
 
@@ -116,13 +114,12 @@ public class SettingFragment extends Fragment {
         TextView tbTitle = view.findViewById(R.id.toolbar_title);
         tbTitle.setText("الاعدادات");
 
-
         setUserData();
         btnBack.setOnClickListener(v-> {
-            SuperVisorHome.whichFrag = "Home";
+            Home.whichFrag = "Home";
             assert getFragmentManager() != null;
-            getFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), SuperVisorHome.whichFrag).addToBackStack("Home").commit();
-            SuperVisorHome.bottomNavigationView.setSelectedItemId(R.id.home);
+            getFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), Home.whichFrag).addToBackStack("Home").commit();
+            Home.bottomNavigationView.setSelectedItemId(R.id.home);
         });
 
         txtRate.setOnClickListener(v-> {
@@ -135,11 +132,12 @@ public class SettingFragment extends Fragment {
         });
 
         txtPassSettings.setOnClickListener(v-> startActivity(new Intent(getActivity(), ChangePassword.class)));
-        /*txtContact.setOnClickListener(v->startActivity(new Intent(getActivity(), Tickets.class)));
-        txtAbout.setOnClickListener(v->startActivity(new Intent(getActivity(), About.class)));
         txtPrivacy.setOnClickListener(v-> startActivity(new Intent(getActivity(), Terms.class)));
-        linWallet.setOnClickListener(v-> startActivity(new Intent(getActivity(), MyWallet.class)));*/
         txtChangePhone.setOnClickListener(v-> startActivity(new Intent(getActivity(), ChangePhone.class)));
+        txtAbout.setOnClickListener(v->startActivity(new Intent(getActivity(), About.class)));
+
+        /*txtContact.setOnClickListener(v->startActivity(new Intent(getActivity(), Tickets.class)));
+        linWallet.setOnClickListener(v-> startActivity(new Intent(getActivity(), MyWallet.class)));*/
 
         txtWalletMoney.setText(UserInFormation.getWalletmoney());
         int currentMoney = Integer.parseInt(UserInFormation.getWalletmoney());
@@ -149,7 +147,6 @@ public class SettingFragment extends Fragment {
             txtWalletMoney.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         } else {
             txtWalletMoney.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
-
         }
 
         txtShare.setOnClickListener(v->{
@@ -196,7 +193,7 @@ public class SettingFragment extends Fragment {
             checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE_CODE);
             if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                if(intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                if(intent.resolveActivity(requireActivity().getPackageManager()) != null) {
                     startActivityForResult(intent, TAKE_IMAGE_CODE);
                 }
             }
@@ -210,7 +207,6 @@ public class SettingFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     private void setUserData() {
         txtName.setText(UserInFormation.getUserName());
-        txtPhone.setText("+2" + UserInFormation.getuPhone());
         Picasso.get().load(Uri.parse(UserInFormation.getUserURL())).into(imgPPP);
         switchNotiGov.setChecked(UserInFormation.getSendGovNoti().equals("true"));
         switchNotiCity.setChecked(UserInFormation.getSendCityNoti().equals("true"));
@@ -219,10 +215,13 @@ public class SettingFragment extends Fragment {
             txtType.setText("مشرف");
             linWallet.setVisibility(View.GONE);
             linStatics.setVisibility(View.GONE);
+            txtPhone.setText(UserInFormation.getSup_code());
         } else {
             txtType.setText("مندوب شحن");
             linWallet.setVisibility(View.VISIBLE);
             linStatics.setVisibility(View.VISIBLE);
+            txtPhone.setText("+2" + UserInFormation.getuPhone());
+
         }
 
     }

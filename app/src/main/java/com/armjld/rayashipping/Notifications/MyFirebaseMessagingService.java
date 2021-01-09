@@ -22,7 +22,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
+import com.armjld.rayashipping.Home;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -88,9 +88,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void chatNoti (String title, String body, String roomid, String to) {
-        SuperVisorHome.getMessageCount();
+        Home.getMessageCount();
         // ------------ Click Notification Event ------------------- //
-        Intent chatintent = new Intent(this, SuperVisorHome.class);
+        Intent chatintent = new Intent(this, Home.class);
         chatintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent2 = PendingIntent.getActivity(this, 1000 /* Request code */, chatintent, 0);
 
@@ -141,8 +141,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendOrderRecived(String messageBody, String title, String OrderID) {
-        SuperVisorHome.getNoti();
-        Intent intent = new Intent(this, SuperVisorHome.class);
+        Home.getNoti();
+        Intent intent = new Intent(this, Home.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         Intent brodcastIntent = new Intent(this, Brodcast.class);
@@ -184,8 +184,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(String messageBody, String title, String action, String OrderID) {
-        SuperVisorHome.getNoti();
-        Intent intent = new Intent(this, SuperVisorHome.class);
+        Home.getNoti();
+        Intent intent = new Intent(this, Home.class);
         intent.putExtra("action", action);
         intent.putExtra("order", OrderID);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

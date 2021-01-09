@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.armjld.rayashipping.Adapters.MyAdapter;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.models.Data;
 
@@ -59,7 +60,7 @@ public class SuperAvillable extends Fragment {
         // ------------------------ Refresh the recycler view ------------------------------- //
         mSwipeRefreshLayout.setOnRefreshListener(() -> {
             mSwipeRefreshLayout.setRefreshing(true);
-            SuperVisorHome.getOrdersByLatest();
+            Home.getOrdersByLatest();
             mSwipeRefreshLayout.setRefreshing(false);
         });
 
@@ -70,9 +71,9 @@ public class SuperAvillable extends Fragment {
 
     public static void getOrders(){
         Timber.i("Setting orders in Home Fragment");
-        filterList = SuperVisorHome.mm;
+        filterList = Home.mm;
         if(mContext!= null) {
-            orderAdapter = new MyAdapter(mContext, filterList);
+            orderAdapter = new MyAdapter(mContext, filterList, "Home");
         }
         if(recyclerView != null) {
             recyclerView.setAdapter(orderAdapter);

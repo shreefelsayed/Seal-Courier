@@ -179,7 +179,6 @@
                             android:layout_height="wrap_content"
                             android:drawableRight="@drawable/ic_vespa"
                             android:drawablePadding="@dimen/_8sdp"
-                            android:drawableTint="@color/colorAccent"
                             android:gravity="center|right"
                             android:text="عدد الشحنات"
                             android:textColor="@color/colorAccent"
@@ -289,7 +288,7 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:tint="@color/colorAccent"
+                                app:tint="@color/ic_profile_background"
                                 tools:ignore="RtlCompat" />
 
                             <TextView
@@ -338,6 +337,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/_10sdp"
+                    android:visibility="gone"
                     android:background="@drawable/bold_round_bg"
                     android:orientation="vertical">
 
@@ -455,9 +455,9 @@
                         android:layout_marginLeft="@dimen/_16sdp"
                         android:layout_marginRight="@dimen/_16sdp"
                         android:layout_marginBottom="@dimen/_16sdp"
-                        android:drawableTint="@color/colorAccent"
                         android:drawableRight="@drawable/ic_star"
                         android:drawablePadding="@dimen/_8sdp"
+                        android:drawableTint="@color/ic_profile_background"
                         android:gravity="center|right"
                         android:text="قيمنا علي متجر جوجل"
                         android:textColor="@color/colorAccent"

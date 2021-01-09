@@ -19,10 +19,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.armjld.rayashipping.Adapters.MyAdapter;
+import com.armjld.rayashipping.Adapters.DeliveryAdapter;
 import com.armjld.rayashipping.Login.LoginManager;
 import com.armjld.rayashipping.Login.StartUp;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
 import com.armjld.rayashipping.models.Data;
+import com.armjld.rayashipping.models.UserInFormation;
 import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,6 +35,8 @@ public class Filters extends AppCompatActivity {
 
     private EditText txtFilterMoney;
     ArrayList<Data> filterList = new ArrayList<>();
+    public static ArrayList<Data> mainListm = new ArrayList<>();
+
     RecyclerView recyclerView;
     LinearLayout EmptyPanel;
     int filterValue;
@@ -86,16 +89,12 @@ public class Filters extends AppCompatActivity {
         autoComp = findViewById(R.id.autoComp);
         autoCompDrop = findViewById(R.id.autoCompDrop);
         btnBack = findViewById(R.id.btnBack);
-
         chkPick = findViewById(R.id.chkPick);
         chkDrop = findViewById(R.id.chkDrop);
-
         autoCityPick = findViewById(R.id.autoCityPick);
         autoCityDrop = findViewById(R.id.autoCityDrop);
-
         tlPickCity = findViewById(R.id.tlPickCity);
         tlDropCity = findViewById(R.id.tlDropCity);
-
         txtOrderCount = findViewById(R.id.txtOrderCount);
 
         String[] cities = getResources().getStringArray(R.array.arrayCities);
@@ -299,20 +298,25 @@ public class Filters extends AppCompatActivity {
             // ------------------------ CHECKING AREAS FILTERS --------------------------//
             if(chkPick.isChecked()) {
                 if(chkDrop.isChecked()) {
-                    filterList = (ArrayList<Data>) SuperVisorHome.mm.stream().filter(x -> x.getStatue().equals("placed") && Integer.parseInt(x.getGMoney()) <= filterValue && x.getTxtPState().equals(spState) && x.getTxtDState().equals(sdState)).collect(Collectors.toList());
+                    filterList = (ArrayList<Data>) mainListm.stream().filter(x -> Integer.parseInt(x.getGMoney()) <= filterValue && x.getTxtPState().equals(spState) && x.getTxtDState().equals(sdState)).collect(Collectors.toList());
                 } else {
-                    filterList = (ArrayList<Data>) SuperVisorHome.mm.stream().filter(x -> x.getStatue().equals("placed") && Integer.parseInt(x.getGMoney()) <= filterValue && x.getTxtPState().equals(spState) && x.getmDRegion().equals(sdRegion)).collect(Collectors.toList());
+                    filterList = (ArrayList<Data>) mainListm.stream().filter(x -> Integer.parseInt(x.getGMoney()) <= filterValue && x.getTxtPState().equals(spState) && x.getmDRegion().equals(sdRegion)).collect(Collectors.toList());
                 }
             } else {
                 if(chkDrop.isChecked()) {
-                    filterList = (ArrayList<Data>) SuperVisorHome.mm.stream().filter(x -> x.getStatue().equals("placed") && Integer.parseInt(x.getGMoney()) <= filterValue && x.getmPRegion().equals(spRegion) && x.getTxtDState().equals(sdState)).collect(Collectors.toList());
+                    filterList = (ArrayList<Data>) mainListm.stream().filter(x -> Integer.parseInt(x.getGMoney()) <= filterValue && x.getmPRegion().equals(spRegion) && x.getTxtDState().equals(sdState)).collect(Collectors.toList());
                 } else {
-                    filterList = (ArrayList<Data>) SuperVisorHome.mm.stream().filter(x -> x.getStatue().equals("placed") && Integer.parseInt(x.getGMoney()) <= filterValue && x.getmPRegion().equals(spRegion) && x.getmDRegion().equals(sdRegion)).collect(Collectors.toList());
+                    filterList = (ArrayList<Data>) mainListm.stream().filter(x -> Integer.parseInt(x.getGMoney()) <= filterValue && x.getmPRegion().equals(spRegion) && x.getmDRegion().equals(sdRegion)).collect(Collectors.toList());
                 }
             }
             updateNone(filterList.size());
-            MyAdapter filterAdapter = new MyAdapter(Filters.this, filterList);
-            recyclerView.setAdapter(filterAdapter);
+            if(UserInFormation.getAccountType().equals("Supervisor")) {
+                MyAdapter filterAdapter = new MyAdapter(Filters.this, filterList, "Home");
+                recyclerView.setAdapter(filterAdapter);
+            } else {
+                DeliveryAdapter filterAdapter = new DeliveryAdapter(Filters.this, filterList, "Hine");
+                recyclerView.setAdapter(filterAdapter);
+            }
             txtOrderCount.setText("هناك " + filterList.size() + " شحنة في خط سيرك");
         }
     }

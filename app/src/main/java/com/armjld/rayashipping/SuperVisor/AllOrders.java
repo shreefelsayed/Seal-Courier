@@ -15,9 +15,15 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.armjld.rayashipping.Adapters.SuperVisorAdapter;
 import com.armjld.rayashipping.Filters;
+import com.armjld.rayashipping.Home;
+import com.armjld.rayashipping.MapsActivity;
 import com.armjld.rayashipping.QRScanner;
 import com.armjld.rayashipping.R;
+import com.armjld.rayashipping.models.Data;
+import com.armjld.rayashipping.models.UserInFormation;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
 
 public class AllOrders extends Fragment {
 
@@ -39,7 +45,7 @@ public class AllOrders extends Fragment {
         View view = inflater.inflate(R.layout.fragment_all_orders, container, false);
 
         // Buttons -------
-        ImageView filtrs_btn = view.findViewById(R.id.filters_btn);
+        ImageView btnFilters = view.findViewById(R.id.filters_btn);
         ImageView btnMaps = view.findViewById(R.id.btnMaps);
         ImageView btnScan = view.findViewById(R.id.btnScan);
 
@@ -51,19 +57,54 @@ public class AllOrders extends Fragment {
         tabs = view.findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
-        filtrs_btn.setOnClickListener(v -> {
-            Intent i = new Intent(getActivity(), Filters.class);
-            startActivityForResult(i, 1);
-        });
 
         btnScan.setOnClickListener(v-> {
             Intent i = new Intent(mContext, QRScanner.class);
             mContext.startActivity(i);
         });
 
-        //btnMaps.setOnClickListener(v -> startActivityForResult(new Intent(getActivity(), MapsActivity.class), 1));
+        btnFilters.setOnClickListener(v -> OpenFilters());
+
+        btnMaps.setOnClickListener(v -> openMaps());
 
         return view;
+    }
+
+    private void OpenFilters() {
+        Intent i = new Intent(getActivity(), Filters.class);
+        if(UserInFormation.getAccountType().equals("Supervisor")) {
+            if(tabs.getSelectedTabPosition() == 0) {
+                Filters.mainListm = Home.mm;
+            } else if (tabs.getSelectedTabPosition() == 1) {
+                Filters.mainListm = Home.delvOrders;
+            }
+        } else {
+            if(tabs.getSelectedTabPosition() == 0) {
+                Filters.mainListm = Home.captinAvillable;
+            } else if (tabs.getSelectedTabPosition() == 1) {
+                Filters.mainListm = Home.captinDelv;
+            }
+        }
+        startActivityForResult(i, 1);
+
+    }
+
+    private void openMaps() {
+        Intent i = new Intent(getActivity(), MapsActivity.class);
+        if(UserInFormation.getAccountType().equals("Supervisor")) {
+            // -------- Compine Lists
+            ArrayList<Data> bothLists = new ArrayList<>();
+            bothLists.addAll(Home.mm);
+            bothLists.addAll(Home.delvOrders);
+            MapsActivity.filterList = bothLists;
+        } else {
+            // -------- Compine Lists
+            ArrayList<Data> bothLists = new ArrayList<>();
+            bothLists.addAll(Home.captinAvillable);
+            bothLists.addAll(Home.captinDelv);
+            MapsActivity.filterList = bothLists;
+        }
+        startActivityForResult(i, 1);
     }
 
     @Override

@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="40dp"
-        app:SpinKit_Color="@color/colorAccent"
+        app:SpinKit_Color="@color/ic_profile_background"
         app:layout_constraintBottom_toTopOf="@+id/textView5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -40,7 +40,7 @@
         android:layout_marginBottom="20dp"
         android:text="Powered By Armjld Co."
         android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/_20sdp"
+        android:textSize="@dimen/_15sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

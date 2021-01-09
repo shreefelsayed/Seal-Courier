@@ -45,9 +45,7 @@ public class chatListclass {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
 
     }
@@ -97,12 +95,13 @@ public class chatListclass {
                     Bdatabase.child("talk").setValue("true");
                     Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(hisId).child("chats").child(myId);
                     Bdatabase.child("talk").setValue("true");
-
                     Intent intent = new Intent(context, Messages.class);
                     intent.putExtra("roomid", Objects.requireNonNull(snapshot.child("roomid").getValue()).toString());
                     intent.putExtra("rid", hisId);
                     ((Activity)context).startActivityForResult(intent, 1);
+
                 } else {
+
                     Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(myId).child("chats");
                     String chat = Bdatabase.push().getKey();
                     Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(myId).child("chats").child(hisId);

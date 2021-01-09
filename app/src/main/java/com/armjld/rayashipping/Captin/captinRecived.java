@@ -15,20 +15,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.armjld.rayashipping.Adapters.MyAdapter;
+import com.armjld.rayashipping.Adapters.DeliveryAdapter;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.models.Data;
 
 import java.util.ArrayList;
-
-import timber.log.Timber;
 
 public class captinRecived extends Fragment {
 
     public static ArrayList<Data> filterList = new ArrayList<>();
     static LinearLayout EmptyPanel;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    public static SwipeRefreshLayout mSwipeRefreshLayout;
     public static RecyclerView recyclerView;
     public static DeliveryAdapter orderAdapter;
     public static Context mContext;
@@ -60,7 +58,7 @@ public class captinRecived extends Fragment {
         // ------------------------ Refresh the recycler view ------------------------------- //
         mSwipeRefreshLayout.setOnRefreshListener(() -> {
             mSwipeRefreshLayout.setRefreshing(true);
-            SuperVisorHome.getDeliveryOrders();
+            Home.getDeliveryOrders();
             mSwipeRefreshLayout.setRefreshing(false);
         });
 
@@ -70,10 +68,10 @@ public class captinRecived extends Fragment {
     }
 
     public static void getOrders(){
-        filterList = SuperVisorHome.captinDelv;
+        filterList = Home.captinDelv;
 
         if(mContext!= null) {
-            orderAdapter = new DeliveryAdapter(mContext, filterList);
+            orderAdapter = new DeliveryAdapter(mContext, filterList, "Home");
         }
         if(recyclerView != null) {
             recyclerView.setAdapter(orderAdapter);

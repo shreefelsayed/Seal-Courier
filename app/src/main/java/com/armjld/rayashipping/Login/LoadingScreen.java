@@ -11,17 +11,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.armjld.rayashipping.Captin.capAvillable;
 import com.armjld.rayashipping.Captin.captinRecived;
 import com.armjld.rayashipping.Notifications.NotificationFragment;
-import com.armjld.rayashipping.SuperVisor.MyCaptins;
+import com.armjld.rayashipping.R;
+import com.armjld.rayashipping.SuperCaptins.MyCaptins;
 import com.armjld.rayashipping.SuperVisor.SuperAvillable;
 import com.armjld.rayashipping.SuperVisor.SuperRecived;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
-import com.armjld.rayashipping.R;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.getRefrence;
-import com.armjld.rayashipping.models.Captins;
 import com.armjld.rayashipping.models.ChatsData;
 import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.notiData;
+import com.armjld.rayashipping.models.userData;
 import com.armjld.rayashipping.rquests;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,14 +31,15 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-import static com.armjld.rayashipping.SuperVisor.SuperVisorHome.captinDelv;
-
 public class LoadingScreen extends AppCompatActivity {
+
+    public static ArrayList<String> cities = new ArrayList<>();
 
     static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     @SuppressLint("StaticFieldLeak")
@@ -68,6 +69,26 @@ public class LoadingScreen extends AppCompatActivity {
         } else if(UserInFormation.getAccountType().equals("Delivery Worker")) {
             getDeliveryOrders();
         }
+
+        getCities();
+
+    }
+
+    private void getCities() {
+        cities.clear();
+        String[] citiess = getResources().getStringArray(R.array.zone1);
+        for (String city : citiess) {
+            String[] filterSep = city.split(", ");
+            String filterGov = filterSep[0].trim();
+            cities.add(filterGov);
+        }
+
+        citiess = getResources().getStringArray(R.array.zone2);
+        for (String city : citiess) {
+            String[] filterSep = city.split(", ");
+            String filterGov = filterSep[0].trim();
+            cities.add(filterGov);
+        }
     }
 
     private void getDeliveryOrders() {
@@ -75,10 +96,10 @@ public class LoadingScreen extends AppCompatActivity {
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef("Esh7nly");
 
-        SuperVisorHome.captinAvillable.clear();
-        SuperVisorHome.captinAvillable.trimToSize();
-        SuperVisorHome.captinDelv.clear();
-        SuperVisorHome.captinDelv.trimToSize();
+        Home.captinAvillable.clear();
+        Home.captinAvillable.trimToSize();
+        Home.captinDelv.clear();
+        Home.captinDelv.trimToSize();
 
         mDatabase.orderByChild("uAccepted").equalTo(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -89,10 +110,10 @@ public class LoadingScreen extends AppCompatActivity {
                         assert orderData != null;
                         if(orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             // ------ Add to Avillabe
-                            SuperVisorHome.captinAvillable.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD")) {
+                            Home.captinAvillable.add(orderData);
+                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied")) {
                             // ------ Add to to Delivered
-                            captinDelv.add(orderData);
+                            Home.captinDelv.add(orderData);
                         }
                     }
                 }
@@ -118,10 +139,10 @@ public class LoadingScreen extends AppCompatActivity {
                         assert orderData != null;
                         if(orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             // ------ Add to Avillabe
-                            SuperVisorHome.captinAvillable.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD")) {
+                            Home.captinAvillable.add(orderData);
+                        } else if (orderData.getStatue().equals("readyD")|| orderData.getStatue().equals("denied")) {
                             // ------ Add to to Delivered
-                            captinDelv.add(orderData);
+                            Home.captinDelv.add(orderData);
                         }
                     }
                 }
@@ -140,25 +161,25 @@ public class LoadingScreen extends AppCompatActivity {
     // --------------- Get My Captins ------------- \\
     private void getCaptins() {
         txtLoading.setText("مراجعه المندوبين ..");
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("captins").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").orderByChild("mySuper").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                SuperVisorHome.mCaptins.clear();
-                SuperVisorHome.mCaptins.trimToSize();
+                Home.mCaptins.clear();
+                Home.mCaptins.trimToSize();
                 if(snapshot.exists()) {
                     // ------ Get my Captins Data
                     for(DataSnapshot captin : snapshot.getChildren()) {
-                        Captins captins = captin.getValue(Captins.class);
-                        assert captins != null;
-                        SuperVisorHome.mCaptins.add(captins); // Add the Captin data
-                        SuperVisorHome.mCaptinsIDS.add(captins.getId()); // Add the id to id List
+                        userData user = captin.getValue(userData.class);
+                        assert user != null;
+                        Home.mCaptinsIDS.add(user.getId()); // Add the id to id List
+                        Home.mCaptins.add(user); // Add the Captin data
                     }
                 }
+
                 // ------ Send data to captins fragment
                 MyCaptins.getCaptins();
                 _req.ImportCuurentRequests();
                 getOrdersByLatest();
-
             }
 
             @Override
@@ -176,10 +197,11 @@ public class LoadingScreen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // --------- Get Avillable Orders Data ------
-                SuperVisorHome.mm.clear();
-                SuperVisorHome.mm.trimToSize();
-                SuperVisorHome.avillableIDS.clear();
-                SuperVisorHome.avillableIDS.trimToSize();
+                Home.mm.clear();
+                Home.mm.trimToSize();
+                Home.avillableIDS.clear();
+                Home.avillableIDS.trimToSize();
+
                 if(snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         if(ds.getChildrenCount() < 5) return;
@@ -196,16 +218,14 @@ public class LoadingScreen extends AppCompatActivity {
                         assert orderDate != null;
                         assert myDate != null;
 
-                        if(orderDate.compareTo(myDate) >= 0 && orderData.getStatue().equals("placed")) {
-                            if(orderData.getProvider().equals("Esh7nly") || orderData.getProvider().equals("Raya")) {
-                                SuperVisorHome.mm.add(orderData);
-                                SuperVisorHome.avillableIDS.add(orderData.getId());
-                            }
+                        if(orderDate.compareTo(myDate) >= 0  && cities.contains(orderData.getmPRegion()) && cities.contains(orderData.getmDRegion())) {
+                            Home.mm.add(orderData);
+                            Home.avillableIDS.add(orderData.getId());
                         }
                     }
 
                     // ------- Sort According to Date
-                    SuperVisorHome.mm.sort((o1, o2) -> {
+                    Home.mm.sort((o1, o2) -> {
                         String one = o1.getDate();
                         String two = o2.getDate();
                         return one.compareTo(two);
@@ -233,13 +253,13 @@ public class LoadingScreen extends AppCompatActivity {
                         if(ds.getChildrenCount() < 5) return;
                         Data orderData = ds.getValue(Data.class);
                         assert orderData != null;
-                        if(orderData.getProvider().equals("Raya") && orderData.getStatue().equals("placed")) {
-                            SuperVisorHome.mm.add(orderData);
-                            SuperVisorHome.avillableIDS.add(orderData.getId());
-                        }
+
+                        Home.mm.add(orderData);
+                        Home.avillableIDS.add(orderData.getId());
                     }
+
                     // ------- Sort According to Date
-                    SuperVisorHome.mm.sort((o1, o2) -> {
+                    Home.mm.sort((o1, o2) -> {
                         String one = o1.getDate();
                         String two = o2.getDate();
                         return one.compareTo(two);
@@ -261,8 +281,8 @@ public class LoadingScreen extends AppCompatActivity {
         DatabaseReference mDatabase = ref.getRef("Raya");
         txtLoading.setText("جاري تحضير الشحنات الشركه ..");
 
-        SuperVisorHome.delvOrders.clear();
-        SuperVisorHome.delvOrders.trimToSize();
+        Home.delvOrders.clear();
+        Home.delvOrders.trimToSize();
 
         mDatabase.orderByChild("dSupervisor").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -270,8 +290,9 @@ public class LoadingScreen extends AppCompatActivity {
                 if(allOrders.exists()) {
                     for(DataSnapshot notDelv : allOrders.getChildren()) {
                         Data orderData = notDelv.getValue(Data.class);
+                        assert orderData != null;
                         if(orderData.getStatue().equals("supD")) {
-                            SuperVisorHome.delvOrders.add(orderData);
+                            Home.delvOrders.add(orderData);
                         }
                     }
                 }
@@ -295,8 +316,9 @@ public class LoadingScreen extends AppCompatActivity {
                 if(allOrders.exists()) {
                     for(DataSnapshot notDelv : allOrders.getChildren()) {
                         Data orderData = notDelv.getValue(Data.class);
+                        assert orderData != null;
                         if(orderData.getStatue().equals("supD")) {
-                            SuperVisorHome.delvOrders.add(orderData);
+                            Home.delvOrders.add(orderData);
                         }
                     }
                 }
@@ -316,8 +338,8 @@ public class LoadingScreen extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void getNoti() {
         txtLoading.setText("جاري تجهيز الإشعارات ..");
-        SuperVisorHome.notiList.clear();
-        SuperVisorHome.notiList.trimToSize();
+        Home.notiList.clear();
+        Home.notiList.trimToSize();
         FirebaseDatabase.getInstance().getReference().child("Pickly").child("notificationRequests").child(UserInFormation.getId()).limitToLast(30).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -332,7 +354,7 @@ public class LoadingScreen extends AppCompatActivity {
                         notiData notiDB = ds.getValue(notiData.class);
                         assert notiDB != null;
 
-                        SuperVisorHome.notiList.add(notiDB);
+                        Home.notiList.add(notiDB);
                         notiDB.setNotiID(notiID);
                         if(notiDB.getIsRead().equals("false")) {
                             unRead++;
@@ -340,7 +362,7 @@ public class LoadingScreen extends AppCompatActivity {
                     }
                 }
 
-                SuperVisorHome.notiCount = unRead; // Set unread Count
+                Home.notiCount = unRead; // Set unread Count
 
                 // ------ Add to Fragment
                 NotificationFragment.setNoti();
@@ -359,8 +381,8 @@ public class LoadingScreen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int newCount = 0; // New Messages Count
-                SuperVisorHome.mChat.clear();
-                SuperVisorHome.mChat.trimToSize();
+                Home.mChat.clear();
+                Home.mChat.trimToSize();
 
                 // ------- Check for Chat Rooms
                 if(snapshot.exists()) {
@@ -374,7 +396,7 @@ public class LoadingScreen extends AppCompatActivity {
                             }
 
                             if(ds.child("timestamp").exists() && talk.equals("true")) {
-                                SuperVisorHome.mChat.add(cchatData);
+                                Home.mChat.add(cchatData);
                             }
 
                             if(ds.child("newMsg").exists()) {
@@ -386,7 +408,7 @@ public class LoadingScreen extends AppCompatActivity {
                     }
                 }
 
-                SuperVisorHome.msgCount = newCount; // Set Count
+                Home.msgCount = newCount; // Set Count
 
                 whatToDo(); // Move to Next Activity
             }
@@ -397,7 +419,7 @@ public class LoadingScreen extends AppCompatActivity {
     }
 
     private void whatToDo() {
-        SuperVisorHome.whichFrag = "Home";
-        startActivity(new Intent(LoadingScreen.this, SuperVisorHome.class));
+        Home.whichFrag = "Home";
+        startActivity(new Intent(LoadingScreen.this, Home.class));
     }
 }

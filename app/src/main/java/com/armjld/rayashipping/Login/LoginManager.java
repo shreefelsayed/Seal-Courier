@@ -137,7 +137,6 @@ public class LoginManager {
                     _locMang.ImportLocation();
 
                     mContext.startActivity(new Intent(mContext, LoadingScreen.class));
-                    Toast.makeText(mContext, "Login Successful", Toast.LENGTH_SHORT).show();
                     ((Activity) mContext).finish();
                 } else {
                     mContext.startActivity(new Intent(mContext, Login_Options.class));
@@ -166,6 +165,7 @@ public class LoginManager {
         UserInFormation.setWalletmoney(String.valueOf(user.getWalletmoney()));
         UserInFormation.setIsConfirm(user.getIsConfirmed());
         UserInFormation.setProvider(user.getProvider());
+        UserInFormation.setPackMoney(user.getPackMoney());
 
         // ------- Set My Supervisor Codes -------- \\
         UserInFormation.setSupId(user.getMySuperId());

@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,33 +23,26 @@ import com.armjld.rayashipping.Chat.Messages;
 import com.armjld.rayashipping.Chat.chatListclass;
 import com.armjld.rayashipping.OrdersClass;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.Ratings.Ratings;
-import com.armjld.rayashipping.SuperVisor.AllOrders;
+import com.armjld.rayashipping.SuperCaptins.MapCaptinTrack;
+import com.armjld.rayashipping.SuperCaptins.MyCaptinInfo;
 import com.armjld.rayashipping.SuperVisor.AsignOrder;
 import com.armjld.rayashipping.SuperVisor.SuperAvillable;
 import com.armjld.rayashipping.SuperVisor.SuperRecived;
-import com.armjld.rayashipping.SuperVisor.SuperVisorHome;
-import com.armjld.rayashipping.models.Captins;
+import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.userData;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class CaptinsAdapter extends  RecyclerView.Adapter<CaptinsAdapter.MyViewHolder> implements ActivityCompat.OnRequestPermissionsResultCallback {
     Context mContext;
-    ArrayList<Captins> captinList;
+    ArrayList<userData> captinList;
     String from;
     private static final int PHONE_CALL_CODE = 100;
 
-    public CaptinsAdapter(Context mContext, ArrayList<Captins> captinList, String from) {
+    public CaptinsAdapter(Context mContext, ArrayList<userData> captinList, String from) {
         this.mContext = mContext;
         this.captinList = captinList;
         this.from = from;
@@ -66,8 +58,10 @@ public class CaptinsAdapter extends  RecyclerView.Adapter<CaptinsAdapter.MyViewH
 
     @Override
     public void onBindViewHolder(@NonNull CaptinsAdapter.MyViewHolder holder, int position) {
-        Captins captin = captinList.get(position);
+        userData captin = captinList.get(position);
         holder.txtName.setText(captin.getName());
+
+        holder.setData(captin);
 
         if(from.equals("info")) {
             holder.btnCall.setVisibility(View.VISIBLE);
@@ -81,6 +75,8 @@ public class CaptinsAdapter extends  RecyclerView.Adapter<CaptinsAdapter.MyViewH
 
         // ------- Show Captin Orders and Data
         holder.linCaptin.setOnClickListener(v-> {
+            MyCaptinInfo.user = captin;
+            mContext.startActivity(new Intent(mContext, MyCaptinInfo.class));
         });
 
         // ------- Chat with Captin
@@ -90,20 +86,18 @@ public class CaptinsAdapter extends  RecyclerView.Adapter<CaptinsAdapter.MyViewH
             Messages.cameFrom = "Profile";
         });
 
+        // ---- Track Captin
+        holder.btnTrack.setOnClickListener(v-> {
+            if(captin.getTrackId().equals("")) return;
+            MapCaptinTrack.user = captin;
+            MapCaptinTrack.DEVICE_ID = captin.getTrackId();
+            mContext.startActivity(new Intent(mContext, MapCaptinTrack.class));
+        });
+
         // ------- Asign to Captin
         holder.btnAsign.setOnClickListener(v-> {
             BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل تريد تسليم الشحنه للمندوب ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
-                OrdersClass ordersClass = new OrdersClass(mContext);
-                if(AsignOrder.type.equals("accept")) {
-                    ordersClass.assignToCaptin(captin.getId(), AsignOrder.orderId, AsignOrder.orderOwner, AsignOrder.orderProvider);
-                    SuperAvillable.orderAdapter.notifyItemChanged(AsignOrder.position);
-                } else if (AsignOrder.type.equals("bid")) {
-                    ordersClass.bidOnOrder(AsignOrder.orderOwner, AsignOrder.orderId, AsignOrder.dName, captin.getId(), AsignOrder.orderProvider);
-                    SuperAvillable.orderAdapter.notifyItemChanged(AsignOrder.position);
-                } else if(AsignOrder.type.equals("delv")) {
-                    ordersClass.asignDelv(captin.getId(), AsignOrder.orderId, AsignOrder.orderOwner, AsignOrder.orderProvider);
-                    SuperRecived.orderAdapter.notifyItemChanged(AsignOrder.position);
-                }
+                AssignToCaptin(captin.getId());
                 ((Activity) mContext).finish();
                 dialogInterface.dismiss();
             }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
@@ -124,45 +118,31 @@ public class CaptinsAdapter extends  RecyclerView.Adapter<CaptinsAdapter.MyViewH
             }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
             mBottomSheetDialog.show();
         });
+    }
 
-        // -------- Get Captin Data -----
-        DatabaseReference capRef = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(captin.getId());
-        capRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userData user = snapshot.getValue(userData.class);
-                assert user != null;
-
-                holder.setData(user);
-
-                // ------------ Ratings ----------- \\
-                String one = "0";
-                String two = "0";
-                String three = "0";
-                String four = "0";
-                String five = "0";
-                if(snapshot.child("rating").child("one").exists()) {
-                    one = Objects.requireNonNull(snapshot.child("rating").child("one").getValue()).toString();
-                }
-                if(snapshot.child("rating").child("two").exists()) {
-                    two = Objects.requireNonNull(snapshot.child("rating").child("two").getValue()).toString();
-                }
-                if(snapshot.child("rating").child("three").exists()) {
-                    three = Objects.requireNonNull(snapshot.child("rating").child("three").getValue()).toString();
-                }
-                if(snapshot.child("rating").child("four").exists()) {
-                    four = Objects.requireNonNull(snapshot.child("rating").child("four").getValue()).toString();
-                }
-                if(snapshot.child("rating").child("five").exists()) {
-                    five = Objects.requireNonNull(snapshot.child("rating").child("five").getValue()).toString();
-                }
-                Ratings _rat = new Ratings();
-                holder.captinRatings.setRating(_rat.calculateRating(one,two,three,four,five));
+    private void AssignToCaptin(String capId) {
+        OrdersClass ordersClass = new OrdersClass(mContext);
+        for(int i = 0; i < AsignOrder.assignToCaptin.size(); i ++) {
+            Data orderData = AsignOrder.assignToCaptin.get(i);
+            switch (orderData.getStatue()) {
+                case "placed":
+                    if(!orderData.getProvider().equals("Esh7nly")) {
+                        ordersClass.assignToCaptin(orderData, capId);
+                    } else {
+                        ordersClass.bidOnOrder(orderData, capId);
+                    }
+                    SuperAvillable.orderAdapter.notifyItemChanged(AsignOrder.position);
+                    break;
+                case "supD":
+                    ordersClass.asignDelv(orderData, capId);
+                    SuperRecived.orderAdapter.notifyItemChanged(AsignOrder.position);
+                    break;
+                case "supDenied":
+                    ordersClass.asignDenied(orderData, capId);
+                    SuperRecived.orderAdapter.notifyItemChanged(AsignOrder.position);
+                    break;
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
+        }
     }
 
     @Override
@@ -180,21 +160,19 @@ public class CaptinsAdapter extends  RecyclerView.Adapter<CaptinsAdapter.MyViewH
         public View myview;
         public TextView txtName;
         public ImageView imgCaptin;
-        public RatingBar captinRatings;
-        public ImageView btnCall, btnMessage, btnAsign;
+        public ImageView btnCall, btnMessage, btnAsign, btnTrack;
         public LinearLayout linCaptin;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             myview = itemView;
-
             imgCaptin = myview.findViewById(R.id.imgCaptin);
-            captinRatings = myview.findViewById(R.id.captinRatings);
             btnCall = myview.findViewById(R.id.btnCall);
             btnMessage = myview.findViewById(R.id.btnMessage);
             txtName = myview.findViewById(R.id.txtName);
             btnAsign = myview.findViewById(R.id.btnAsign);
             linCaptin = myview.findViewById(R.id.linCaptin);
+            btnTrack = myview.findViewById(R.id.btnTrack);
         }
 
         public void setData(userData user) {

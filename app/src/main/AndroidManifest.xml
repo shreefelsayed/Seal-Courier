@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.armjld.rayashipping">
 
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the "MyLocation" functionality.
+    -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -23,20 +28,43 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RayaShipping"
         tools:ignore="AllowBackup,LockedOrientationActivity">
-        <activity android:name=".Settings.ChangePhone"></activity>
-        <activity android:name=".Settings.ChangePassword" />
+
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".SuperCaptins.MapCaptinTrack"
+            android:label="@string/title_activity_map_captin_track"></activity>
+        <activity android:name=".TrackCaptin" />
+        <activity android:name=".Settings.Terms" />
+        <activity android:name=".Settings.About" />
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps" />
         <activity android:name=".QRScanner" />
+        <activity android:name=".Filters" />
+        <activity android:name=".Login.Login_Options" />
+        <activity android:name=".Login.LoadingScreen" />
+        <activity android:name=".SuperCaptins.MyCaptinInfo" />
+        <activity android:name=".Settings.ChangePhone" />
+        <activity android:name=".Settings.ChangePassword" />
         <activity android:name=".Captin.CaptinOrderInfo" />
         <activity android:name=".Captin.CaptinHome" />
-        <activity android:name=".Filters" />
         <activity android:name=".SuperVisor.OrdersBySameUser" />
         <activity android:name=".SuperVisor.AsignOrder" />
         <activity android:name=".SuperVisor.OrderInfo" />
-        <activity android:name=".Login.LoadingScreen" />
-        <activity android:name=".SuperVisor.SuperVisorHome" />
+        <activity android:name=".Home" />
         <activity android:name=".Login.Forget_Password" />
         <activity android:name=".Login.New_SignUp" />
-        <activity android:name=".Login.Login_Options" />
         <activity android:name=".Chat.Messages" />
         <activity android:name=".Login.StartUp">
             <intent-filter>

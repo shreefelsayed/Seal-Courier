@@ -47,6 +47,16 @@ public class Data {
     private String trackid = "";
     private String provider = "Esh7nly";
 
+    private String dHub = ""; // Should be assigned Automaticlly
+    private String pHub = ""; // Should be assigned Automaticlly
+    private String dHubName = ""; // Should be assigned Automaticlly
+    private String pHubName = ""; // Should be assigned Automaticlly
+
+    private String pSupervisor = "";
+    private String dSupervisor = "";
+    private String tries = "0";
+
+
     public Data(){ }
 
     public Data(String txtPState, String mPRegion, String mPAddress, String mPShop, String txtDState, String mDRegion, String DAddress, String DDate, String DPhone, String DName,
@@ -108,11 +118,11 @@ public class Data {
     public String get_long() { return _long; }
     public void set_long(String _long) { this._long = _long; }
     public String getTrackid() {
-    return trackid;
-}
+        return trackid;
+    }
     public void setTrackid(String trackid) {
-    this.trackid = trackid;
-}
+        this.trackid = trackid;
+    }
     public String getRemoved() {
         return removed;
     }
@@ -258,6 +268,14 @@ public class Data {
     public void setIsMetro(String isMetro) { this.isMetro = isMetro;
     }
 
+    public String getTries() {
+        return tries;
+    }
+
+    public void setTries(String tries) {
+        this.tries = tries;
+    }
+
     public String getPriority() {
         return priority;
     }
@@ -334,6 +352,54 @@ public class Data {
 
     public void setuAccepted(String uAccepted) {
         this.uAccepted = uAccepted;
+    }
+
+    public String getdHub() {
+        return dHub;
+    }
+
+    public void setdHub(String dHub) {
+        this.dHub = dHub;
+    }
+
+    public String getpHub() {
+        return pHub;
+    }
+
+    public void setpHub(String pHub) {
+        this.pHub = pHub;
+    }
+
+    public String getpSupervisor() {
+        return pSupervisor;
+    }
+
+    public void setpSupervisor(String pSupervisor) {
+        this.pSupervisor = pSupervisor;
+    }
+
+    public String getdSupervisor() {
+        return dSupervisor;
+    }
+
+    public void setdSupervisor(String dSupervisor) {
+        this.dSupervisor = dSupervisor;
+    }
+
+    public String getdHubName() {
+        return dHubName;
+    }
+
+    public void setdHubName(String dHubName) {
+        this.dHubName = dHubName;
+    }
+
+    public String getpHubName() {
+        return pHubName;
+    }
+
+    public void setpHubName(String pHubName) {
+        this.pHubName = pHubName;
     }
 
 }
