@@ -25,7 +25,7 @@ public class Terms extends AppCompatActivity {
         TextView txtTerms = findViewById(R.id.txtTerms);
         ImageView btnBack = findViewById(R.id.btnBack);
         txtTerms.setMovementMethod(new ScrollingMovementMethod());
-        btnBack.setOnClickListener(v-> finish());
+        btnBack.setOnClickListener(v -> finish());
         String privcyCode = "<p dir=\"RTL\" style='margin-top:0in;margin-right:0in;margin-bottom:10.0pt;margin-left:0in;line-height:115%;font-size:15px;font-family:\"Calibri\",sans-serif;text-align:center;'><span style='font-size:19px;line-height:115%;font-family:\"Arial\",sans-serif;'>الشروط والاحكام</span></p>\n" +
                 "<p dir=\"RTL\" style='margin-top:0in;margin-right:0in;margin-bottom:10.0pt;margin-left:0in;line-height:115%;font-size:15px;font-family:\"Calibri\",sans-serif;text-align:right;'><span style='font-size:19px;line-height:115%;font-family:\"Arial\",sans-serif;'>&nbsp;</span></p>\n" +
                 "<p dir=\"RTL\" style='margin-top:0in;margin-right:0in;margin-bottom:10.0pt;margin-left:0in;line-height:115%;font-size:15px;font-family:\"Calibri\",sans-serif;text-align:right;'><span style='font-size:19px;line-height:115%;font-family:\"Arial\",sans-serif;'>بمجرد استخدامك لمنصة التشغيل والابلكيشن الخاصة بشركة إشحنلي فهذا يعد بمثابة موافقة علي جميع الاحكام والشروط والخصوصية المذكورة والمنصوص عليها من قبل الشركة .</span></p>\n" +

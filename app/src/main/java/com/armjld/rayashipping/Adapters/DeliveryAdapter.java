@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,10 +25,10 @@ import com.armjld.rayashipping.Captin.CaptinOrderInfo;
 import com.armjld.rayashipping.Captin.captinRecived;
 import com.armjld.rayashipping.Chat.Messages;
 import com.armjld.rayashipping.Chat.chatListclass;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.OrdersClass;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.OrderInfo;
-import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
@@ -43,12 +44,12 @@ import java.util.Objects;
 
 public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyViewHolder> implements ActivityCompat.OnRequestPermissionsResultCallback {
 
-    Context mContext;
-    ArrayList<Data>filtersData;
-    String from;
-    private final DatabaseReference uDatabase;
     private static final int PHONE_CALL_CODE = 100;
     public static caculateTime _cacu = new caculateTime();
+    private final DatabaseReference uDatabase;
+    Context mContext;
+    ArrayList<Data> filtersData;
+    String from;
 
     public DeliveryAdapter(Context mContext, ArrayList<Data> filtersData, String from) {
         this.mContext = mContext;
@@ -61,13 +62,13 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view  = inflater.inflate(R.layout.card_captin,parent,false);
+        View view = inflater.inflate(R.layout.card_captin, parent, false);
         return new MyViewHolder(view);
     }
 
     @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder,final int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         Vibrator vibe = (Vibrator) Objects.requireNonNull(mContext).getSystemService(Context.VIBRATOR_SERVICE);
         Data data = filtersData.get(position);
 
@@ -122,7 +123,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         });
 
         // ----------------------- Return a Denied Order
-        holder.btnOrderBack.setOnClickListener(v-> {
+        holder.btnOrderBack.setOnClickListener(v -> {
             BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل قمت بتسليم الشحنة للتاجر ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                 // ------- Update Database ------
                 OrdersClass ordersClass = new OrdersClass(mContext);
@@ -140,7 +141,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         });
 
         // ----------------------- Set Order As Denied
-        holder.btnDenied.setOnClickListener(v-> {
+        holder.btnDenied.setOnClickListener(v -> {
             BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("لم يستلم العميل الشحنه ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                 // ------- Update Database ------
                 OrdersClass ordersClass = new OrdersClass(mContext);
@@ -174,7 +175,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         });
 
         // ----- Chat with Supplier
-        holder.btnChat.setOnClickListener(v-> {
+        holder.btnChat.setOnClickListener(v -> {
             chatListclass _chatList = new chatListclass();
             _chatList.startChating(UserInFormation.getId(), data.getuId(), mContext);
             Messages.cameFrom = "Profile";
@@ -194,7 +195,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        ((Home)mContext).onRequestPermissionsResult(requestCode, permissions, grantResults);
+        ((Home) mContext).onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PHONE_CALL_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(mContext, "Phone Permission Granted", Toast.LENGTH_SHORT).show();
@@ -206,8 +207,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public View myview;
-        public Button btnInfo,btnDelivered,btnChat,btnRecived,btnOrderBack,btnDenied;
-        public TextView txtProvider,txtGetStat,txtgGet, txtgMoney,txtDate, txtUsername, txtOrderFrom, txtOrderTo,txtPostDate,pickDate;
+        public Button btnInfo, btnDelivered, btnChat, btnRecived, btnOrderBack, btnDenied;
+        public TextView txtProvider, txtGetStat, txtgGet, txtgMoney, txtDate, txtUsername, txtOrderFrom, txtOrderTo, txtPostDate, pickDate;
         public LinearLayout linerDate, linerAll;
         public ImageButton mImageButton;
         public ImageView icTrans;
@@ -240,8 +241,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         }
 
 
-        void setUsername(String uid, String owner){
-            if(!owner.equals("")) {
+        void setUsername(String uid, String owner) {
+            if (!owner.equals("")) {
                 txtUsername.setText(owner);
                 return;
             }
@@ -249,23 +250,25 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
             uDatabase.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()) {
+                    if (dataSnapshot.exists()) {
                         txtUsername.setText(Objects.requireNonNull(dataSnapshot.child("name").getValue()).toString());
                     }
                 }
+
                 @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) { }
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
             });
         }
 
 
-        public void setOrderFrom(String orderFrom){
+        public void setOrderFrom(String orderFrom) {
             txtOrderFrom.setText(orderFrom);
         }
 
         public void setDilveredButton(String state) {
             switch (state) {
-                case "accepted" : {
+                case "accepted": {
                     btnDelivered.setVisibility(View.GONE);
                     btnChat.setVisibility(View.GONE);
                     btnRecived.setVisibility(View.GONE);
@@ -280,7 +283,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setVisibility(View.VISIBLE);
                     break;
                 }
-                case "recived" : {
+                case "recived": {
                     btnChat.setVisibility(View.GONE);
                     btnDelivered.setVisibility(View.GONE);
                     btnOrderBack.setVisibility(View.GONE);
@@ -296,7 +299,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     break;
                 }
 
-                case "recived2" : {
+                case "recived2": {
                     btnChat.setVisibility(View.GONE);
                     btnDelivered.setVisibility(View.GONE);
                     btnRecived.setVisibility(View.GONE);
@@ -311,7 +314,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     break;
                 }
 
-                case "readyD" : {
+                case "readyD": {
                     btnChat.setVisibility(View.GONE);
                     btnRecived.setVisibility(View.GONE);
                     btnOrderBack.setVisibility(View.GONE);
@@ -327,7 +330,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     break;
                 }
 
-                case "denied" : {
+                case "denied": {
                     btnChat.setVisibility(View.GONE);
                     btnDelivered.setVisibility(View.GONE);
                     btnInfo.setVisibility(View.GONE);
@@ -342,7 +345,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     break;
                 }
 
-                case "capDenied" : {
+                case "capDenied": {
                     btnChat.setVisibility(View.GONE);
                     btnDelivered.setVisibility(View.GONE);
                     btnRecived.setVisibility(View.GONE);
@@ -372,17 +375,17 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
             }
         }
 
-        public void setOrderto(String orderto){
+        public void setOrderto(String orderto) {
             txtOrderTo.setText(orderto);
         }
 
-        public void setDate (String date, String pDate){
+        public void setDate(String date, String pDate) {
             txtDate.setText(date);
             pickDate.setText(pDate);
         }
 
         @SuppressLint("SetTextI18n")
-        public void setOrdercash(String ordercash){
+        public void setOrdercash(String ordercash) {
             txtgMoney.setText("ثمن الرسالة  " + ordercash + " ج");
         }
 
@@ -396,7 +399,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         }
 
         public void checkDeleted(String removed) {
-            if(removed.equals("true")) {
+            if (removed.equals("true")) {
                 linerAll.setVisibility(View.GONE);
             } else {
                 linerAll.setVisibility(View.VISIBLE);
@@ -406,23 +409,23 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         @SuppressLint("UseCompatLoadingForDrawables")
         public void setIcon(String trans) {
             switch (trans) {
-                case "Trans" :
+                case "Trans":
                     icTrans.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_run));
                     break;
-                case "Car" :
+                case "Car":
                     icTrans.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_car));
                     break;
-                case "Bike" :
+                case "Bike":
                     icTrans.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_bicycle));
                     break;
-                case "Motor" :
+                case "Motor":
                     icTrans.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_vespa));
                     break;
             }
         }
 
         public void setProvider(String provider) {
-            if(provider.equals("Esh7nly")) {
+            if (provider.equals("Esh7nly")) {
                 txtgGet.setVisibility(View.VISIBLE);
                 txtProvider.setVisibility(View.VISIBLE);
                 txtProvider.setText("Esh7nly");
@@ -447,7 +450,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         }
 
         public void setViewer(String accountType) {
-            if(accountType.equals("Supervisor")) {
+            if (accountType.equals("Supervisor")) {
                 btnRecived.setVisibility(View.GONE);
                 btnDelivered.setVisibility(View.GONE);
                 btnChat.setVisibility(View.GONE);

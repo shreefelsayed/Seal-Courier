@@ -25,27 +25,28 @@ public class Ratings {
                 String three = "0";
                 String four = "0";
                 String five = "0";
-                if(snapshot.child("one").exists()) {
+                if (snapshot.child("one").exists()) {
                     one = snapshot.child("one").getValue().toString();
                 }
-                if(snapshot.child("two").exists()) {
+                if (snapshot.child("two").exists()) {
                     two = snapshot.child("two").getValue().toString();
                 }
-                if(snapshot.child("three").exists()) {
+                if (snapshot.child("three").exists()) {
                     three = snapshot.child("three").getValue().toString();
                 }
-                if(snapshot.child("four").exists()) {
+                if (snapshot.child("four").exists()) {
                     four = snapshot.child("four").getValue().toString();
                 }
-                if(snapshot.child("five").exists()) {
+                if (snapshot.child("five").exists()) {
                     five = snapshot.child("five").getValue().toString();
                 }
 
-                UserInFormation.setRating(calculateRating(one,two,three,four,five));
+                UserInFormation.setRating(calculateRating(one, two, three, four, five));
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -53,11 +54,11 @@ public class Ratings {
         uDatabase.child(userID).child("rating").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                switch (Rating)  {
-                    case 1 : {
-                        if(snapshot.child("one").exists()) {
+                switch (Rating) {
+                    case 1: {
+                        if (snapshot.child("one").exists()) {
                             int rate1 = Integer.parseInt(snapshot.child("one").getValue().toString());
-                            uDatabase.child(userID).child("rating").child("one").setValue(rate1+1);
+                            uDatabase.child(userID).child("rating").child("one").setValue(rate1 + 1);
                         } else {
                             uDatabase.child(userID).child("rating").child("one").setValue(1);
 
@@ -65,20 +66,20 @@ public class Ratings {
                         break;
                     }
 
-                    case 2 : {
-                        if(snapshot.child("two").exists()) {
+                    case 2: {
+                        if (snapshot.child("two").exists()) {
                             int rate2 = Integer.parseInt(snapshot.child("two").getValue().toString());
-                            uDatabase.child(userID).child("rating").child("two").setValue(rate2+1);
+                            uDatabase.child(userID).child("rating").child("two").setValue(rate2 + 1);
                         } else {
                             uDatabase.child(userID).child("rating").child("two").setValue(1);
                         }
                         break;
                     }
 
-                    case 3 : {
-                        if(snapshot.child("three").exists()) {
+                    case 3: {
+                        if (snapshot.child("three").exists()) {
                             int rate3 = Integer.parseInt(snapshot.child("three").getValue().toString());
-                            uDatabase.child(userID).child("rating").child("three").setValue(rate3+1);
+                            uDatabase.child(userID).child("rating").child("three").setValue(rate3 + 1);
                         } else {
                             uDatabase.child(userID).child("rating").child("three").setValue(1);
                         }
@@ -86,10 +87,10 @@ public class Ratings {
                         break;
                     }
 
-                    case 4 : {
-                        if(snapshot.child("four").exists()) {
+                    case 4: {
+                        if (snapshot.child("four").exists()) {
                             int rate4 = Integer.parseInt(snapshot.child("four").getValue().toString());
-                            uDatabase.child(userID).child("rating").child("four").setValue(rate4+1);
+                            uDatabase.child(userID).child("rating").child("four").setValue(rate4 + 1);
                         } else {
                             uDatabase.child(userID).child("rating").child("four").setValue(1);
 
@@ -97,10 +98,10 @@ public class Ratings {
                         break;
                     }
 
-                    case 5 : {
-                        if(snapshot.child("five").exists()) {
+                    case 5: {
+                        if (snapshot.child("five").exists()) {
                             int rate5 = Integer.parseInt(snapshot.child("five").getValue().toString());
-                            uDatabase.child(userID).child("rating").child("five").setValue(rate5+1);
+                            uDatabase.child(userID).child("rating").child("five").setValue(rate5 + 1);
                         } else {
                             uDatabase.child(userID).child("rating").child("five").setValue(1);
                         }
@@ -112,7 +113,8 @@ public class Ratings {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -124,7 +126,7 @@ public class Ratings {
         int intR5 = Integer.parseInt(R5);
 
         int TotalCount = intR1 + intR2 + intR3 + intR4 + intR5;
-        if(TotalCount == 0) {
+        if (TotalCount == 0) {
             TotalCount = 1;
         }
 

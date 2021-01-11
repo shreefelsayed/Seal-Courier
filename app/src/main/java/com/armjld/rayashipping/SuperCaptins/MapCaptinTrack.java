@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -56,7 +55,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.FirebaseDatabase;
@@ -82,23 +80,21 @@ import timber.log.Timber;
 public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private static final int REQUEST_CHECK_SETTINGS = 102;
+    private static final int PHONE_CALL_CODE = 100;
+    private static final String PUBLISHABLE_KEY = "00F4wm01NAr4ZHVE4gjrtQiQw8BxYC9dJNjeoM0LE4eEpm928geMz-2Tt8bZgOzJnTlE64SKDs_ZUEYyBJE4wQ"; // declare your key here
+    public static userData user;
+    public static String DEVICE_ID;
     android.location.Location currentLocation;
     GoogleApiClient mGoogleApiClient;
     FusedLocationProviderClient fusedLocationProviderClient;
-    private static final int REQUEST_CHECK_SETTINGS = 102;
-    private static final int PHONE_CALL_CODE = 100;
-    private GoogleMap mMap;
     LocationRequest mLocationRequest;
     ImageView btnBack, btnMessage, btnCall, imgCaptin;
     TextView txtName, txtDeviceState, txtBattery;
-    public static userData user;
-
-    private static final String PUBLISHABLE_KEY = "00F4wm01NAr4ZHVE4gjrtQiQw8BxYC9dJNjeoM0LE4eEpm928geMz-2Tt8bZgOzJnTlE64SKDs_ZUEYyBJE4wQ"; // declare your key here
-    public static  String DEVICE_ID;
     LatLng userLoc;
-
+    private GoogleMap mMap;
     private HyperTrackViews mHyperTrackView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,18 +109,18 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
         txtDeviceState = findViewById(R.id.txtDeviceState);
         txtBattery = findViewById(R.id.txtBattery);
 
-        btnBack.setOnClickListener(v-> finish());
+        btnBack.setOnClickListener(v -> finish());
 
         TextView tbTitle2 = findViewById(R.id.toolbar_title);
         tbTitle2.setText("تتبع المندوب");
 
-        btnMessage.setOnClickListener(v-> {
+        btnMessage.setOnClickListener(v -> {
             chatListclass _chatList = new chatListclass();
             _chatList.startChating(UserInFormation.getId(), user.getId(), this);
             Messages.cameFrom = "Profile";
         });
 
-        btnCall.setOnClickListener(v-> {
+        btnCall.setOnClickListener(v -> {
             @SuppressLint("UseCheckPermission") BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) this).setMessage("هل تريد الاتصال بالمندوب ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
                 checkPermission(Manifest.permission.CALL_PHONE, PHONE_CALL_CODE);
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -140,8 +136,8 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
 
         new LoadMarker().execute(user.getPpURL());
 
-        final LocationManager manager2 = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-        if (!manager2.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
+        final LocationManager manager2 = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!manager2.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         } else {
             fetchLocation();
@@ -162,10 +158,9 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
 
     public void checkPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions((Activity) this, new String[] { permission }, requestCode);
+            ActivityCompat.requestPermissions((Activity) this, new String[]{permission}, requestCode);
         }
     }
-
 
     private void setUserData() {
         txtName.setText(user.getName());
@@ -184,7 +179,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
 
         mHyperTrackView.getDeviceMovementStatus(DEVICE_ID,
                 (Consumer<MovementStatus>) movementStatus -> {
-                    Log.i("TAG","Got movement status data : " + gson.toJson(movementStatus));
+                    Log.i("TAG", "Got movement status data : " + gson.toJson(movementStatus));
                 });
 
         mHyperTrackView.subscribeToDeviceUpdates(DEVICE_ID,
@@ -225,7 +220,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
     }
 
     private void setLocation(Location location) {
-        if(mMap != null) {
+        if (mMap != null) {
             userLoc = new LatLng(location.getLatitude(), location.getLongitude());
             new LoadMarker().execute(user.getPpURL());
         }
@@ -266,12 +261,12 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        if(fusedLocationProviderClient == null) {
+        if (fusedLocationProviderClient == null) {
             return;
         }
         Task<android.location.Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(location -> {
-            if(location != null) {
+            if (location != null) {
                 currentLocation = location;
                 LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
@@ -279,7 +274,6 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
             }
         });
     }
-
 
     private void buildGoogleAPIClient() {
         if (mGoogleApiClient == null) {
@@ -301,10 +295,9 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
         super.onStop();
     }
 
-
     private void checkGPS() {
 
-        if(mGoogleApiClient == null) {
+        if (mGoogleApiClient == null) {
             buildGoogleAPIClient();
         }
 
@@ -329,7 +322,6 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
             }
         });
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -392,8 +384,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
 
     }
 
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    public void checkLocationPermission(){
+    public void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
         }
@@ -441,7 +432,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
 
         protected void onPostExecute(Bitmap bitmap) {
             mMap.clear();
-            if(userLoc != null) {
+            if (userLoc != null) {
                 if (bitmap != null) {
                     View custom_layout = ((LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.places_pin_layout, null);
                     ImageView iv_category_logo = (ImageView) custom_layout.findViewById(R.id.profile_image);
@@ -459,7 +450,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
         private Bitmap createDrawableFromView(Context context, View view) {
             DisplayMetrics displayMetrics = new DisplayMetrics();
             ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,          RelativeLayout.LayoutParams.WRAP_CONTENT));
+            view.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
             view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
             view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
             view.buildDrawingCache();

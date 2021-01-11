@@ -25,10 +25,10 @@ public class DirectReplyReciver extends AppCompatActivity {
 
         assert params != null;
         String to = params.getString("to");
-        String roomid  = params.getString("roomid");
+        String roomid = params.getString("roomid");
 
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
-        if(remoteInput != null) {
+        if (remoteInput != null) {
             String msg = (String) remoteInput.getCharSequence("chatKey");
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);

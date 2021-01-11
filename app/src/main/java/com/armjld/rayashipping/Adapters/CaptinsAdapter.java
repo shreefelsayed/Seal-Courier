@@ -1,6 +1,7 @@
 package com.armjld.rayashipping.Adapters;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -36,11 +37,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class CaptinsAdapter extends  RecyclerView.Adapter<CaptinsAdapter.MyViewHolder> implements ActivityCompat.OnRequestPermissionsResultCallback {
-    Context mContext;
+public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHolder> implements ActivityCompat.OnRequestPermissionsResultCallback {
+    private static final int PHONE_CALL_CODE = 100;
+    static Context mContext;
     ArrayList<userData> captinList;
     String from;
-    private static final int PHONE_CALL_CODE = 100;
 
     public CaptinsAdapter(Context mContext, ArrayList<userData> captinList, String from) {
         this.mContext = mContext;
@@ -56,46 +57,49 @@ public class CaptinsAdapter extends  RecyclerView.Adapter<CaptinsAdapter.MyViewH
         return new MyViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull CaptinsAdapter.MyViewHolder holder, int position) {
         userData captin = captinList.get(position);
         holder.txtName.setText(captin.getName());
+        holder.txtAddress.setText(captin.getUserCity());
 
         holder.setData(captin);
+        holder.setIcon(captin);
 
-        if(from.equals("info")) {
+        if (from.equals("info")) {
             holder.btnCall.setVisibility(View.VISIBLE);
             holder.btnMessage.setVisibility(View.VISIBLE);
             holder.btnAsign.setVisibility(View.GONE);
-        } else if(from.equals("asign")) {
+        } else if (from.equals("asign")) {
             holder.btnCall.setVisibility(View.GONE);
             holder.btnMessage.setVisibility(View.GONE);
             holder.btnAsign.setVisibility(View.VISIBLE);
         }
 
         // ------- Show Captin Orders and Data
-        holder.linCaptin.setOnClickListener(v-> {
+        holder.linCaptin.setOnClickListener(v -> {
             MyCaptinInfo.user = captin;
             mContext.startActivity(new Intent(mContext, MyCaptinInfo.class));
         });
 
         // ------- Chat with Captin
-        holder.btnMessage.setOnClickListener(v-> {
+        holder.btnMessage.setOnClickListener(v -> {
             chatListclass _chatList = new chatListclass();
             _chatList.startChating(UserInFormation.getId(), captin.getId(), mContext);
             Messages.cameFrom = "Profile";
         });
 
         // ---- Track Captin
-        holder.btnTrack.setOnClickListener(v-> {
-            if(captin.getTrackId().equals("")) return;
+        holder.btnTrack.setOnClickListener(v -> {
+            if (captin.getTrackId().equals("")) return;
             MapCaptinTrack.user = captin;
             MapCaptinTrack.DEVICE_ID = captin.getTrackId();
             mContext.startActivity(new Intent(mContext, MapCaptinTrack.class));
         });
 
         // ------- Asign to Captin
-        holder.btnAsign.setOnClickListener(v-> {
+        holder.btnAsign.setOnClickListener(v -> {
             BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل تريد تسليم الشحنه للمندوب ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                 AssignToCaptin(captin.getId());
                 ((Activity) mContext).finish();
@@ -122,11 +126,11 @@ public class CaptinsAdapter extends  RecyclerView.Adapter<CaptinsAdapter.MyViewH
 
     private void AssignToCaptin(String capId) {
         OrdersClass ordersClass = new OrdersClass(mContext);
-        for(int i = 0; i < AsignOrder.assignToCaptin.size(); i ++) {
+        for (int i = 0; i < AsignOrder.assignToCaptin.size(); i++) {
             Data orderData = AsignOrder.assignToCaptin.get(i);
             switch (orderData.getStatue()) {
                 case "placed":
-                    if(!orderData.getProvider().equals("Esh7nly")) {
+                    if (!orderData.getProvider().equals("Esh7nly")) {
                         ordersClass.assignToCaptin(orderData, capId);
                     } else {
                         ordersClass.bidOnOrder(orderData, capId);
@@ -155,11 +159,28 @@ public class CaptinsAdapter extends  RecyclerView.Adapter<CaptinsAdapter.MyViewH
         return position;
     }
 
+    public void checkPermission(String permission, int requestCode) {
+        if (ContextCompat.checkSelfPermission(mContext, permission) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions((Activity) mContext, new String[]{permission}, requestCode);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PHONE_CALL_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(mContext, "Phone Permission Granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(mContext, "Phone Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public View myview;
-        public TextView txtName;
-        public ImageView imgCaptin;
+        public TextView txtName, txtAddress;
+        public ImageView imgCaptin, icTrans;
         public ImageView btnCall, btnMessage, btnAsign, btnTrack;
         public LinearLayout linCaptin;
 
@@ -173,28 +194,27 @@ public class CaptinsAdapter extends  RecyclerView.Adapter<CaptinsAdapter.MyViewH
             btnAsign = myview.findViewById(R.id.btnAsign);
             linCaptin = myview.findViewById(R.id.linCaptin);
             btnTrack = myview.findViewById(R.id.btnTrack);
+            txtAddress = myview.findViewById(R.id.txtAddress);
+            icTrans = myview.findViewById(R.id.icTrans);
         }
 
         public void setData(userData user) {
             Picasso.get().load(Uri.parse(user.getPpURL())).into(imgCaptin);
             txtName.setText(user.getName());
         }
-    }
 
-    public void checkPermission(String permission, int requestCode) {
-        if (ContextCompat.checkSelfPermission(mContext, permission) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions((Activity) mContext, new String[] { permission }, requestCode);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PHONE_CALL_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(mContext, "Phone Permission Granted", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(mContext, "Phone Permission Denied", Toast.LENGTH_SHORT).show();
+        @SuppressLint("UseCompatLoadingForDrawables")
+        public void setIcon(userData captin) {
+            switch (captin.getTransType()) {
+                case "Motor":
+                    icTrans.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_vespa));
+                    break;
+                case "Car":
+                    icTrans.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_car));
+                    break;
+                default:
+                    icTrans.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_run));
+                    break;
             }
         }
     }

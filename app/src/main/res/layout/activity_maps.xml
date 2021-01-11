@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layoutDirection="ltr"
     android:layout_height="match_parent"
     android:background="@color/colorBack"
+    android:layoutDirection="ltr"
     tools:context=".MapsActivity">
 
     <include
@@ -59,9 +59,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corner_top"
         android:paddingTop="@dimen/_5sdp"
+        android:translationY="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:translationY="0dp"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

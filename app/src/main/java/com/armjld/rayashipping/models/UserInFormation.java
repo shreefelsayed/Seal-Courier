@@ -23,14 +23,14 @@ public class UserInFormation {
     private static String provider = "";
 
 
-
     private static String sup_code = "";
     private static String mySup = "";
     private static String supId = "";
 
     private static String packMoney = "";
 
-    public UserInFormation() { }
+    public UserInFormation() {
+    }
 
     public static String getPackMoney() {
         return packMoney;
@@ -60,23 +60,33 @@ public class UserInFormation {
         return walletmoney;
     }
 
-    public static void setWalletmoney(String walletmoney) { UserInFormation.walletmoney = walletmoney; }
+    public static void setWalletmoney(String walletmoney) {
+        UserInFormation.walletmoney = walletmoney;
+    }
 
     public static String getSendCityNoti() {
         return sendCityNoti;
     }
 
-    public static void setSendCityNoti(String sendCityNoti) { UserInFormation.sendCityNoti = sendCityNoti; }
+    public static void setSendCityNoti(String sendCityNoti) {
+        UserInFormation.sendCityNoti = sendCityNoti;
+    }
 
-    public static String getSendGovNoti() { return sendGovNoti; }
+    public static String getSendGovNoti() {
+        return sendGovNoti;
+    }
 
-    public static void setSendGovNoti(String sendGovNoti) { UserInFormation.sendGovNoti = sendGovNoti; }
+    public static void setSendGovNoti(String sendGovNoti) {
+        UserInFormation.sendGovNoti = sendGovNoti;
+    }
 
     public static String getCurrentdate() {
         return currentdate;
     }
 
-    public static void setCurrentdate(String currentdate) { UserInFormation.currentdate = currentdate; }
+    public static void setCurrentdate(String currentdate) {
+        UserInFormation.currentdate = currentdate;
+    }
 
     public static String getUserName() {
         return userName;
@@ -114,20 +124,32 @@ public class UserInFormation {
         return id;
     }
 
-    public static void setId(String id) { UserInFormation.id = id; }
+    public static void setId(String id) {
+        UserInFormation.id = id;
+    }
 
-    public static String getEmail() { return email; }
+    public static String getEmail() {
+        return email;
+    }
 
-    public static void setEmail(String email) { UserInFormation.email = email; }
+    public static void setEmail(String email) {
+        UserInFormation.email = email;
+    }
 
-    public static String getPass() { return pass; }
+    public static String getPass() {
+        return pass;
+    }
 
-    public static void setPass(String pass) { UserInFormation.pass = pass; }
-
-    public static void setRating(int rating) { UserInFormation.rating = rating; }
+    public static void setPass(String pass) {
+        UserInFormation.pass = pass;
+    }
 
     public static int getRating() {
         return rating;
+    }
+
+    public static void setRating(int rating) {
+        UserInFormation.rating = rating;
     }
 
     public static String getOrdersType() {

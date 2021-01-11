@@ -18,7 +18,7 @@ public class TrackCaptin extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static final String PUBLISHABLE_KEY = "00F4wm01NAr4ZHVE4gjrtQiQw8BxYC9dJNjeoM0LE4eEpm928geMz-2Tt8bZgOzJnTlE64SKDs_ZUEYyBJE4wQ"; // declare your key here
-    public static  String DEVICE_ID; // paste your device id here
+    public static String DEVICE_ID; // paste your device id here
 
     private HyperTrackViews mHyperTrackView;
 

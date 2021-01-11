@@ -11,6 +11,22 @@ public class notiData {
     private String action = "";
     private String uName = "Quicker";
     private String ppURL = "https://firebasestorage.googleapis.com/v0/b/pickly-ed2f4.appspot.com/o/ppUsers%2Fdefult.jpg?alt=media&token=a1b6b5cc-6f03-41fa-acf2-0c14e601935f";
+    private String notiID = "";
+
+    public notiData() {
+    }
+
+    public notiData(String from, String to, String orderid, String statue, String datee, String isRead, String action, String uName, String ppURL) {
+        this.from = from;
+        this.orderid = orderid;
+        this.statue = statue;
+        this.to = to;
+        this.datee = datee;
+        this.isRead = isRead;
+        this.action = action;
+        this.uName = uName;
+        this.ppURL = ppURL;
+    }
 
     public String getNotiID() {
         return notiID;
@@ -20,8 +36,9 @@ public class notiData {
         this.notiID = notiID;
     }
 
-    private String notiID = "";
-    public String getuName() { return uName; }
+    public String getuName() {
+        return uName;
+    }
 
     public void setuName(String uName) {
         this.uName = uName;
@@ -34,9 +51,6 @@ public class notiData {
     public void setPpURL(String ppURL) {
         this.ppURL = ppURL;
     }
-
-
-    public notiData () {}
 
     public String getFrom() {
         return from;
@@ -86,19 +100,11 @@ public class notiData {
         this.isRead = isRead;
     }
 
-    public String getAction() { return action; }
+    public String getAction() {
+        return action;
+    }
 
-    public void setAction(String action) { this.action = action; }
-
-    public notiData(String from, String to, String orderid, String statue, String datee, String isRead, String action, String uName, String ppURL) {
-        this.from = from;
-        this.orderid = orderid;
-        this.statue = statue;
-        this.to = to;
-        this.datee = datee;
-        this.isRead = isRead;
+    public void setAction(String action) {
         this.action = action;
-        this.uName = uName;
-        this.ppURL = ppURL;
     }
 }

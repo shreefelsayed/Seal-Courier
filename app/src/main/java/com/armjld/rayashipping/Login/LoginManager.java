@@ -36,14 +36,47 @@ import java.util.Objects;
 
 
 public class LoginManager {
+    public static boolean dataset = false;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users");
-    public static boolean dataset = false;
     UserDatabase userDatabase = new UserDatabase();
 
     SimpleDateFormat sdf0 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     String today = sdf0.format(new Date());
 
+    /**
+     * Returns the consumer friendly device name
+     */
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
+    private static String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+
+        StringBuilder phrase = new StringBuilder();
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase.append(Character.toUpperCase(c));
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+            phrase.append(c);
+        }
+
+        return phrase.toString();
+    }
 
     public void setMyInfo(Context mContext) {
         mAuth = FirebaseAuth.getInstance();
@@ -52,23 +85,23 @@ public class LoginManager {
         uDatabase.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     userData User = snapshot.getValue(userData.class);
                     assert User != null;
 
-                    if(User.getActive().equals("false")) {
+                    if (User.getActive().equals("false")) {
                         Toast.makeText(mContext, "تم اغلاق حسابك، الرجاء الاتصال بالدعم الفني", Toast.LENGTH_SHORT).show();
                         clearInfo(mContext);
                         return;
                     }
 
-                    if(!User.getProvider().equals("Raya")) {
+                    if (!User.getProvider().equals("Raya")) {
                         Toast.makeText(mContext, "لا يمكنك تسجيل الدخول", Toast.LENGTH_SHORT).show();
                         clearInfo(mContext);
                         return;
                     }
 
-                    if(!User.getAccountType().equals("Delivery Worker") &&!User.getAccountType().equals("Supervisor")) {
+                    if (!User.getAccountType().equals("Delivery Worker") && !User.getAccountType().equals("Supervisor")) {
                         Toast.makeText(mContext, "لا يمكنك تسجيل الدخول", Toast.LENGTH_SHORT).show();
                         clearInfo(mContext);
                         return;
@@ -79,8 +112,8 @@ public class LoginManager {
 
                     Ratings _ratings = new Ratings();
                     _ratings.setMyRating();
-                    if(UserInFormation.getAccountType().equals("Delivery Worker")) {
-                        if(!snapshot.child("locations").exists() && snapshot.child("userCity").exists() && snapshot.child("userState").exists()) {
+                    if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+                        if (!snapshot.child("locations").exists() && snapshot.child("userCity").exists() && snapshot.child("userState").exists()) {
                             String locid = uDatabase.child(UserInFormation.getId()).child("locations").push().getKey();
 
                             HashMap<String, Object> newLocation = new HashMap<>();
@@ -91,7 +124,7 @@ public class LoginManager {
                             uDatabase.child(UserInFormation.getId()).child("locations").child(locid).setValue(newLocation);
                         }
 
-                        if(!snapshot.child("locations").exists() && !snapshot.child("userCity").exists()) {
+                        if (!snapshot.child("locations").exists() && !snapshot.child("userCity").exists()) {
                             String locid = uDatabase.child(UserInFormation.getId()).child("locations").push().getKey();
                             HashMap<String, Object> newLocation = new HashMap<>();
                             newLocation.put("state", "القاهرة");
@@ -104,20 +137,20 @@ public class LoginManager {
 
                         }
 
-                        if(snapshot.child("isCar").exists() && snapshot.child("isMotor").exists() && snapshot.child("isTrans").exists() && snapshot.child("isBike").exists()) {
-                            if(snapshot.child("isTrans").getValue().toString().equals("true")) {
+                        if (snapshot.child("isCar").exists() && snapshot.child("isMotor").exists() && snapshot.child("isTrans").exists() && snapshot.child("isBike").exists()) {
+                            if (snapshot.child("isTrans").getValue().toString().equals("true")) {
                                 UserInFormation.setTrans("Trans");
                             }
 
-                            if(snapshot.child("isCar").getValue().toString().equals("true")) {
+                            if (snapshot.child("isCar").getValue().toString().equals("true")) {
                                 UserInFormation.setTrans("Car");
                             }
 
-                            if(snapshot.child("isBike").getValue().toString().equals("true")) {
+                            if (snapshot.child("isBike").getValue().toString().equals("true")) {
                                 UserInFormation.setTrans("Bike");
                             }
 
-                            if(snapshot.child("isMotor").getValue().toString().equals("true")) {
+                            if (snapshot.child("isMotor").getValue().toString().equals("true")) {
                                 UserInFormation.setTrans("Motor");
                             }
                         } else {
@@ -142,8 +175,10 @@ public class LoginManager {
                     mContext.startActivity(new Intent(mContext, Login_Options.class));
                 }
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
     }
 
@@ -208,7 +243,7 @@ public class LoginManager {
         UserInFormation.clearUser();
         dataset = false;
 
-        ((Activity)mContext).finish();
+        ((Activity) mContext).finish();
         mContext.startActivity(new Intent(mContext, Login_Options.class));
         Toast.makeText(mContext, "تم تسجيل الخروج بنجاح", Toast.LENGTH_SHORT).show();
     }
@@ -219,7 +254,7 @@ public class LoginManager {
         @Override
         protected String doInBackground(String... strings) {
             String publicIP = "";
-            try  {
+            try {
                 java.util.Scanner s = new java.util.Scanner(
                         new java.net.URL(
                                 "https://api.ipify.org")
@@ -240,39 +275,6 @@ public class LoginManager {
             userDatabase.setValue("ip", publicIp);
         }
     }
-
-    /** Returns the consumer friendly device name */
-    public static String getDeviceName() {
-        String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
-        if (model.startsWith(manufacturer)) {
-            return capitalize(model);
-        }
-        return capitalize(manufacturer) + " " + model;
-    }
-
-    private static String capitalize(String str) {
-        if (TextUtils.isEmpty(str)) {
-            return str;
-        }
-        char[] arr = str.toCharArray();
-        boolean capitalizeNext = true;
-
-        StringBuilder phrase = new StringBuilder();
-        for (char c : arr) {
-            if (capitalizeNext && Character.isLetter(c)) {
-                phrase.append(Character.toUpperCase(c));
-                capitalizeNext = false;
-                continue;
-            } else if (Character.isWhitespace(c)) {
-                capitalizeNext = true;
-            }
-            phrase.append(c);
-        }
-
-        return phrase.toString();
-    }
-
 
 
 }

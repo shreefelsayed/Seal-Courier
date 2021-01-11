@@ -39,7 +39,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if(viewType == MSG_RIGHT) {
+        if (viewType == MSG_RIGHT) {
             view = LayoutInflater.from(context).inflate(R.layout.chat_right, parent, false);
         } else {
             view = LayoutInflater.from(context).inflate(R.layout.chat_left, parent, false);
@@ -49,10 +49,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        String strTime = chatData.get(position).getTimestamp().substring(11,16);
+        String strTime = chatData.get(position).getTimestamp().substring(11, 16);
         holder.txtTime.setText(strTime);
 
-        if(chatData.get(position).getType().equals("pic")) {
+        if (chatData.get(position).getType().equals("pic")) {
             holder.txtMsg.setVisibility(View.GONE);
             holder.imgMsg.setVisibility(View.VISIBLE);
             Picasso.get().load(Uri.parse(chatData.get(position).getUrl())).into(holder.imgMsg);
@@ -70,7 +70,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 
     @Override
     public int getItemViewType(int position) {
-        if(chatData.get(position).getSenderid().equals(uId)) {
+        if (chatData.get(position).getSenderid().equals(uId)) {
             return MSG_RIGHT;
         } else {
             return MSG_LEFT;
@@ -78,7 +78,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txtMsg,txtTime;
+        TextView txtMsg, txtTime;
         ImageView imgMsg;
 
         public MyViewHolder(@NonNull View itemView) {

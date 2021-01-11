@@ -58,7 +58,7 @@ public class AllOrders extends Fragment {
         tabs.setupWithViewPager(viewPager);
 
 
-        btnScan.setOnClickListener(v-> {
+        btnScan.setOnClickListener(v -> {
             Intent i = new Intent(mContext, QRScanner.class);
             mContext.startActivity(i);
         });
@@ -72,17 +72,23 @@ public class AllOrders extends Fragment {
 
     private void OpenFilters() {
         Intent i = new Intent(getActivity(), Filters.class);
-        if(UserInFormation.getAccountType().equals("Supervisor")) {
-            if(tabs.getSelectedTabPosition() == 0) {
+        if (UserInFormation.getAccountType().equals("Supervisor")) {
+            if (tabs.getSelectedTabPosition() == 0) {
                 Filters.mainListm = Home.mm;
+                Filters.what = "recive";
             } else if (tabs.getSelectedTabPosition() == 1) {
                 Filters.mainListm = Home.delvOrders;
+                Filters.what = "drop";
             }
         } else {
-            if(tabs.getSelectedTabPosition() == 0) {
+            if (tabs.getSelectedTabPosition() == 0) {
                 Filters.mainListm = Home.captinAvillable;
+                Filters.what = "recive";
+
             } else if (tabs.getSelectedTabPosition() == 1) {
                 Filters.mainListm = Home.captinDelv;
+                Filters.what = "drop";
+
             }
         }
         startActivityForResult(i, 1);
@@ -91,7 +97,7 @@ public class AllOrders extends Fragment {
 
     private void openMaps() {
         Intent i = new Intent(getActivity(), MapsActivity.class);
-        if(UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getAccountType().equals("Supervisor")) {
             // -------- Compine Lists
             ArrayList<Data> bothLists = new ArrayList<>();
             bothLists.addAll(Home.mm);

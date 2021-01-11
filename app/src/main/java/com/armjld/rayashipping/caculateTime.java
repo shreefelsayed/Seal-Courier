@@ -21,7 +21,7 @@ public class caculateTime {
         assert d1 != null;
 
 
-        if(d1 == null || d2 == null) {
+        if (d1 == null || d2 == null) {
             return "الان";
         }
 
@@ -38,11 +38,11 @@ public class caculateTime {
 
         String finalDate = "";
         if (dS < 60) {
-            if(dS < 1) {
+            if (dS < 1) {
                 finalDate = "الأن";
-            } else if(dS ==1) {
+            } else if (dS == 1) {
                 finalDate = "منذ ثانية";
-            } else if(dS == 2) {
+            } else if (dS == 2) {
                 finalDate = "منذ 2 ثانية";
             } else if (dS <= 9) {
                 finalDate = "منذ " + dS + " ثواني";
@@ -50,9 +50,9 @@ public class caculateTime {
                 finalDate = "منذ " + dS + " ثانية";
             }
         } else if (dS > 60 && dS < 3600) {
-            if(dM ==1) {
+            if (dM == 1) {
                 finalDate = "منذ دقيقة";
-            } else if(dM == 2) {
+            } else if (dM == 2) {
                 finalDate = "منذ دقيقتين";
             } else if (dM > 2 && dM <= 9) {
                 finalDate = "منذ " + dM + " دقائق";
@@ -60,9 +60,9 @@ public class caculateTime {
                 finalDate = "منذ " + dM + " دقيقة";
             }
         } else if (dS > 3600 && dS < 86400) {
-            if(dH ==1) {
+            if (dH == 1) {
                 finalDate = "منذ ساعة";
-            } else if(dH == 2) {
+            } else if (dH == 2) {
                 finalDate = "منذ ساعتين";
             } else if (dH > 2 && dH <= 9) {
                 finalDate = "منذ " + dH + " ساعات";
@@ -70,9 +70,9 @@ public class caculateTime {
                 finalDate = "منذ " + dH + " ساعة";
             }
         } else if (dS > 86400) {
-            if(dD ==1) {
+            if (dD == 1) {
                 finalDate = "منذ يوم";
-            } else if(dD == 2) {
+            } else if (dD == 2) {
                 finalDate = "منذ يومين";
             } else if (dD > 2 && dD <= 9) {
                 finalDate = "منذ " + dD + " أيام";
@@ -80,6 +80,6 @@ public class caculateTime {
                 finalDate = "منذ " + dD + " يوم";
             }
         }
-       return finalDate;
+        return finalDate;
     }
 }

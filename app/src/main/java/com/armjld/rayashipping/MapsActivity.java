@@ -28,8 +28,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.armjld.rayashipping.Adapters.MyAdapter;
+
 import com.armjld.rayashipping.Adapters.DeliveryAdapter;
+import com.armjld.rayashipping.Adapters.MyAdapter;
 import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.google.android.gms.common.ConnectionResult;
@@ -65,20 +66,20 @@ import java.util.Objects;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnInfoWindowClickListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener,GoogleMap.OnMapClickListener,
+        GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnMapClickListener,
         LocationListener {
 
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private static final int REQUEST_CHECK_SETTINGS = 102;
+    private static final String TAG = "Maps";
+    public static ArrayList<Data> filterList = new ArrayList<>();
     Location currentLocation;
     GoogleApiClient mGoogleApiClient;
     FusedLocationProviderClient fusedLocationProviderClient;
-    private static final int REQUEST_CHECK_SETTINGS = 102;
-    private static final String TAG = "Maps";
-    private GoogleMap mMap;
     LocationRequest mLocationRequest;
-    private FloatingActionButton btnGCL;
     RecyclerView recyclerView2;
-    public static ArrayList<Data> filterList = new ArrayList<>();
-
+    private GoogleMap mMap;
+    private FloatingActionButton btnGCL;
 
     // Disable the Back Button
     @Override
@@ -95,13 +96,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         recyclerView2.setVisibility(View.GONE);
 
         recyclerView2.setHasFixedSize(true);
-        LinearLayoutManager layoutManager= new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         recyclerView2.setLayoutManager(layoutManager);
 
-        final LocationManager manager2 = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-        if (!manager2.isProviderEnabled(LocationManager.GPS_PROVIDER) ) {
+        final LocationManager manager2 = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (!manager2.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         } else {
             fetchLocation();
@@ -127,8 +128,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         btnGCL.setVisibility(View.GONE);
         btnGCL.setOnClickListener(v -> {
-            final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER) ) { // Check if GPS is Enabled
+            final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { // Check if GPS is Enabled
                 buildAlertMessageNoGps();
             } else {
                 fetchLocation();
@@ -149,12 +150,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        if(fusedLocationProviderClient == null) {
+        if (fusedLocationProviderClient == null) {
             return;
         }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(location -> {
-            if(location != null) {
+            if (location != null) {
                 currentLocation = location;
                 LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
@@ -202,7 +203,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.setMyLocationEnabled(true);
         }
 
-        for (int i = 0; i <  filterList.size(); i++) {
+        for (int i = 0; i < filterList.size(); i++) {
             Data thisOrder = filterList.get(i);
 
             String state = thisOrder.getStatue();
@@ -210,14 +211,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String orderId = thisOrder.getId();
 
             boolean toPick = state.equals("placed") || state.equals("accepted") || state.equals("recived");
-            boolean toDelv = state.equals("readyD") || state.equals("supD")  || state.equals("capDenied") || state.equals("supDenied");
+            boolean toDelv = state.equals("readyD") || state.equals("supD") || state.equals("capDenied") || state.equals("supDenied");
 
-            if(toPick && !thisOrder.getLat().equals("") && !thisOrder.get_long().equals("")) {
+            if (toPick && !thisOrder.getLat().equals("") && !thisOrder.get_long().equals("")) {
                 double newLat = Double.parseDouble(thisOrder.getLat());
                 double newLong = Double.parseDouble(thisOrder.get_long());
                 LatLng latLng = new LatLng(newLat, newLong);
                 addOrder(latLng, state, provider, orderId);
-            } else if(toDelv) {
+            } else if (toDelv) {
                 checkForDelvLocation(thisOrder.getDPhone(), state, provider, orderId);
             }
 
@@ -238,11 +239,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         marker.setTag(id);
     }
 
-    private void checkForDelvLocation(String dPhone , String state, String provider, String id) {
+    private void checkForDelvLocation(String dPhone, String state, String provider, String id) {
         FirebaseDatabase.getInstance().getReference().child("Pickly").child("clientsLocations").child(dPhone).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     // -------- This client added his location to our Database
                     double _lat = Double.parseDouble(Objects.requireNonNull(snapshot.child("_lat").getValue()).toString());
                     double _long = Double.parseDouble(Objects.requireNonNull(snapshot.child("_long").getValue()).toString());
@@ -253,7 +254,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -261,16 +263,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_raya_pick);
 
         boolean toPick = state.equals("placed") || state.equals("accepted") || state.equals("recived");
-        boolean toDelv = state.equals("readyD") || state.equals("supD")  || state.equals("capDenied") || state.equals("supDenied");
+        boolean toDelv = state.equals("readyD") || state.equals("supD") || state.equals("capDenied") || state.equals("supDenied");
 
-        if(!provider.equals("Esh7nly")) {
-            if(toPick) {
+        if (!provider.equals("Esh7nly")) {
+            if (toPick) {
                 drawable = ContextCompat.getDrawable(this, R.drawable.ic_raya_delv);
             } else if (toDelv) {
                 drawable = ContextCompat.getDrawable(this, R.drawable.ic_raya_pick);
             }
         } else {
-            if(toPick) {
+            if (toPick) {
                 drawable = ContextCompat.getDrawable(this, R.drawable.ic_eshh7nly_delv);
             } else if (toDelv) {
                 drawable = ContextCompat.getDrawable(this, R.drawable.ic_eshh7nly_pick);
@@ -295,7 +297,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void setCardDate(Data orderData) {
         ArrayList<Data> list = new ArrayList<>();
         list.add(orderData);
-        if(UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getAccountType().equals("Supervisor")) {
             MyAdapter myAdapter = new MyAdapter(this, list, "Home");
             recyclerView2.setAdapter(myAdapter);
         } else {
@@ -314,12 +316,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onClick(View view) { }
-
+    public void onClick(View view) {
+    }
 
     private void checkGPS() {
 
-        if(mGoogleApiClient == null) {
+        if (mGoogleApiClient == null) {
             buildGoogleAPIClient();
         }
 
@@ -356,7 +358,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) { }
+    public void onPointerCaptureChanged(boolean hasCapture) {
+    }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
@@ -422,10 +425,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
-
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    public void checkLocationPermission(){
+    public void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
         }

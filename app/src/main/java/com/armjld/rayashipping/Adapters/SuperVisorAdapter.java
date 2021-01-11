@@ -31,16 +31,16 @@ public class SuperVisorAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment fragment = null;
-        switch (position){
+        switch (position) {
             case 0:
-                if(UserInFormation.getAccountType().equals("Delivery Worker")) {
+                if (UserInFormation.getAccountType().equals("Delivery Worker")) {
                     fragment = new capAvillable();
                 } else {
                     fragment = new SuperAvillable();
                 }
                 break;
             case 1:
-                if(UserInFormation.getAccountType().equals("Delivery Worker")) {
+                if (UserInFormation.getAccountType().equals("Delivery Worker")) {
                     fragment = new captinRecived();
                 } else {
                     fragment = new SuperRecived();

@@ -32,7 +32,7 @@ public class Login_Options extends AppCompatActivity {
     boolean doubleBackToExitPressedOnce = false;
     private FirebaseAuth mAuth;
     private ProgressDialog mdialog;
-    private EditText email,pass;
+    private EditText email, pass;
     private TextInputLayout tlEmail, tlPass;
 
     @Override
@@ -44,7 +44,7 @@ public class Login_Options extends AppCompatActivity {
 
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "اضغط مرة اخري للخروج من التطبيق", Toast.LENGTH_SHORT).show();
-        new Handler().postDelayed(() -> doubleBackToExitPressedOnce=false, 2000);
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class Login_Options extends AppCompatActivity {
             String mpass = pass.getText().toString().trim();
 
             // --- Check how to login (Email Or Phone)
-            if(memail.length() == 11 && isNumb(memail)) {
+            if (memail.length() == 11 && isNumb(memail)) {
                 loginWithPhone(memail, mpass);
             } else {
                 login(memail, mpass);
@@ -83,10 +83,10 @@ public class Login_Options extends AppCompatActivity {
 
         textWatchers();
 
-        if(uMail != null && uPass != null) {
+        if (uMail != null && uPass != null) {
             email.setText(uMail);
             pass.setText(uPass);
-            login(uMail,uPass);
+            login(uMail, uPass);
         }
 
     }
@@ -140,11 +140,11 @@ public class Login_Options extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").orderByChild("phone").equalTo(phone).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    for(DataSnapshot user : snapshot.getChildren()) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot user : snapshot.getChildren()) {
                         String email = Objects.requireNonNull(user.child("email").getValue()).toString();
                         String realPass = Objects.requireNonNull(user.child("mpass").getValue()).toString();
-                        if(!mpass.equals(realPass)) {
+                        if (!mpass.equals(realPass)) {
                             MaterialDialog materialDialog = new MaterialDialog.Builder(Login_Options.this).setTitle("فشل في تسجيل الدخول").setMessage("تأكد من البريد الالكتروني و كلمة المرور الخاصة بك").setCancelable(true).setPositiveButton("حاول مجددا", (dialogInterface, which) -> dialogInterface.dismiss()).setNegativeButton("استرداد كلمة السر", (dialogInterface, which) -> {
                                 dialogInterface.dismiss();
                                 startActivity(new Intent(Login_Options.this, Forget_Password.class));
@@ -163,7 +163,8 @@ public class Login_Options extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -197,7 +198,7 @@ public class Login_Options extends AppCompatActivity {
         });
     }
 
-    public boolean isNumb (String value) {
+    public boolean isNumb(String value) {
         return !Pattern.matches("[a-zA-Z]+", value);
     }
 

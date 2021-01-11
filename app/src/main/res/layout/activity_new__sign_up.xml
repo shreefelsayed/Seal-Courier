@@ -41,7 +41,6 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar_home">
 
         <ScrollView
-            android:id="@+id/captinExtra"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -205,7 +204,6 @@
         </ScrollView>
 
         <ScrollView
-            android:id="@+id/putInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -527,14 +525,12 @@
         </ScrollView>
 
         <LinearLayout
-            android:id="@+id/code"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center|top"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtMyPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"

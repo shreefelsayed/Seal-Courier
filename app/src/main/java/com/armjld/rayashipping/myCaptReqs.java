@@ -2,13 +2,12 @@ package com.armjld.rayashipping;
 
 public class myCaptReqs {
     String captinId;
+    String orderId;
 
     public myCaptReqs(String captinId, String orderId) {
         this.captinId = captinId;
         this.orderId = orderId;
     }
-
-    String orderId;
 
     public String getCaptinId() {
         return captinId;

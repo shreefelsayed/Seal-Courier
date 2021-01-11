@@ -5,7 +5,8 @@ public class Captins {
     String phone;
     String id;
 
-    public Captins() {}
+    public Captins() {
+    }
 
     public Captins(String name, String phone, String id) {
         this.name = name;

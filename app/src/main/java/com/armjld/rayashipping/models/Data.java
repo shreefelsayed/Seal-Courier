@@ -2,6 +2,7 @@ package com.armjld.rayashipping.models;
 
 public class Data {
 
+    public static String removed = "false";
     // Pick up Data
     private String mPAddress;
     private String mPShop;
@@ -32,7 +33,6 @@ public class Data {
     private String srateid;
     private String pDate = "";
     private String type = "Normal";
-    public static String removed = "false";
     private String packType = "";
     private String packWeight = "";
     private String lat = "";
@@ -57,11 +57,12 @@ public class Data {
     private String tries = "0";
 
 
-    public Data(){ }
+    public Data() {
+    }
 
     public Data(String txtPState, String mPRegion, String mPAddress, String mPShop, String txtDState, String mDRegion, String DAddress, String DDate, String DPhone, String DName,
                 String GMoney, String GGet, String date, String id, String uId, String isTrans, String isMetro, String isMotor, String isCar, String statue, String uAccepted, String srated,
-                String srateid, String drated, String drateid, String acceptedTime, String dilverTime, String notes, String type , String owner, String pDate, String packWeight, String packType, String lat, String _long, String trackid) {
+                String srateid, String drated, String drateid, String acceptedTime, String dilverTime, String notes, String type, String owner, String pDate, String packWeight, String packType, String lat, String _long, String trackid) {
 
         //PICK
         this.txtPState = txtPState;
@@ -91,7 +92,7 @@ public class Data {
         this.uId = uId;
 
         //Transportation
-        this.isTrans  = isTrans;
+        this.isTrans = isTrans;
         this.isMetro = isMetro;
         this.isMotor = isMotor;
         this.isCar = isCar;
@@ -111,161 +112,259 @@ public class Data {
         this.trackid = trackid;
     }
 
-    public String getProvider() { return provider; }
-    public void setProvider(String provider) { this.provider = provider; }
-    public String getLat() { return lat; }
-    public void setLat(String lat) { this.lat = lat; }
-    public String get_long() { return _long; }
-    public void set_long(String _long) { this._long = _long; }
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String get_long() {
+        return _long;
+    }
+
+    public void set_long(String _long) {
+        this._long = _long;
+    }
+
     public String getTrackid() {
         return trackid;
     }
+
     public void setTrackid(String trackid) {
         this.trackid = trackid;
     }
+
     public String getRemoved() {
         return removed;
     }
+
     public void setRemoved(String removed) {
         this.removed = removed;
     }
+
     public String getOwner() {
         return owner;
     }
+
     public void setOwner(String owner) {
         this.owner = owner;
     }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
-    public String getpDate() { return pDate; }
-    public void setpDate(String pDate) { this.pDate = pDate; }
+
+    public String getpDate() {
+        return pDate;
+    }
+
+    public void setpDate(String pDate) {
+        this.pDate = pDate;
+    }
+
     public String getPackType() {
         return packType;
     }
+
     public void setPackType(String packType) {
         this.packType = packType;
     }
+
     public String getPackWeight() {
         return packWeight;
     }
+
     public void setPackWeight(String packWeight) {
         this.packWeight = packWeight;
     }
+
     public String getTxtPState() {
         return txtPState;
     }
+
     public void setTxtPState(String txtPState) {
         this.txtPState = txtPState;
     }
+
     public String getmPAddress() {
         return mPAddress;
     }
+
     public void setmPAddress(String mPAddress) {
         this.mPAddress = mPAddress;
     }
+
     public String getmPShop() {
         return mPShop;
     }
+
     public void setmPShop(String mPShop) {
         this.mPShop = mPShop;
     }
+
     public String getDate() {
         return date;
     }
-    public String getNotes() { return notes; }
-    public void setNotes(String notes) { this.notes = notes; }
+
     public void setDate(String date) {
         this.date = date;
     }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     public String getStatue() {
         return statue;
     }
+
     public void setStatue(String statue) {
         this.statue = statue;
     }
-    public String trans(){ String trans = "( " + isCar + " " + isMetro + " " +isTrans + " " + isMotor + " )";return trans; }
-    public String reStateP(){ String reStateP = txtPState + " - " + mPRegion;return reStateP; }
-    public String reStateD(){ String reStateD = txtDState + " - " + mDRegion;return reStateD; }
+
+    public String trans() {
+        String trans = "( " + isCar + " " + isMetro + " " + isTrans + " " + isMotor + " )";
+        return trans;
+    }
+
+    public String reStateP() {
+        String reStateP = txtPState + " - " + mPRegion;
+        return reStateP;
+    }
+
+    public String reStateD() {
+        String reStateD = txtDState + " - " + mDRegion;
+        return reStateD;
+    }
+
     public String getDilverTime() {
         return dilverTime;
     }
+
     public void setDilverTime(String dilverTime) {
         this.dilverTime = dilverTime;
     }
+
     public String getAcceptedTime() {
         return acceptedTime;
     }
+
     public void setAcceptedTime(String acceptedTime) {
         this.acceptedTime = acceptedTime;
     }
-    public String getLastedit() { return lastedit; }
-    public void setLastedit(String lastedit) { this.lastedit = lastedit; }
+
+    public String getLastedit() {
+        return lastedit;
+    }
+
+    public void setLastedit(String lastedit) {
+        this.lastedit = lastedit;
+    }
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
+
     public String getDAddress() {
         return DAddress;
     }
-    public String getTxtDState() {
-        return txtDState;
-    }
-    public void setTxtDState(String txtDState) {
-        this.txtDState = txtDState;
-    }
+
     public void setDAddress(String DAddress) {
         this.DAddress = DAddress;
     }
+
+    public String getTxtDState() {
+        return txtDState;
+    }
+
+    public void setTxtDState(String txtDState) {
+        this.txtDState = txtDState;
+    }
+
     public String getDDate() {
         return DDate;
     }
+
     public void setDDate(String DDate) {
         this.DDate = DDate;
     }
+
     public String getDPhone() {
         return DPhone;
     }
+
     public void setDPhone(String DPhone) {
         this.DPhone = DPhone;
     }
+
     public String getDName() {
         return DName;
     }
+
     public void setDName(String DName) {
         this.DName = DName;
     }
+
     public String getGMoney() {
         return GMoney;
     }
+
     public void setGMoney(String GMoney) {
         this.GMoney = GMoney;
     }
+
     public String getGGet() {
         return GGet;
     }
+
     public void setGGet(String GGet) {
         this.GGet = GGet;
     }
+
     public String getuId() {
         return uId;
     }
+
     public void setuId(String uId) {
         this.uId = uId;
     }
+
     public String getIsTrans() {
         return isTrans;
     }
+
     public void setIsTrans(String isTrans) {
         this.isTrans = isTrans;
     }
-    public String getIsMetro() { return isMetro; }
-    public void setIsMetro(String isMetro) { this.isMetro = isMetro;
+
+    public String getIsMetro() {
+        return isMetro;
+    }
+
+    public void setIsMetro(String isMetro) {
+        this.isMetro = isMetro;
     }
 
     public String getTries() {
@@ -315,7 +414,13 @@ public class Data {
     public void setmDRegion(String mDRegion) {
         this.mDRegion = mDRegion;
     }
-    public String getuAccepted() { return uAccepted;
+
+    public String getuAccepted() {
+        return uAccepted;
+    }
+
+    public void setuAccepted(String uAccepted) {
+        this.uAccepted = uAccepted;
     }
 
     public String getSrated() {
@@ -348,10 +453,6 @@ public class Data {
 
     public void setDrateid(String drateid) {
         this.drateid = drateid;
-    }
-
-    public void setuAccepted(String uAccepted) {
-        this.uAccepted = uAccepted;
     }
 
     public String getdHub() {

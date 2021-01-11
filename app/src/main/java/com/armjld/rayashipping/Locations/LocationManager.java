@@ -19,10 +19,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class LocationManager {
-    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     public static ArrayList<LocationDataType> locHolder = new ArrayList<LocationDataType>();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     DatabaseReference Bdatabase;
-    private int index =0;
+    private int index = 0;
 
     public ArrayList<LocationDataType> getLocHolder() {
         return locHolder;
@@ -40,12 +40,12 @@ public class LocationManager {
         this.index = index;
     }
 
-    public boolean add(LocationDataType loc , String id){
+    public boolean add(LocationDataType loc, String id) {
 
-        if(loc == null){
+        if (loc == null) {
             return false;
-        } else{
-            Bdatabase =FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("locations").child(id);
+        } else {
+            Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("locations").child(id);
             Bdatabase.child("lattude").setValue(loc.getLattude());
             Bdatabase.child("lontude").setValue(loc.getLontude());
             Bdatabase.child("address").setValue(loc.getAddress());
@@ -59,36 +59,36 @@ public class LocationManager {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public boolean Remove(String id){
+    public boolean Remove(String id) {
         LocationDataType loc = null;
         loc = locHolder.stream().filter(x -> x.getId().equals(id)).findFirst().get();
 
         locHolder.remove(loc);
         String uId = UserInFormation.getId();
 
-        if(uId == null ||uId.isEmpty()){
+        if (uId == null || uId.isEmpty()) {
             return false;
         }
 
-        Bdatabase =FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(uId).child("locations").child(id);
+        Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(uId).child("locations").child(id);
         Bdatabase.removeValue();
         return true;
 
     }
 
-    public void ImportLocation(){
+    public void ImportLocation() {
         locHolder.clear();
         locHolder.trimToSize();
         FirebaseUser user = mAuth.getCurrentUser();
-        if (user == null){
+        if (user == null) {
             return;
         }
         Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(user.getUid()).child("locations");
         Bdatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    for(DataSnapshot ds : snapshot.getChildren()){
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
                         LocationDataType loc = ds.getValue(LocationDataType.class);
                         locHolder.add(loc);
                         Log.i("Location Manager", " Added New Location");
@@ -97,7 +97,8 @@ public class LocationManager {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 }

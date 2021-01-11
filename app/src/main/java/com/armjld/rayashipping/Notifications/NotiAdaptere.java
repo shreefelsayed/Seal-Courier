@@ -12,9 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.Filters;
 import com.armjld.rayashipping.Home;
+import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.notiData;
@@ -25,10 +25,10 @@ import java.util.ArrayList;
 
 public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder> {
 
+    public static caculateTime _cacu = new caculateTime();
     Context context, context1;
     long count;
-    ArrayList<notiData>notiData;
-    public static caculateTime _cacu = new caculateTime();
+    ArrayList<notiData> notiData;
 
 
     public NotiAdaptere(Context context, ArrayList<notiData> notiData, Context context1, long count) {
@@ -50,21 +50,21 @@ public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         String Datee = notiData.get(position).getDatee();
         String Statue = notiData.get(position).getStatue();
-        String OrderID =notiData.get(position).getOrderid();
+        String OrderID = notiData.get(position).getOrderid();
         String uName = notiData.get(position).getuName();
         String action = notiData.get(position).getAction();
         String ppURL = notiData.get(position).getPpURL();
 
-        holder.setNoti(uName, Statue, Datee,ppURL);
+        holder.setNoti(uName, Statue, Datee, ppURL);
 
-        holder.myview.setOnClickListener(v-> {
+        holder.myview.setOnClickListener(v -> {
             switch (action) {
                 case "noting": {
                     // ------------ Do Nothing
                     break;
                 }
-                case "recived" :
-                case "profile" : {
+                case "recived":
+                case "profile": {
                     whichProfile();
                     break;
                 }
@@ -91,19 +91,19 @@ public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder
                     }
                     break;
                 }*/
-                case "home" : {
+                case "home": {
                     context.startActivity(new Intent(context, Home.class));
                     break;
                 }
-                case "facebook" : {
+                case "facebook": {
                     String fbLink = "https://www.facebook.com/esh7nlyy/";
-                    Intent browse = new Intent(Intent.ACTION_VIEW , Uri.parse(fbLink));
+                    Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse(fbLink));
                     context.startActivity(browse);
                     break;
                 }
-                case "playstore" : {
+                case "playstore": {
                     String psLink = "https://play.google.com/store/apps/details?id=com.armjld.shipply";
-                    Intent browse = new Intent( Intent.ACTION_VIEW , Uri.parse(psLink));
+                    Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse(psLink));
                     context.startActivity(browse);
                     break;
                 }
@@ -124,15 +124,15 @@ public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder
                     break;
                 }*/
 
-                case "filter" : {
-                    if(UserInFormation.getAccountType().equals("Delivery Worker")) {
+                case "filter": {
+                    if (UserInFormation.getAccountType().equals("Delivery Worker")) {
                         context.startActivity(new Intent(context, Filters.class));
                     }
                     break;
                 }
 
-                case "fbgroup" : {
-                    if(UserInFormation.getAccountType().equals("Delivery Worker")) {
+                case "fbgroup": {
+                    if (UserInFormation.getAccountType().equals("Delivery Worker")) {
                         openWebURL("https://www.facebook.com/groups/3563137860431456/");
                     }
                     break;
@@ -159,7 +159,7 @@ public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder
 
     }
 
-    private void whichProfile () {
+    private void whichProfile() {
         Home.whichFrag = "Profile";
         context.startActivity(new Intent(context, Home.class));
     }
@@ -175,10 +175,14 @@ public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder
         return position;
     }
 
+    public void openWebURL(String inURL) {
+        Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse(inURL));
+        context.startActivity(browse);
+    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public View myview;
-        public TextView txtBody, txtNotidate,txtName;
+        public TextView txtBody, txtNotidate, txtName;
         public ImageView imgEditPhoto;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -195,15 +199,10 @@ public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder
             txtName.setText(uName);
             txtBody.setText(statue);
             txtNotidate.setText(_cacu.setPostDate(datee));
-            if(!ppURL.equals("")) {
+            if (!ppURL.equals("")) {
                 Picasso.get().load(Uri.parse(ppURL)).into(imgEditPhoto);
             }
         }
 
-    }
-
-public void openWebURL(String inURL) {
-        Intent browse = new Intent( Intent.ACTION_VIEW , Uri.parse(inURL) );
-        context.startActivity(browse);
     }
 }

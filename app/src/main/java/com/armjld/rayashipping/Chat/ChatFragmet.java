@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AllOrders;
-import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.models.ChatsData;
 
 import java.util.ArrayList;
@@ -31,17 +31,37 @@ public class ChatFragmet extends Fragment {
     public static Context mContext;
     public static RecyclerView recyclerChat;
     public static ArrayList<ChatsData> mChat;
-    ImageView btnBack;
     public static LinearLayout EmptyPanel;
+    ImageView btnBack;
     SwipeRefreshLayout refresh;
 
-    public ChatFragmet() { }
-    
+    public ChatFragmet() {
+    }
+
     public static ChatFragmet newInstance() {
         ChatFragmet fragment = new ChatFragmet();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static void getMessages() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            mChat = Home.mChat;
+            _chatsAdapter = new chatsAdapter(mContext, mChat);
+            if (recyclerChat != null) {
+                recyclerChat.setAdapter(_chatsAdapter);
+                updateNone(mChat.size());
+            }
+        }
+    }
+
+    private static void updateNone(int listSize) {
+        if (listSize > 0) {
+            EmptyPanel.setVisibility(View.GONE);
+        } else {
+            EmptyPanel.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -55,7 +75,7 @@ public class ChatFragmet extends Fragment {
 
         recyclerChat = view.findViewById(R.id.recyclerChat);
         recyclerChat.setHasFixedSize(true);
-        LinearLayoutManager layoutManager= new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         recyclerChat.setLayoutManager(layoutManager);
@@ -67,7 +87,7 @@ public class ChatFragmet extends Fragment {
         EmptyPanel = view.findViewById(R.id.EmptyPanel);
         tbTitle.setText("المحادثات");
 
-        btnBack.setOnClickListener(v-> {
+        btnBack.setOnClickListener(v -> {
             Home.whichFrag = "Home";
             assert getFragmentManager() != null;
             getFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), Home.whichFrag).addToBackStack("Home").commit();
@@ -85,7 +105,7 @@ public class ChatFragmet extends Fragment {
             refresh.setRefreshing(false);
         });
 
-        if(mChat.size() >= 1 ) {
+        if (mChat.size() >= 1) {
             EmptyPanel.setVisibility(View.GONE);
         } else {
             EmptyPanel.setVisibility(View.VISIBLE);
@@ -94,36 +114,17 @@ public class ChatFragmet extends Fragment {
         return view;
     }
 
-public static void getMessages() {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-        mChat = Home.mChat;
-        _chatsAdapter = new chatsAdapter(mContext, mChat);
-        if(recyclerChat != null) {
-            recyclerChat.setAdapter(_chatsAdapter);
-            updateNone(mChat.size());
-        }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mContext = context;
+
     }
-}
 
-@Override
-public void onAttach(@NonNull Context context) {
-    super.onAttach(context);
-    mContext = context;
-
-}
-
-@Override
-public void onDetach() {
-    super.onDetach();
-    mContext = null;
-}
-
-private static void updateNone(int listSize) {
-    if(listSize > 0) {
-        EmptyPanel.setVisibility(View.GONE);
-    } else {
-        EmptyPanel.setVisibility(View.VISIBLE);
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext = null;
     }
-}
 
 }

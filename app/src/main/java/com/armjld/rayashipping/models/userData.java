@@ -32,6 +32,7 @@ public class userData {
     private String supervisor_code = "";
     private String packMoney = "0";
 
+    private String transType = "Motor";
     private String trackId = "";
 
 
@@ -61,6 +62,9 @@ public class userData {
         this.walletmoney = walletmoney;
         this.isConfirmed = isConfirmed;
         this.provider = provider;
+    }
+
+    public userData() {
     }
 
     public String getName() {
@@ -255,8 +259,6 @@ public class userData {
         this.isConfirmed = isConfirmed;
     }
 
-    public userData(){ }
-
     public String getProvider() {
         return provider;
     }
@@ -303,5 +305,13 @@ public class userData {
 
     public void setPackMoney(String packMoney) {
         this.packMoney = packMoney;
+    }
+
+    public String getTransType() {
+        return transType;
+    }
+
+    public void setTransType(String transType) {
+        this.transType = transType;
     }
 }

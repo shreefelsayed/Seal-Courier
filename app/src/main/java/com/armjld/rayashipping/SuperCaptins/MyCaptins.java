@@ -3,13 +3,6 @@ package com.armjld.rayashipping.SuperCaptins;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +10,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.armjld.rayashipping.Adapters.CaptinsAdapter;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AllOrders;
-import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.models.userData;
 
 import java.util.ArrayList;
@@ -29,15 +28,38 @@ import timber.log.Timber;
 
 public class MyCaptins extends Fragment {
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     public static RecyclerView recyclerView;
     public static CaptinsAdapter captinsAdapter;
     public static ArrayList<userData> captinList = new ArrayList<>();
-    static LinearLayout EmptyPanel;
     public static Context mContext;
+    static LinearLayout EmptyPanel;
     ImageView btnBack;
-    
-    public MyCaptins() { }
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    public MyCaptins() {
+    }
+
+    public static void getCaptins() {
+        Timber.i("Setting orders in Home Fragment");
+        captinList = Home.mCaptins;
+
+        if (mContext != null) {
+            captinsAdapter = new CaptinsAdapter(mContext, captinList, "info");
+        }
+        if (recyclerView != null) {
+            recyclerView.setAdapter(captinsAdapter);
+            updateNone(captinList.size());
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private static void updateNone(int listSize) {
+        if (listSize > 0) {
+            EmptyPanel.setVisibility(View.GONE);
+        } else {
+            EmptyPanel.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +75,7 @@ public class MyCaptins extends Fragment {
         recyclerView = view.findViewById(R.id.recycler);
         btnBack = view.findViewById(R.id.btnBack);
 
-        btnBack.setOnClickListener(v-> {
+        btnBack.setOnClickListener(v -> {
             Home.whichFrag = "Home";
             assert getFragmentManager() != null;
             getFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), Home.whichFrag).addToBackStack("Home").commit();
@@ -67,7 +89,7 @@ public class MyCaptins extends Fragment {
 
         //Recycler
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager= new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -81,28 +103,6 @@ public class MyCaptins extends Fragment {
 
         getCaptins();
         return view;
-    }
-
-    public static void getCaptins(){
-        Timber.i("Setting orders in Home Fragment");
-        captinList = Home.mCaptins;
-        
-        if(mContext!= null) {
-            captinsAdapter = new CaptinsAdapter(mContext, captinList, "info");
-        }
-        if(recyclerView != null) {
-            recyclerView.setAdapter(captinsAdapter);
-            updateNone(captinList.size());
-        }
-    }
-    
-    @SuppressLint("SetTextI18n")
-    private static void updateNone(int listSize) {
-        if(listSize > 0) {
-            EmptyPanel.setVisibility(View.GONE);
-        } else {
-            EmptyPanel.setVisibility(View.VISIBLE);
-        }
     }
 
     @Override

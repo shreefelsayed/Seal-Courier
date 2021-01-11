@@ -6,9 +6,10 @@ public class rateData {
     private int rate = 5;
     private String comment = "";
 
-    public rateData (){}
+    public rateData() {
+    }
 
-    public rateData(String rId, String oId, String sId, String dId, int rate, String comment, String datee){
+    public rateData(String rId, String oId, String sId, String dId, int rate, String comment, String datee) {
         this.rId = rId;
         this.oId = oId;
         this.sId = sId;

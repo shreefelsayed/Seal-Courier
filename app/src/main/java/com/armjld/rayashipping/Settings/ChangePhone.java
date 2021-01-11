@@ -1,8 +1,5 @@
 package com.armjld.rayashipping.Settings;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -15,6 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.models.UserInFormation;
@@ -33,25 +33,26 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mukesh.OtpView;
+
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
 public class ChangePhone extends AppCompatActivity {
 
+    public String mVerificationId = "";
     EditText txtPhone;
     OtpView txtOTP;
     FloatingActionButton btnNext;
     ViewFlipper viewFlipper;
     String strPhone, strOTP;
     ImageView btnBack;
-    public String mVerificationId = "";
     CountDownTimer resend;
     TextView txtResend;
     TextInputLayout tlPhone;
     String oldPhone;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     ProgressDialog mdialog;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,25 +79,27 @@ public class ChangePhone extends AppCompatActivity {
         txtOTP.setOtpCompletionListener(otp -> verifyPhoneNumberWithCode(mVerificationId, Objects.requireNonNull(txtOTP.getText()).toString()));
         viewFlipper.setDisplayedChild(0);
 
-        btnBack.setOnClickListener(v-> showPrev());
-        btnNext.setOnClickListener(v-> showNext());
+        btnBack.setOnClickListener(v -> showPrev());
+        btnNext.setOnClickListener(v -> showNext());
 
         txtPhone.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(txtPhone.getText().toString().trim().length() == 11 && !txtPhone.getText().toString().equals(oldPhone)) {
+                if (txtPhone.getText().toString().trim().length() == 11 && !txtPhone.getText().toString().equals(oldPhone)) {
                     tlPhone.setErrorEnabled(false);
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable editable) { }
+            public void afterTextChanged(Editable editable) {
+            }
         });
-        txtResend.setOnClickListener(v-> {
-            if(strPhone == null) {
+        txtResend.setOnClickListener(v -> {
+            if (strPhone == null) {
                 viewFlipper.setDisplayedChild(0);
                 btnBack.setVisibility(View.VISIBLE);
                 return;
@@ -111,19 +114,19 @@ public class ChangePhone extends AppCompatActivity {
 
     private void showNext() {
         switch (viewFlipper.getDisplayedChild()) {
-            case 0 :
-                if(txtPhone.getText().toString().length() != 11) {
+            case 0:
+                if (txtPhone.getText().toString().length() != 11) {
                     tlPhone.setError("ادخل رقم هاتف مكون من ١١ رقم");
                     return;
                 }
 
-                if(txtPhone.getText().toString().equals(oldPhone)) {
+                if (txtPhone.getText().toString().equals(oldPhone)) {
                     tlPhone.setError("لا يمكنك ادخال رقمك القديم");
                     return;
                 }
                 check(txtPhone.getText().toString().trim());
                 break;
-            case 1 :
+            case 1:
                 strOTP = Objects.requireNonNull(txtOTP.getText()).toString();
                 verifyPhoneNumberWithCode(mVerificationId, strOTP);
                 break;
@@ -132,10 +135,10 @@ public class ChangePhone extends AppCompatActivity {
 
     private void showPrev() {
         switch (viewFlipper.getDisplayedChild()) {
-            case 0 :
+            case 0:
                 finish();
                 break;
-            case 1 :
+            case 1:
                 strOTP = "";
                 strPhone = "";
                 txtOTP.setText("");
@@ -151,7 +154,7 @@ public class ChangePhone extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").orderByChild("phone").equalTo(trim).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     Toast.makeText(ChangePhone.this, "رقم الهاتف مسجل في حساب أخر", Toast.LENGTH_SHORT).show();
                     mdialog.dismiss();
                 } else {
@@ -162,7 +165,8 @@ public class ChangePhone extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -170,7 +174,7 @@ public class ChangePhone extends AppCompatActivity {
         mdialog.setMessage("جاري ارسال الكود ..");
         mdialog.setCancelable(false);
         mdialog.show();
-        if(mCallbacks == null) {
+        if (mCallbacks == null) {
             mCallBack();
         }
 
@@ -187,7 +191,7 @@ public class ChangePhone extends AppCompatActivity {
         mdialog.setCancelable(false);
         mdialog.show();
 
-        if(verificationId.equals("")) {
+        if (verificationId.equals("")) {
             Toast.makeText(this, "حدث خطأ في لتاكد من الرمز الرجاء الابلاغ عنه", Toast.LENGTH_LONG).show();
             mdialog.dismiss();
             return;
@@ -202,7 +206,7 @@ public class ChangePhone extends AppCompatActivity {
         mdialog.setCancelable(false);
         mdialog.show();
         Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).updatePhoneNumber(phoneAuthCredential).addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
+            if (task.isSuccessful()) {
                 changeDatabase();
             } else {
                 if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
@@ -223,7 +227,7 @@ public class ChangePhone extends AppCompatActivity {
         pDatabase.orderByChild("phone").equalTo(UserInFormation.getuPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     for (DataSnapshot payments : snapshot.getChildren()) {
                         String id = Objects.requireNonNull(payments.child("id").getValue()).toString();
                         pDatabase.child(id).child("phone").setValue(strPhone);
@@ -236,7 +240,8 @@ public class ChangePhone extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
 
 
@@ -285,6 +290,7 @@ public class ChangePhone extends AppCompatActivity {
                 txtResend.setEnabled(false);
                 txtResend.setText("اضغط هنا لاعادة ارسال كود التفعيل بعد " + l / 1000 + " ثانية");
             }
+
             @Override
             public void onFinish() {
                 txtResend.setEnabled(true);

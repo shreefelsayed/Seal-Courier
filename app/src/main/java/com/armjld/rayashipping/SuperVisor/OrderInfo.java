@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.MapsActivity;
+import com.armjld.rayashipping.OrdersBySameUser;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.Ratings.Ratings;
 import com.armjld.rayashipping.caculateTime;
@@ -48,24 +49,24 @@ import static com.google.firebase.database.FirebaseDatabase.getInstance;
 
 public class OrderInfo extends AppCompatActivity {
 
-    String orderID;
-    DatabaseReference uDatabase,nDatabase;
-    String owner;
+    private static final int PHONE_CALL_CODE = 100;
     public static Data orderData;
-    TextView date3, date, orderto, OrderFrom,txtPack,txtWeight,ordercash2,fees2,txtPostDate2;
+    String orderID;
+    DatabaseReference uDatabase, nDatabase;
+    String owner;
+    TextView date3, date, orderto, OrderFrom, txtPack, txtWeight, ordercash2, fees2, txtPostDate2;
     TextView dsUsername;
     TextView txtTitle;
     TextView ddCount;
-    TextView dsPAddress,dsDAddress,txtCallCustomer,txtCustomerName;
-    ImageView supPP,btnOrderMap;
+    TextView dsPAddress, dsDAddress, txtCallCustomer, txtCustomerName;
+    ImageView supPP, btnOrderMap;
     RatingBar rbUser;
     ImageView btnClose;
-    Button btnBid,btnAccept;
+    Button btnBid, btnAccept;
     TextView txtMoreOrders;
     ImageView icTrans;
-    private static final int PHONE_CALL_CODE = 100;
     TextView txtNotes;
-    LinearLayout linSupplier,advice;
+    LinearLayout linSupplier, advice;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
     SimpleDateFormat orderformat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
@@ -78,10 +79,10 @@ public class OrderInfo extends AppCompatActivity {
     String ownerName = "";
     String dPhone = "";
     String ownerPhone;
-    private boolean hasMore = false;
-    private boolean toClick = true;
     boolean isBid = false;
     int position = 0;
+    private boolean hasMore = false;
+    private boolean toClick = true;
 
     @Override
     public void onBackPressed() {
@@ -95,7 +96,7 @@ public class OrderInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_info);
 
-        if(orderData == null) {
+        if (orderData == null) {
             finish();
             return;
         }
@@ -169,10 +170,10 @@ public class OrderInfo extends AppCompatActivity {
         DAddress = DAddress + " - " + orderData.getDAddress();
 
         // ------ Check what buttons to show depending on the provider & statue
-        if(orderState.equals("placed")) {
+        if (orderState.equals("placed")) {
             btnBid.setVisibility(View.VISIBLE);
             btnAccept.setVisibility(View.VISIBLE);
-        } else if(orderState.equals("supD")){
+        } else if (orderState.equals("supD")) {
             btnBid.setVisibility(View.GONE);
             btnAccept.setVisibility(View.VISIBLE);
         } else {
@@ -180,7 +181,7 @@ public class OrderInfo extends AppCompatActivity {
             btnAccept.setVisibility(View.GONE);
         }
 
-        if(orderData.getProvider().equals("Esh7nly")) {
+        if (orderData.getProvider().equals("Esh7nly")) {
             btnAccept.setVisibility(View.GONE);
             fees2.setVisibility(View.VISIBLE);
             advice.setVisibility(View.VISIBLE);
@@ -190,18 +191,18 @@ public class OrderInfo extends AppCompatActivity {
             advice.setVisibility(View.GONE);
         }
 
-        if(orderData.getNotes().equals("")) txtNotes.setVisibility(View.GONE);
+        if (orderData.getNotes().equals("")) txtNotes.setVisibility(View.GONE);
 
         boolean toPick = orderData.getStatue().equals("placed") || orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived");
-        boolean toDelv = orderData.getStatue().equals("readyD") || orderData.getStatue().equals("supD")  || orderData.getStatue().equals("capDenied") || orderData.getStatue().equals("supDenied");
+        boolean toDelv = orderData.getStatue().equals("readyD") || orderData.getStatue().equals("supD") || orderData.getStatue().equals("capDenied") || orderData.getStatue().equals("supDenied");
 
 
-        if(toPick || toDelv) btnOrderMap.setVisibility(View.VISIBLE);
+        if (toPick || toDelv) btnOrderMap.setVisibility(View.VISIBLE);
 
         // ----------- Set the Bidding Statue
         isBid = rquests.getRequests().stream().anyMatch(x -> x.getOrderId().equals(orderID));
 
-        if(!isBid) {
+        if (!isBid) {
             setBid("false");
         } else {
             setBid("true");
@@ -220,14 +221,14 @@ public class OrderInfo extends AppCompatActivity {
         txtNotes.setText("الملاحظات : " + orderData.getNotes());
         txtCallCustomer.setText("رقم هاتف العميل : " + dPhone);
         txtCallCustomer.setPaintFlags(txtCallCustomer.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        txtCustomerName.setText( orderData.getDName());
+        txtCustomerName.setText(orderData.getDName());
         dsPAddress.setText(PAddress);
         dsDAddress.setText(DAddress);
 
         // ------------------------- Buttons Functions ---------------------------- \\
 
         // ------ Accept for Raya Orders
-        btnAccept.setOnClickListener(v-> {
+        btnAccept.setOnClickListener(v -> {
 
             Intent intent = new Intent(this, AsignOrder.class);
             AsignOrder.assignToCaptin.clear();
@@ -237,7 +238,7 @@ public class OrderInfo extends AppCompatActivity {
 
         // ------- Request for Esh7nly Orders
         btnBid.setOnClickListener(v1 -> {
-            if(isBid) {
+            if (isBid) {
                 BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(this).setMessage("هل انت متأكد من انك تريد الغاء التقديم علي هذه الشحنه ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                     // ------------------- Send Request -------------------- //
                     rquests _rquests = new rquests(this);
@@ -272,7 +273,7 @@ public class OrderInfo extends AppCompatActivity {
         });
 
         supPP.setOnClickListener(v -> {
-            if(hasMore && toClick) {
+            if (hasMore && toClick) {
                 Intent otherOrders = new Intent(this, OrdersBySameUser.class);
                 otherOrders.putExtra("userid", owner);
                 otherOrders.putExtra("name", ownerName);
@@ -287,7 +288,7 @@ public class OrderInfo extends AppCompatActivity {
         });
 
         txtCallCustomer.setOnClickListener(v -> {
-            if(!dPhone.equals("")) {
+            if (!dPhone.equals("")) {
                 BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(OrderInfo.this).setMessage("هل تريد الاتصال بالعميل ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
 
                     checkPermission(Manifest.permission.CALL_PHONE, PHONE_CALL_CODE);
@@ -368,7 +369,8 @@ public class OrderInfo extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
     }
 
@@ -390,23 +392,23 @@ public class OrderInfo extends AppCompatActivity {
                 String three = "0";
                 String four = "0";
                 String five = "0";
-                if(snapshot.child("rating").child("one").exists()) {
+                if (snapshot.child("rating").child("one").exists()) {
                     one = Objects.requireNonNull(snapshot.child("rating").child("one").getValue()).toString();
                 }
-                if(snapshot.child("rating").child("two").exists()) {
+                if (snapshot.child("rating").child("two").exists()) {
                     two = Objects.requireNonNull(snapshot.child("rating").child("two").getValue()).toString();
                 }
-                if(snapshot.child("rating").child("three").exists()) {
+                if (snapshot.child("rating").child("three").exists()) {
                     three = Objects.requireNonNull(snapshot.child("rating").child("three").getValue()).toString();
                 }
-                if(snapshot.child("rating").child("four").exists()) {
+                if (snapshot.child("rating").child("four").exists()) {
                     four = Objects.requireNonNull(snapshot.child("rating").child("four").getValue()).toString();
                 }
-                if(snapshot.child("rating").child("five").exists()) {
+                if (snapshot.child("rating").child("five").exists()) {
                     five = Objects.requireNonNull(snapshot.child("rating").child("five").getValue()).toString();
                 }
                 Ratings _rat = new Ratings();
-                rbUser.setRating(_rat.calculateRating(one,two,three,four,five));
+                rbUser.setRating(_rat.calculateRating(one, two, three, four, five));
 
                 linSupplier.setVisibility(View.VISIBLE); // Show the Info
             }
@@ -421,7 +423,7 @@ public class OrderInfo extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         isBid = rquests.getRequests().stream().anyMatch(x -> x.getOrderId().equals(orderID));
-        if(!isBid) {
+        if (!isBid) {
             setBid("false");
         } else {
             setBid("true");
@@ -436,23 +438,23 @@ public class OrderInfo extends AppCompatActivity {
     @SuppressLint("UseCompatLoadingForDrawables")
     public void setIcon(String trans) {
         switch (trans) {
-            case "Trans" :
+            case "Trans":
                 icTrans.setImageDrawable(getResources().getDrawable(R.drawable.ic_run));
                 break;
-            case "Car" :
+            case "Car":
                 icTrans.setImageDrawable(getResources().getDrawable(R.drawable.ic_car));
                 break;
-            case "Bike" :
+            case "Bike":
                 icTrans.setImageDrawable(getResources().getDrawable(R.drawable.ic_bicycle));
                 break;
-            case "Motor" :
+            case "Motor":
                 icTrans.setImageDrawable(getResources().getDrawable(R.drawable.ic_vespa));
                 break;
         }
     }
 
     public void setBid(String type) {
-        if(type.equals("true")) {
+        if (type.equals("true")) {
             btnBid.setText("الغاء الطلب");
             btnBid.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_bad_square));
         } else {
@@ -463,7 +465,7 @@ public class OrderInfo extends AppCompatActivity {
 
     public void checkPermission(String permission, int requestCode) {
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this, new String[] { permission }, requestCode);
+            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
         }
     }
 

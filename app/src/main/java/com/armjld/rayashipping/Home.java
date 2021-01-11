@@ -7,13 +7,14 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+
 import com.armjld.rayashipping.Captin.capAvillable;
 import com.armjld.rayashipping.Captin.captinRecived;
 import com.armjld.rayashipping.Chat.ChatFragmet;
-import com.armjld.rayashipping.Login.LoadingScreen;
 import com.armjld.rayashipping.Login.LoginManager;
 import com.armjld.rayashipping.Login.StartUp;
 import com.armjld.rayashipping.Notifications.NotificationFragment;
@@ -38,11 +39,8 @@ import com.hypertrack.sdk.HyperTrack;
 import com.hypertrack.sdk.TrackingError;
 import com.hypertrack.sdk.TrackingStateObserver;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -71,149 +69,11 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
 
     public static int notiCount = 0;
     public static int msgCount = 0;
-
-
-    boolean doubleBackToExitPressedOnce = false;
     public static String whichFrag = "Home";
     public static BottomNavigationView bottomNavigationView;
-
+    public static BadgeDrawable badge, chatsBadge;
     static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-    public static BadgeDrawable badge, chatsBadge;
-
-    String htID = "00F4wm01NAr4ZHVE4gjrtQiQw8BxYC9dJNjeoM0LE4eEpm928geMz-2Tt8bZgOzJnTlE64SKDs_ZUEYyBJE4wQ";
-    HyperTrack sdkInstance;
-
-    @Override
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag("Home");
-        if (fragment != null && fragment.isVisible()) {
-            if (doubleBackToExitPressedOnce) {
-                finishAffinity();
-                System.exit(0);
-            }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "اضغط مرة اخري للخروج من التطبيق", Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-        } else {
-            whichFrag = "Home";
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), whichFrag).addToBackStack("Home").commit();
-            bottomNavigationView.setSelectedItemId(R.id.home);
-        }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!LoginManager.dataset) {
-            finish();
-            startActivity(new Intent(this, StartUp.class));
-        }
-
-        if (sdkInstance.isRunning()) {
-            onTrackingStart();
-        } else {
-            onTrackingStop();
-        }
-
-        sdkInstance.requestPermissionsIfNecessary();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        sdkInstance.removeTrackingListener(this);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supervisor_home);
-
-        HyperTrack.enableDebugLogging();
-        sdkInstance = HyperTrack
-                .getInstance(htID)
-                .addTrackingListener(Home.this);
-
-        sdkInstance.setDeviceName(UserInFormation.getUserName());
-        Map<String,Object> myMetadata = new HashMap<>();
-        myMetadata.put("vehicle_type", UserInFormation.getTrans());
-        myMetadata.put("group_id", UserInFormation.getAccountType());
-
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("trackId").setValue(sdkInstance.getDeviceID());
-
-        sdkInstance.setDeviceMetadata(myMetadata);
-        sdkInstance.start();
-
-        if (UserInFormation.getId() == null) {
-            finish();
-            startActivity(new Intent(this, StartUp.class));
-        }
-
-        bottomNavigationView = findViewById(R.id.bottomNav);
-        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
-
-        Menu menu = bottomNavigationView.getMenu();
-        MenuItem item = menu.findItem(R.id.noti);
-        badge = bottomNavigationView.getOrCreateBadge(item.getItemId());
-        chatsBadge = bottomNavigationView.getOrCreateBadge(menu.findItem(R.id.chats).getItemId());
-
-
-        if (notiCount == 0) {
-            bottomNavigationView.removeBadge(R.id.noti);
-        } else {
-            badge.setNumber(notiCount);
-        }
-
-        if (msgCount == 0) {
-            bottomNavigationView.removeBadge(R.id.chats);
-        } else {
-            badge.setNumber(msgCount);
-        }
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, whichFrag(), whichFrag).addToBackStack("Home").commit();
-
-        if(UserInFormation.getAccountType().equals("Delivery Worker")) {
-            bottomNavigationView.getMenu().removeItem(R.id.profile);
-        }
-    }
-
-    private Fragment whichFrag() {
-        Fragment frag = null;
-        switch (whichFrag) {
-            case "Home": {
-                frag = new AllOrders();
-                bottomNavigationView.setSelectedItemId(R.id.home);
-                break;
-            }
-            case "Profile": {
-                frag = new MyCaptins();
-                bottomNavigationView.setSelectedItemId(R.id.profile);
-                break;
-            }
-
-            case "Chats": {
-                frag = new ChatFragmet();
-                bottomNavigationView.setSelectedItemId(R.id.chats);
-                break;
-            }
-
-            case "Noti": {
-                frag = new NotificationFragment();
-                bottomNavigationView.setSelectedItemId(R.id.noti);
-                break;
-            }
-
-            case "Settings": {
-                frag = new SettingFragment();
-                bottomNavigationView.setSelectedItemId(R.id.settings);
-                break;
-            }
-
-        }
-        return frag;
-    }
-
     @SuppressLint("NonConstantResourceId")
     private final BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
         Fragment fragment = null;
@@ -253,6 +113,9 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, fragTag).addToBackStack("Home").commit();
         return true;
     };
+    boolean doubleBackToExitPressedOnce = false;
+    String htID = "00F4wm01NAr4ZHVE4gjrtQiQw8BxYC9dJNjeoM0LE4eEpm928geMz-2Tt8bZgOzJnTlE64SKDs_ZUEYyBJE4wQ";
+    HyperTrack sdkInstance;
 
     public static void getMessageCount() {
         if (chatsBadge == null || bottomNavigationView == null) {
@@ -289,65 +152,19 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
     }
 
     public static void getOrdersByLatest() {
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef("Esh7nly");
-        mDatabase.orderByChild("statue").equalTo("placed").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mm.clear();
-                mm.trimToSize();
-                avillableIDS.clear();
-                avillableIDS.trimToSize();
+        mm.clear();
+        avillableIDS.clear();
 
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (ds.getChildrenCount() < 5) return;
-                        Data orderData = ds.getValue(Data.class);
-                        assert orderData != null;
-                        Date orderDate = null;
-                        Date myDate = null;
-                        try {
-                            orderDate = format.parse(Objects.requireNonNull(ds.child("ddate").getValue()).toString());
-                            myDate = format.parse(sdf.format(Calendar.getInstance().getTime()));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        assert orderDate != null;
-                        assert myDate != null;
-
-                        if (orderDate.compareTo(myDate) >= 0 && LoadingScreen.cities.contains(orderData.getmPRegion()) && LoadingScreen.cities.contains(orderData.getmDRegion())) {
-                            mm.add(orderData);
-                            avillableIDS.add(orderData.getId());
-                            Timber.i(orderData.getId());
-                        }
-
-                        mm.sort((o1, o2) -> {
-                            String one = o1.getDate();
-                            String two = o2.getDate();
-                            return one.compareTo(two);
-                        });
-                    }
-                }
-
-                getRayaOrders();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
-
-    public static void getRayaOrders() {
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef("Raya");
+
         mDatabase.orderByChild("statue").equalTo("placed").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // --------- Get Avillable Orders Data ------
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        if(ds.getChildrenCount() < 5) return;
+                        if (ds.getChildrenCount() < 5) return;
                         Data orderData = ds.getValue(Data.class);
                         assert orderData != null;
 
@@ -356,17 +173,19 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
                     }
                     // ------- Sort According to Date
                     Home.mm.sort((o1, o2) -> {
-                        String one = o1.getDate();
-                        String two = o2.getDate();
-                        return one.compareTo(two);
+                        String one = o1.getpDate();
+                        String two = o2.getpDate();
+                        return two.compareTo(one);
                     });
                 }
 
                 // -------- Add data to Fragment
                 SuperAvillable.getOrders();
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
     }
 
@@ -391,7 +210,8 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -401,51 +221,35 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
         DatabaseReference mDatabase = ref.getRef("Raya");
         delvOrders.clear();
         delvOrders.trimToSize();
+
         mDatabase.orderByChild("dSupervisor").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot allOrders) {
-                if(allOrders.exists()) {
-                    for(DataSnapshot notDelv : allOrders.getChildren()) {
+                if (allOrders.exists()) {
+                    for (DataSnapshot notDelv : allOrders.getChildren()) {
                         Data orderData = notDelv.getValue(Data.class);
                         assert orderData != null;
-                        if(orderData.getStatue().equals("supD")) {
+                        if (orderData.getStatue().equals("supD")) {
                             delvOrders.add(orderData);
                         }
                     }
                 }
 
-                getEsh7nlyDelv();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
-    }
-
-    // ---------- Get To Deliver Esh7nly Orders --------- \\
-    public static void getEsh7nlyDelv() {
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef("Esh7nly");
-
-        mDatabase.orderByChild("dSupervisor").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot allOrders) {
-                if(allOrders.exists()) {
-                    for(DataSnapshot notDelv : allOrders.getChildren()) {
-                        Data orderData = notDelv.getValue(Data.class);
-                        assert orderData != null;
-                        if(orderData.getStatue().equals("supD")) {
-                            delvOrders.add(orderData);
-                        }
-                    }
-                }
+                // ------- Sort According to Date
+                Home.delvOrders.sort((o1, o2) -> {
+                    String one = o1.getDDate();
+                    String two = o2.getDDate();
+                    return two.compareTo(one);
+                });
 
                 //set in Fragment -------
                 SuperRecived.getOrders();
+
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -524,57 +328,42 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
     }
 
     public static void getDeliveryOrders() {
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef("Esh7nly");
-
         captinAvillable.clear();
         captinAvillable.trimToSize();
-
         captinDelv.clear();
         captinDelv.trimToSize();
 
-        mDatabase.orderByChild("uAccepted").equalTo(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        Data orderData = ds.getValue(Data.class);
-                        assert orderData != null;
-                        if(orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
-                            // ------ Add to Avillabe
-                            captinAvillable.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied")) {
-                            // ------ Add to to Delivered
-                            captinDelv.add(orderData);
-                        }
-                    }
-                }
-                getForRaya();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
-    }
-
-    public static void getForRaya() {
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef("Raya");
 
         mDatabase.orderByChild("uAccepted").equalTo(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Data orderData = ds.getValue(Data.class);
                         assert orderData != null;
-                        if(orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
+                        if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             captinAvillable.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD")|| orderData.getStatue().equals("denied")) {
+                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied")) {
                             captinDelv.add(orderData);
                         }
                     }
                 }
+
+                // ------- Sort According to Date
+                Home.captinAvillable.sort((o1, o2) -> {
+                    String one = o1.getpDate();
+                    String two = o2.getpDate();
+                    return two.compareTo(one);
+                });
+
+                // ------- Sort According to Date
+                Home.captinDelv.sort((o1, o2) -> {
+                    String one = o1.getDDate();
+                    String two = o2.getDDate();
+                    return two.compareTo(one);
+                });
 
                 // -------- Set orders in Fragment
                 capAvillable.getOrders();
@@ -582,10 +371,138 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("Home");
+        if (fragment != null && fragment.isVisible()) {
+            if (doubleBackToExitPressedOnce) {
+                finishAffinity();
+                System.exit(0);
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "اضغط مرة اخري للخروج من التطبيق", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+        } else {
+            whichFrag = "Home";
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), whichFrag).addToBackStack("Home").commit();
+            bottomNavigationView.setSelectedItemId(R.id.home);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!LoginManager.dataset) {
+            finish();
+            startActivity(new Intent(this, StartUp.class));
+        }
+
+        if (sdkInstance.isRunning()) {
+            onTrackingStart();
+        } else {
+            onTrackingStop();
+        }
+
+        sdkInstance.requestPermissionsIfNecessary();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sdkInstance.removeTrackingListener(this);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_supervisor_home);
+
+        HyperTrack.enableDebugLogging();
+        sdkInstance = HyperTrack.getInstance(htID).addTrackingListener(Home.this);
+
+        sdkInstance.setDeviceName(UserInFormation.getUserName());
+        Map<String, Object> myMetadata = new HashMap<>();
+        myMetadata.put("vehicle_type", UserInFormation.getTrans());
+        myMetadata.put("group_id", UserInFormation.getAccountType());
+
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("trackId").setValue(sdkInstance.getDeviceID());
+
+        sdkInstance.setDeviceMetadata(myMetadata);
+        sdkInstance.start();
+
+        if (UserInFormation.getId() == null) {
+            finish();
+            startActivity(new Intent(this, StartUp.class));
+        }
+
+        bottomNavigationView = findViewById(R.id.bottomNav);
+        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
+
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem item = menu.findItem(R.id.noti);
+        badge = bottomNavigationView.getOrCreateBadge(item.getItemId());
+        chatsBadge = bottomNavigationView.getOrCreateBadge(menu.findItem(R.id.chats).getItemId());
+
+
+        if (notiCount == 0) {
+            bottomNavigationView.removeBadge(R.id.noti);
+        } else {
+            badge.setNumber(notiCount);
+        }
+
+        if (msgCount == 0) {
+            bottomNavigationView.removeBadge(R.id.chats);
+        } else {
+            badge.setNumber(msgCount);
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, whichFrag(), whichFrag).addToBackStack("Home").commit();
+
+        if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+            bottomNavigationView.getMenu().removeItem(R.id.profile);
+        }
+    }
+
+    private Fragment whichFrag() {
+        Fragment frag = null;
+        switch (whichFrag) {
+            case "Home": {
+                frag = new AllOrders();
+                bottomNavigationView.setSelectedItemId(R.id.home);
+                break;
+            }
+            case "Profile": {
+                frag = new MyCaptins();
+                bottomNavigationView.setSelectedItemId(R.id.profile);
+                break;
+            }
+
+            case "Chats": {
+                frag = new ChatFragmet();
+                bottomNavigationView.setSelectedItemId(R.id.chats);
+                break;
+            }
+
+            case "Noti": {
+                frag = new NotificationFragment();
+                bottomNavigationView.setSelectedItemId(R.id.noti);
+                break;
+            }
+
+            case "Settings": {
+                frag = new SettingFragment();
+                bottomNavigationView.setSelectedItemId(R.id.settings);
+                break;
+            }
+
+        }
+        return frag;
+    }
 
     @Override
     public void onError(TrackingError trackingError) {

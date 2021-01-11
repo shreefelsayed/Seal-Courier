@@ -3,8 +3,8 @@
     style="?android:attr/dropDownItemStyle"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:text="search"
+    android:background="@color/background"
     android:padding="@dimen/_5sdp"
+    android:text="search"
     android:textAppearance="?android:attr/textAppearanceMediumInverse"
-    android:textColor="@color/colorAccent"
-    android:background="@color/background"/>
+    android:textColor="@color/colorAccent" />

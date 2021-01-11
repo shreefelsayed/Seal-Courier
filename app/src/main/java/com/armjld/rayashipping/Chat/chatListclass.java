@@ -20,21 +20,21 @@ public class chatListclass {
 
     private DatabaseReference Bdatabase;
 
-    public void dlevarychat(String id){
+    public void dlevarychat(String id) {
         String uId = UserInFormation.getId();
         Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("orders");
         Bdatabase.orderByChild("uAccepted").equalTo(uId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isFound = false;
-                for(DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.child("uId").getValue().toString().equals(id) && ds.child("statue").getValue().toString().equals("accepted")||ds.child("statue").getValue().toString().equals("recived") ||ds.child("statue").getValue().toString().equals("recived2")||ds.child("statue").getValue().toString().equals("denied")){
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    if (ds.child("uId").getValue().toString().equals(id) && ds.child("statue").getValue().toString().equals("accepted") || ds.child("statue").getValue().toString().equals("recived") || ds.child("statue").getValue().toString().equals("recived2") || ds.child("statue").getValue().toString().equals("denied")) {
                         isFound = true;
                         break;
                     }
                 }
 
-                if(!isFound) {
+                if (!isFound) {
                     Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(uId).child("chats").child(id);
                     Bdatabase.child("talk").setValue("false");
 
@@ -45,28 +45,29 @@ public class chatListclass {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
 
     }
 
-    public void supplierchat(String id){
+    public void supplierchat(String id) {
         String uId = UserInFormation.getId();
         Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("orders");
         Bdatabase.orderByChild("uId").equalTo(uId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isFound = false;
-                for(DataSnapshot ds : snapshot.getChildren()){
-                    if(ds.child("uAccepted").getValue().toString().equals(id)){
-                        if(ds.child("statue").getValue().toString().equals("accepted")||ds.child("statue").getValue().toString().equals("recived") ||ds.child("statue").getValue().toString().equals("recived2") ||ds.child("statue").getValue().toString().equals("denied")) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    if (ds.child("uAccepted").getValue().toString().equals(id)) {
+                        if (ds.child("statue").getValue().toString().equals("accepted") || ds.child("statue").getValue().toString().equals("recived") || ds.child("statue").getValue().toString().equals("recived2") || ds.child("statue").getValue().toString().equals("denied")) {
                             isFound = true;
                             break;
                         }
                     }
                 }
 
-                if(!isFound) {
+                if (!isFound) {
                     Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(uId).child("chats").child(id);
                     Bdatabase.child("talk").setValue("false");
 
@@ -88,9 +89,10 @@ public class chatListclass {
         DatabaseReference Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(myId).child("chats").child(hisId);
         Bdatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             DatabaseReference Bdatabase;
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(myId).child("chats").child(hisId);
                     Bdatabase.child("talk").setValue("true");
                     Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(hisId).child("chats").child(myId);
@@ -98,7 +100,7 @@ public class chatListclass {
                     Intent intent = new Intent(context, Messages.class);
                     intent.putExtra("roomid", Objects.requireNonNull(snapshot.child("roomid").getValue()).toString());
                     intent.putExtra("rid", hisId);
-                    ((Activity)context).startActivityForResult(intent, 1);
+                    ((Activity) context).startActivityForResult(intent, 1);
 
                 } else {
 
@@ -115,14 +117,15 @@ public class chatListclass {
                     Bdatabase.child("talk").setValue("true");
 
                     Intent intent = new Intent(context, Messages.class);
-                    intent.putExtra("roomid",chat);
+                    intent.putExtra("roomid", chat);
                     intent.putExtra("rid", hisId);
-                    ((Activity)context).startActivityForResult(intent, 1);
+                    ((Activity) context).startActivityForResult(intent, 1);
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 

@@ -21,17 +21,18 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Objects;
 
 public class ChangePassword extends Activity {
 
 
-    EditText txtOldPass ,txtPass1, txtPass2;
+    private final String uId = UserInFormation.getId();
+    EditText txtOldPass, txtPass1, txtPass2;
     Button confirm;
     private FirebaseAuth mAuth;
     private ProgressDialog mdialog;
     private DatabaseReference uDatabase;
-    private final String uId = UserInFormation.getId();
     private TextInputLayout tlOldPass, tlPass1, tlPass2;
 
 
@@ -40,7 +41,7 @@ public class ChangePassword extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
 
-        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             finish();
             startActivity(new Intent(this, Login_Options.class));
             Toast.makeText(this, "الرجاء تسجيل الدخول", Toast.LENGTH_SHORT).show();
@@ -62,7 +63,7 @@ public class ChangePassword extends Activity {
         mdialog = new ProgressDialog(this);
 
         ImageView btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v-> finish());
+        btnBack.setOnClickListener(v -> finish());
 
         TextView tbTitle = findViewById(R.id.toolbar_title);
         tbTitle.setText("تغيير كلمة المرور");
@@ -72,19 +73,19 @@ public class ChangePassword extends Activity {
             String strPass1 = txtPass1.getText().toString();
             String strPass2 = txtPass2.getText().toString();
 
-            if(strPass1.isEmpty()) {
+            if (strPass1.isEmpty()) {
                 tlPass1.setError("يجب ادخال كلمة سر");
                 txtPass1.requestFocus();
                 return;
             }
 
-            if(strPass1.length() < 6) {
+            if (strPass1.length() < 6) {
                 tlPass1.setError("يجب ان تكون كلمة المرور من 6 احرف علي الاقل");
                 txtPass1.requestFocus();
                 return;
             }
 
-            if(!strPass1.equals(strPass2)){
+            if (!strPass1.equals(strPass2)) {
                 tlPass2.setError("تأكد من تطابق كلمتين المرور");
                 txtPass2.requestFocus();
                 return;
@@ -96,7 +97,7 @@ public class ChangePassword extends Activity {
                 return;
             }
 
-            if(strOldPass.equals(strPass1)) {
+            if (strOldPass.equals(strPass1)) {
                 tlPass1.setError("لا يمكن ان تكون كلمة المرور الجديدة هي نفسها القديمة");
                 txtPass1.requestFocus();
                 return;
@@ -105,9 +106,9 @@ public class ChangePassword extends Activity {
             mdialog.setMessage("جاري تغيير الرقم السري ...");
             mdialog.show();
 
-            AuthCredential credential = EmailAuthProvider.getCredential(UserInFormation.getEmail(),UserInFormation.getPass()); // Current Login Credentials \\
+            AuthCredential credential = EmailAuthProvider.getCredential(UserInFormation.getEmail(), UserInFormation.getPass()); // Current Login Credentials \\
             Objects.requireNonNull(mAuth.getCurrentUser()).reauthenticate(credential).addOnCompleteListener(reAuth -> {
-                if(reAuth.isSuccessful()) {
+                if (reAuth.isSuccessful()) {
                     mAuth.getCurrentUser().updatePassword(strPass1).addOnCompleteListener(changePass -> {
                         if (changePass.isSuccessful()) {
                             uDatabase.child(uId).child("mpass").setValue(strPass1);

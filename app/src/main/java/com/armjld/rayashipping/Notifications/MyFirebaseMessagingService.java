@@ -21,8 +21,8 @@ import androidx.core.content.ContextCompat;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.Home;
+import com.armjld.rayashipping.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -43,15 +43,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
             Map<String, String> data = remoteMessage.getData();
 
-            if(Objects.equals(data.get("type"), "normal")) {
+            if (Objects.equals(data.get("type"), "normal")) {
                 String nameFrom = data.get("title");
                 String statue = data.get("body");
                 String action = data.get("action");
                 String OrderID = data.get("orderid");
-                if(Objects.equals(action, "recived")) {
+                if (Objects.equals(action, "recived")) {
                     sendOrderRecived(statue, nameFrom, OrderID);
                 } else {
-                    sendNotification(statue, nameFrom,action, OrderID);
+                    sendNotification(statue, nameFrom, action, OrderID);
                 }
             } else {
                 String title = data.get("title");
@@ -84,10 +84,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Short lived task is done.");
     }
 
-    private void sendRegistrationToServer(String token) { }
+    private void sendRegistrationToServer(String token) {
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    private void chatNoti (String title, String body, String roomid, String to) {
+    private void chatNoti(String title, String body, String roomid, String to) {
         Home.getMessageCount();
         // ------------ Click Notification Event ------------------- //
         Intent chatintent = new Intent(this, Home.class);
@@ -111,7 +112,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.MessagingStyle messagingStyle = new NotificationCompat.MessagingStyle(title).setConversationTitle("Quicker").addMessage(body, 123, title);
         String channelId = getString(R.string.default_notification_channel_id);
 
-        Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.noti);
+        Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.noti);
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
@@ -137,7 +138,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
         assert notificationManager != null;
-        notificationManager.notify(1000 , notificationBuilder.build());
+        notificationManager.notify(1000, notificationBuilder.build());
     }
 
     private void sendOrderRecived(String messageBody, String title, String OrderID) {
@@ -151,7 +152,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent actionIntent = PendingIntent.getBroadcast(this, 0, brodcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         String channelId = getString(R.string.default_notification_channel_id);
-        Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.noti);
+        Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.noti);
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
@@ -180,7 +181,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         assert notificationManager != null;
-        notificationManager.notify(10 , notificationBuilder.build());
+        notificationManager.notify(10, notificationBuilder.build());
     }
 
     private void sendNotification(String messageBody, String title, String action, String OrderID) {
@@ -190,7 +191,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.putExtra("order", OrderID);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ getApplicationContext().getPackageName() + "/" + R.raw.noti);
+        Uri soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.noti);
 
         String channelId = getString(R.string.default_notification_channel_id);
 
@@ -228,7 +229,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
         assert notificationManager != null;
-        notificationManager.notify(1 , notificationBuilder.build());
+        notificationManager.notify(1, notificationBuilder.build());
     }
 
     public int createID() {

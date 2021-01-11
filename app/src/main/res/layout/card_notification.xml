@@ -9,10 +9,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:background="@color/background"
-        android:baselineAligned="false">
-        
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -37,10 +37,10 @@
                     android:id="@+id/imgEditPhoto"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:srcCompat="@color/colorWhite"
-                    tools:srcCompat="@tools:sample/avatars"
                     android:contentDescription="Picture"
-                    tools:ignore="HardcodedText" />
+                    app:srcCompat="@color/colorWhite"
+                    tools:ignore="HardcodedText"
+                    tools:srcCompat="@tools:sample/avatars" />
             </androidx.cardview.widget.CardView>
 
             <LinearLayout
@@ -71,11 +71,11 @@
                     android:id="@+id/txtBody"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:layout_gravity="right"
                     android:autoLink="web"
-                    android:layout_centerInParent="true"
-                    android:linksClickable="true"
                     android:gravity="right"
+                    android:linksClickable="true"
                     android:text="Body"
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/_14sdp"

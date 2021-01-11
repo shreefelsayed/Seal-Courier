@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,11 +21,10 @@ import java.util.Objects;
 
 public class rquests {
 
-    private static final ArrayList<myCaptReqs>requests= new ArrayList<>();
-    private DatabaseReference Bdatabase;
+    private static final ArrayList<myCaptReqs> requests = new ArrayList<>();
     int count;
-
     Context mContext;
+    private DatabaseReference Bdatabase;
 
     public rquests(Context context) {
         this.mContext = context;
@@ -35,9 +35,11 @@ public class rquests {
         return requests;
     }
 
-    public void addrequest(requestsData _req, String captin, String provider){
+    public void addrequest(requestsData _req, String captin, String provider) {
         String uId = UserInFormation.getId();
-        if(uId == null){ return; }
+        if (uId == null) {
+            return;
+        }
         // ------- Set data to Captin
 
         getRefrence ref = new getRefrence();
@@ -55,7 +57,7 @@ public class rquests {
     }
 
     // -------------- Just Delete Current User Request for one Order ---------------- //
-    public void deleteReq(String orderid, String owner, String provider){
+    public void deleteReq(String orderid, String owner, String provider) {
         myCaptReqs _getReq = requests.stream().filter(x -> x.getOrderId().equals(orderid)).findFirst().orElse(null);
         assert _getReq != null;
         String captinId = _getReq.getCaptinId();
@@ -67,7 +69,7 @@ public class rquests {
         FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(captinId).child("requests").child(orderid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child("noti").exists()) {
+                if (snapshot.child("noti").exists()) {
                     FirebaseDatabase.getInstance().getReference().child("Pickly").child("notificationRequests").child(owner).child(Objects.requireNonNull(snapshot.child("noti").getValue()).toString()).removeValue();
                 }
                 mDatabase.child(orderid).child("requests").child(captinId).removeValue();
@@ -84,15 +86,15 @@ public class rquests {
     }
 
     // ------------------ Delete all the requests on and Order ---------------------- ///
-    public void  deletedOrder(String orderid, String provider){
+    public void deletedOrder(String orderid, String provider) {
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef(provider);
 
-        count =0;
+        count = 0;
         mDatabase.child(orderid).child("requests").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
+                if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         requestsData rData = ds.getValue(requestsData.class);
                         assert rData != null;
@@ -104,25 +106,26 @@ public class rquests {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
     // -------------- Delete all expect for one ------------- \\
-    public void  deleteButOne(String orderid, String one, String provider){
+    public void deleteButOne(String orderid, String one, String provider) {
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef(provider);
 
-        count =0;
+        count = 0;
         mDatabase.child(orderid).child("requests").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
+                if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         requestsData rData = ds.getValue(requestsData.class);
                         assert rData != null;
                         String dlivaryId = rData.getId();
-                        if(!dlivaryId.equals(one)) {
+                        if (!dlivaryId.equals(one)) {
                             FirebaseDatabase.getInstance().getReference().child("Pickly").child("orders").child(orderid).child("requests").child(dlivaryId).child("statue").setValue("declined");
                             FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(dlivaryId).child("requests").child(orderid).child("statue").setValue("declined");
                         }
@@ -131,9 +134,11 @@ public class rquests {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
+
     // -------------------- Import the Requests for the Current User --------------------------- //
     public void ImportCuurentRequests() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
@@ -141,25 +146,25 @@ public class rquests {
         requests.clear();
         requests.trimToSize();
 
-        if(Home.mCaptinsIDS.size() == 0) {
+        if (Home.mCaptinsIDS.size() == 0) {
             return;
         }
 
         // ------- Get requests assigned to all of my captins
-        for(int i = 0; i < Home.mCaptinsIDS.size(); i++) {
+        for (int i = 0; i < Home.mCaptinsIDS.size(); i++) {
             String myCaptinID = Home.mCaptinsIDS.get(i);
             FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(myCaptinID).child("requests").orderByChild("statue").equalTo("N/A").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(snapshot.exists()) {
-                        for(DataSnapshot ds : snapshot.getChildren()) {
+                    if (snapshot.exists()) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
                             requestsData req = ds.getValue(requestsData.class);
                             assert req != null;
                             myCaptReqs reqs = new myCaptReqs(myCaptinID, req.getOrderId());
                             requests.add(reqs);
 
                             // ------ Delete Outdated Requests
-                            if(!req.getDate().substring(0 , 10).equals(datee.substring(0 ,10)) && !Home.avillableIDS.contains(req.getOrderId())) {
+                            if (!req.getDate().substring(0, 10).equals(datee.substring(0, 10)) && !Home.avillableIDS.contains(req.getOrderId())) {
                                 String owner = req.getOwner();
                                 deleteReq(req.getOrderId(), owner, "Esh7nly");
                             }
@@ -168,7 +173,8 @@ public class rquests {
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) { }
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
             });
         }
 

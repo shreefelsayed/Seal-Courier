@@ -20,6 +20,7 @@ public class About extends AppCompatActivity {
     TextView txtVersion;
     ImageView imgFacebook;
     String fbLink = "https://www.facebook.com/esh7nlyy";
+
     //3878fe
     @SuppressLint("SetTextI18n")
     @Override
@@ -34,7 +35,7 @@ public class About extends AppCompatActivity {
         tbTitle.setText("عن البرنامج");
 
         ImageView btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v-> finish());
+        btnBack.setOnClickListener(v -> finish());
 
         imgFacebook.setOnClickListener(v -> openWebURL(fbLink));
 
@@ -48,7 +49,7 @@ public class About extends AppCompatActivity {
     }
 
     public void openWebURL(String inURL) {
-        Intent browse = new Intent( Intent.ACTION_VIEW , Uri.parse(inURL) );
+        Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse(inURL));
         startActivity(browse);
     }
 }

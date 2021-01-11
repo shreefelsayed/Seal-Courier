@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
-        android:title="الشحنات"
-        android:icon="@drawable/ic_home"/>
+        android:icon="@drawable/ic_home"
+        android:title="الشحنات" />
     <item
         android:id="@+id/profile"
-        android:title="المندوبين"
-        android:icon="@drawable/ic_profile"/>
+        android:icon="@drawable/ic_profile"
+        android:title="المندوبين" />
     <item
         android:id="@+id/chats"
-        android:title="المحادثات"
-        android:icon="@drawable/ic_chats"/>
+        android:icon="@drawable/ic_chats"
+        android:title="المحادثات" />
     <item
         android:id="@+id/noti"
-        android:title="الاشعارات"
-        android:icon="@drawable/ic_notifications"/>
+        android:icon="@drawable/ic_notifications"
+        android:title="الاشعارات" />
     <item
         android:id="@+id/settings"
-        android:title="الاعدادات"
-        android:icon="@drawable/ic_settings_black_24dp"/>
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="الاعدادات" />
 </menu>

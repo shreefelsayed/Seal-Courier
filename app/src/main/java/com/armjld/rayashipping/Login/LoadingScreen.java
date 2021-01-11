@@ -10,12 +10,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.armjld.rayashipping.Captin.capAvillable;
 import com.armjld.rayashipping.Captin.captinRecived;
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.Notifications.NotificationFragment;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperCaptins.MyCaptins;
 import com.armjld.rayashipping.SuperVisor.SuperAvillable;
 import com.armjld.rayashipping.SuperVisor.SuperRecived;
-import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.getRefrence;
 import com.armjld.rayashipping.models.ChatsData;
 import com.armjld.rayashipping.models.Data;
@@ -47,7 +47,8 @@ public class LoadingScreen extends AppCompatActivity {
     rquests _req = new rquests(this);
 
     @Override
-    public void onBackPressed() { }
+    public void onBackPressed() {
+    }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -55,7 +56,7 @@ public class LoadingScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
 
-        if(UserInFormation.getId() == null) {
+        if (UserInFormation.getId() == null) {
             finish();
             startActivity(new Intent(this, StartUp.class));
             return;
@@ -64,10 +65,10 @@ public class LoadingScreen extends AppCompatActivity {
         txtLoading = findViewById(R.id.txtLoading);
 
         txtLoading.setText("Getting Account Type ..");
-        if(UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getAccountType().equals("Supervisor")) {
             getCaptins();
-        } else if(UserInFormation.getAccountType().equals("Delivery Worker")) {
-            getDeliveryOrders();
+        } else if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+            getForRaya();
         }
 
         getCities();
@@ -96,19 +97,14 @@ public class LoadingScreen extends AppCompatActivity {
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef("Esh7nly");
 
-        Home.captinAvillable.clear();
-        Home.captinAvillable.trimToSize();
-        Home.captinDelv.clear();
-        Home.captinDelv.trimToSize();
-
         mDatabase.orderByChild("uAccepted").equalTo(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Data orderData = ds.getValue(Data.class);
                         assert orderData != null;
-                        if(orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
+                        if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             // ------ Add to Avillabe
                             Home.captinAvillable.add(orderData);
                         } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied")) {
@@ -117,11 +113,11 @@ public class LoadingScreen extends AppCompatActivity {
                         }
                     }
                 }
-                getForRaya();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -130,22 +126,41 @@ public class LoadingScreen extends AppCompatActivity {
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef("Raya");
 
+        Home.captinAvillable.clear();
+        Home.captinAvillable.trimToSize();
+        Home.captinDelv.clear();
+        Home.captinDelv.trimToSize();
+
         mDatabase.orderByChild("uAccepted").equalTo(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Data orderData = ds.getValue(Data.class);
                         assert orderData != null;
-                        if(orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
+                        if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             // ------ Add to Avillabe
                             Home.captinAvillable.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD")|| orderData.getStatue().equals("denied")) {
+                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied")) {
                             // ------ Add to to Delivered
                             Home.captinDelv.add(orderData);
                         }
                     }
                 }
+
+                // ------- Sort According to Date
+                Home.captinAvillable.sort((o1, o2) -> {
+                    String one = o1.getpDate();
+                    String two = o2.getpDate();
+                    return two.compareTo(one);
+                });
+
+                // ------- Sort According to Date
+                Home.captinDelv.sort((o1, o2) -> {
+                    String one = o1.getDDate();
+                    String two = o2.getDDate();
+                    return two.compareTo(one);
+                });
 
                 // -------- Set orders in Fragment
                 capAvillable.getOrders();
@@ -154,7 +169,8 @@ public class LoadingScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -166,9 +182,9 @@ public class LoadingScreen extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Home.mCaptins.clear();
                 Home.mCaptins.trimToSize();
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     // ------ Get my Captins Data
-                    for(DataSnapshot captin : snapshot.getChildren()) {
+                    for (DataSnapshot captin : snapshot.getChildren()) {
                         userData user = captin.getValue(userData.class);
                         assert user != null;
                         Home.mCaptinsIDS.add(user.getId()); // Add the id to id List
@@ -178,12 +194,13 @@ public class LoadingScreen extends AppCompatActivity {
 
                 // ------ Send data to captins fragment
                 MyCaptins.getCaptins();
+                getRayaOrders();
                 _req.ImportCuurentRequests();
-                getOrdersByLatest();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -202,23 +219,23 @@ public class LoadingScreen extends AppCompatActivity {
                 Home.avillableIDS.clear();
                 Home.avillableIDS.trimToSize();
 
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        if(ds.getChildrenCount() < 5) return;
+                        if (ds.getChildrenCount() < 5) return;
                         Data orderData = ds.getValue(Data.class);
                         assert orderData != null;
                         Date orderDate = null;
                         Date myDate = null;
                         try {
                             orderDate = format.parse(Objects.requireNonNull(ds.child("ddate").getValue()).toString());
-                            myDate =  format.parse(format.format(Calendar.getInstance().getTime()));
+                            myDate = format.parse(format.format(Calendar.getInstance().getTime()));
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
                         assert orderDate != null;
                         assert myDate != null;
 
-                        if(orderDate.compareTo(myDate) >= 0  && cities.contains(orderData.getmPRegion()) && cities.contains(orderData.getmDRegion())) {
+                        if (orderDate.compareTo(myDate) >= 0 && cities.contains(orderData.getmPRegion()) && cities.contains(orderData.getmDRegion())) {
                             Home.mm.add(orderData);
                             Home.avillableIDS.add(orderData.getId());
                         }
@@ -232,10 +249,11 @@ public class LoadingScreen extends AppCompatActivity {
                     });
                 }
 
-                getRayaOrders();
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
     }
 
@@ -248,9 +266,9 @@ public class LoadingScreen extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // --------- Get Avillable Orders Data ------
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        if(ds.getChildrenCount() < 5) return;
+                        if (ds.getChildrenCount() < 5) return;
                         Data orderData = ds.getValue(Data.class);
                         assert orderData != null;
 
@@ -260,9 +278,9 @@ public class LoadingScreen extends AppCompatActivity {
 
                     // ------- Sort According to Date
                     Home.mm.sort((o1, o2) -> {
-                        String one = o1.getDate();
-                        String two = o2.getDate();
-                        return one.compareTo(two);
+                        String one = o1.getpDate();
+                        String two = o2.getpDate();
+                        return two.compareTo(one);
                     });
                 }
 
@@ -270,8 +288,10 @@ public class LoadingScreen extends AppCompatActivity {
                 SuperAvillable.getOrders();
                 getRayaDelv();
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
     }
 
@@ -287,37 +307,11 @@ public class LoadingScreen extends AppCompatActivity {
         mDatabase.orderByChild("dSupervisor").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot allOrders) {
-                if(allOrders.exists()) {
-                    for(DataSnapshot notDelv : allOrders.getChildren()) {
+                if (allOrders.exists()) {
+                    for (DataSnapshot notDelv : allOrders.getChildren()) {
                         Data orderData = notDelv.getValue(Data.class);
                         assert orderData != null;
-                        if(orderData.getStatue().equals("supD")) {
-                            Home.delvOrders.add(orderData);
-                        }
-                    }
-                }
-
-                getEsh7nlyDelv();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
-    }
-
-    // ---------- Get To Deliver Esh7nly Orders --------- \\
-    private void getEsh7nlyDelv() {
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef("Esh7nly");
-        txtLoading.setText("جاري تحضير الشحنات ..");
-        mDatabase.orderByChild("dSupervisor").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot allOrders) {
-                if(allOrders.exists()) {
-                    for(DataSnapshot notDelv : allOrders.getChildren()) {
-                        Data orderData = notDelv.getValue(Data.class);
-                        assert orderData != null;
-                        if(orderData.getStatue().equals("supD")) {
+                        if (orderData.getStatue().equals("supD")) {
                             Home.delvOrders.add(orderData);
                         }
                     }
@@ -329,7 +323,35 @@ public class LoadingScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    // ---------- Get To Deliver Esh7nly Orders --------- \\
+    private void getEsh7nlyDelv() {
+        getRefrence ref = new getRefrence();
+        DatabaseReference mDatabase = ref.getRef("Esh7nly");
+        txtLoading.setText("جاري تحضير الشحنات ..");
+        mDatabase.orderByChild("dSupervisor").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot allOrders) {
+                if (allOrders.exists()) {
+                    for (DataSnapshot notDelv : allOrders.getChildren()) {
+                        Data orderData = notDelv.getValue(Data.class);
+                        assert orderData != null;
+                        if (orderData.getStatue().equals("supD")) {
+                            Home.delvOrders.add(orderData);
+                        }
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 
@@ -346,9 +368,9 @@ public class LoadingScreen extends AppCompatActivity {
                 int unRead = 0; // Unread Noti Count
 
                 // -------- Check for Notifications
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        if(ds.getChildrenCount() < 5) continue;
+                        if (ds.getChildrenCount() < 5) continue;
                         String notiID = ds.getKey();
                         assert notiID != null;
                         notiData notiDB = ds.getValue(notiData.class);
@@ -356,7 +378,7 @@ public class LoadingScreen extends AppCompatActivity {
 
                         Home.notiList.add(notiDB);
                         notiDB.setNotiID(notiID);
-                        if(notiDB.getIsRead().equals("false")) {
+                        if (notiDB.getIsRead().equals("false")) {
                             unRead++;
                         }
                     }
@@ -369,8 +391,10 @@ public class LoadingScreen extends AppCompatActivity {
 
                 getMessageCount();
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
         });
     }
 
@@ -385,22 +409,22 @@ public class LoadingScreen extends AppCompatActivity {
                 Home.mChat.trimToSize();
 
                 // ------- Check for Chat Rooms
-                if(snapshot.exists()) {
-                    for(DataSnapshot ds:snapshot.getChildren()) {
-                        if(ds.child("roomid").exists()) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        if (ds.child("roomid").exists()) {
                             ChatsData cchatData = ds.getValue(ChatsData.class);
                             String talk = "true";
 
-                            if(ds.child("talk").exists()) {
+                            if (ds.child("talk").exists()) {
                                 talk = Objects.requireNonNull(ds.child("talk").getValue()).toString();
                             }
 
-                            if(ds.child("timestamp").exists() && talk.equals("true")) {
+                            if (ds.child("timestamp").exists() && talk.equals("true")) {
                                 Home.mChat.add(cchatData);
                             }
 
-                            if(ds.child("newMsg").exists()) {
-                                if(Objects.requireNonNull(ds.child("newMsg").getValue()).toString().equals("true") && Objects.requireNonNull(ds.child("talk").getValue()).toString().equals("true")) {
+                            if (ds.child("newMsg").exists()) {
+                                if (Objects.requireNonNull(ds.child("newMsg").getValue()).toString().equals("true") && Objects.requireNonNull(ds.child("talk").getValue()).toString().equals("true")) {
                                     newCount++;
                                 }
                             }
@@ -414,7 +438,8 @@ public class LoadingScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 

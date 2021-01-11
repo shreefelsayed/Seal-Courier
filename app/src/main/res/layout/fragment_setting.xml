@@ -52,7 +52,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
-                android:id="@+id/userInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -154,7 +153,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linSettings"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/rounded_corner_top"
@@ -200,7 +198,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linMainSettings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_10sdp"
@@ -298,7 +295,7 @@
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
                                 android:background="@drawable/round_shape"
-                                android:backgroundTint="@color/red_500"
+                                android:backgroundTint="@color/colorGreen"
                                 android:foregroundGravity="top"
                                 android:gravity="center"
                                 android:paddingLeft="@dimen/_2sdp"
@@ -337,9 +334,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/_10sdp"
-                    android:visibility="gone"
                     android:background="@drawable/bold_round_bg"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -401,7 +398,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linOther"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/_10sdp"
@@ -415,9 +411,9 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginRight="@dimen/_15sdp"
                         android:text="اخري"
+                        android:textAlignment="center"
                         android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/_18sdp"
-                        android:textAlignment="center" />
+                        android:textSize="@dimen/_18sdp" />
 
                     <TextView
                         android:id="@+id/txtContact"

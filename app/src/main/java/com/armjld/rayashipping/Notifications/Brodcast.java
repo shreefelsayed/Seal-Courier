@@ -32,19 +32,19 @@ public class Brodcast extends BroadcastReceiver {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Data data = snapshot.getValue(Data.class);
                 assert data != null;
-                if(data == null) {
+                if (data == null) {
                     Toast.makeText(context, "Data is Null", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 String owner = data.getuId();
-                if(data.getStatue().equals("recived")) {
+                if (data.getStatue().equals("recived")) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
                     String datee = sdf.format(new Date());
 
                     FirebaseDatabase.getInstance().getReference().child("Pickly").child("orders").child(orderID).child("statue").setValue("recived2");
                     FirebaseDatabase.getInstance().getReference().child("Pickly").child("orders").child(orderID).child(orderID).child("recived2Time").setValue(datee);
                     String message = "قام " + UserInFormation.getUserName() + " بتأكد استلام الاوردر";
-                    notiData Noti = new notiData(UserInFormation.getId(), owner, orderID,message,datee,"false", "profile", UserInFormation.getUserName(), UserInFormation.getUserURL());
+                    notiData Noti = new notiData(UserInFormation.getId(), owner, orderID, message, datee, "false", "profile", UserInFormation.getUserName(), UserInFormation.getUserURL());
                     FirebaseDatabase.getInstance().getReference().child("Pickly").child("notificationRequests").child(owner).push().setValue(Noti);
                     Toast.makeText(context, "تم تأكيد استلام الشحنة", Toast.LENGTH_SHORT).show();
                 }
@@ -54,7 +54,8 @@ public class Brodcast extends BroadcastReceiver {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
 
     }

@@ -8,18 +8,17 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import com.armjld.rayashipping.CaptinWalletInfo;
 import com.armjld.rayashipping.Chat.Messages;
 import com.armjld.rayashipping.Chat.chatListclass;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.Ratings.Ratings;
-import com.armjld.rayashipping.TrackCaptin;
 import com.armjld.rayashipping.getRefrence;
 import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
@@ -38,19 +37,90 @@ public class MyCaptinInfo extends AppCompatActivity {
 
     public static TabLayout tabs;
     public static userData user;
-    ImageView imgPPP, btnBack,btnMessage, btnInfo,btnTrack;
-    ConstraintLayout linWallet;
-    TextView txtUsername,txtWalletMoney;
-    RatingBar rbProfile;
     public static ArrayList<Data> placed = new ArrayList<>();
     public static ArrayList<Data> delv = new ArrayList<>();
+    ImageView imgPPP, btnBack, btnMessage, btnInfo, btnTrack;
+    ConstraintLayout linWallet;
+    TextView txtUsername, txtWalletMoney;
+    RatingBar rbProfile;
+
+    private static void turnSwipes(String st) {
+        if (st.equals("ON")) {
+            if (myCaptinRecived.mSwipeRefreshLayout != null) {
+                myCaptinRecived.mSwipeRefreshLayout.setRefreshing(true);
+            }
+
+            if (myCaptinDelv.mSwipeRefreshLayout != null) {
+                myCaptinDelv.mSwipeRefreshLayout.setRefreshing(true);
+            }
+
+        } else {
+            if (myCaptinRecived.mSwipeRefreshLayout != null) {
+                myCaptinRecived.mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            if (myCaptinDelv.mSwipeRefreshLayout != null) {
+                myCaptinDelv.mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }
+    }
+
+    public static void getRaya() {
+
+        turnSwipes("ON");
+
+        placed.clear();
+        delv.clear();
+
+        getRefrence ref = new getRefrence();
+        DatabaseReference mDatabase = ref.getRef("Raya");
+        mDatabase.orderByChild("uAccepted").equalTo(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot ds : snapshot.getChildren()) {
+                        Data orderData = ds.getValue(Data.class);
+                        assert orderData != null;
+                        if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
+                            placed.add(orderData);
+                        } else if (orderData.getStatue().equals("readyD")) {
+                            delv.add(orderData);
+                        }
+                    }
+                }
+
+                // ------- Sort According to Date
+                placed.sort((o1, o2) -> {
+                    String one = o1.getpDate();
+                    String two = o2.getpDate();
+                    return two.compareTo(one);
+                });
+
+                // ------- Sort According to Date
+                delv.sort((o1, o2) -> {
+                    String one = o1.getDDate();
+                    String two = o2.getDDate();
+                    return two.compareTo(one);
+                });
+
+                myCaptinDelv.getOrders();
+                myCaptinRecived.getOrders();
+                turnSwipes("OFF");
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_captin_info);
 
-        if(user == null) finish();
+        if (user == null) finish();
 
         imgPPP = findViewById(R.id.imgPPP);
         btnBack = findViewById(R.id.btnBack);
@@ -65,7 +135,7 @@ public class MyCaptinInfo extends AppCompatActivity {
         btnTrack = findViewById(R.id.btnTrack);
 
 
-        btnBack.setOnClickListener(v-> finish());
+        btnBack.setOnClickListener(v -> finish());
 
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(new myCaptinAdapter(this, getSupportFragmentManager()));
@@ -73,109 +143,32 @@ public class MyCaptinInfo extends AppCompatActivity {
         tabs.setupWithViewPager(viewPager);
 
 
+        btnInfo.setOnClickListener(v -> {
+        });
 
-        btnInfo.setOnClickListener(v-> { });
+        linWallet.setOnClickListener(v -> {
+            CaptinWalletInfo.user = user;
+            startActivity(new Intent(this, CaptinWalletInfo.class));
+        });
 
-        linWallet.setOnClickListener(v-> { });
-
-        btnTrack.setOnClickListener(v-> {
-            if(user.getTrackId().equals("")) { return; }
+        btnTrack.setOnClickListener(v -> {
+            if (user.getTrackId().equals("")) {
+                return;
+            }
             MapCaptinTrack.user = user;
             MapCaptinTrack.DEVICE_ID = user.getTrackId();
             startActivity(new Intent(this, MapCaptinTrack.class));
         });
 
-        btnMessage.setOnClickListener(v-> {
+        btnMessage.setOnClickListener(v -> {
             chatListclass _chatList = new chatListclass();
             _chatList.startChating(UserInFormation.getId(), user.getId(), this);
             Messages.cameFrom = "Profile";
         });
 
         setCaptinsData();
-        getEsh7nly();
+        getRaya();
     }
-
-    public static void getEsh7nly() {
-        placed.clear();
-        delv.clear();
-
-        turnSwipes("ON");
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef("Esh7nly");
-        mDatabase.orderByChild("uAccepted").equalTo(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        Data orderData = ds.getValue(Data.class);
-                        assert orderData != null;
-
-                        if(orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
-                            placed.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD")) {
-                            delv.add(orderData);
-                        }
-                    }
-                }
-
-                getRaya();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
-    }
-
-    private static void turnSwipes(String st) {
-        if(st.equals("ON")) {
-            if(myCaptinRecived.mSwipeRefreshLayout != null) {
-                myCaptinRecived.mSwipeRefreshLayout.setRefreshing(true);
-            }
-
-            if(myCaptinDelv.mSwipeRefreshLayout != null) {
-                myCaptinDelv.mSwipeRefreshLayout.setRefreshing(true);
-            }
-
-        } else {
-            if(myCaptinRecived.mSwipeRefreshLayout != null) {
-                myCaptinRecived.mSwipeRefreshLayout.setRefreshing(false);
-            }
-
-            if(myCaptinDelv.mSwipeRefreshLayout != null) {
-                myCaptinDelv.mSwipeRefreshLayout.setRefreshing(false);
-            }
-        }
-    }
-
-    public static void getRaya() {
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef("Raya");
-        mDatabase.orderByChild("uAccepted").equalTo(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        Data orderData = ds.getValue(Data.class);
-                        assert orderData != null;
-                        if(orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
-                            placed.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD")) {
-                            delv.add(orderData);
-                        }
-                    }
-                }
-
-                myCaptinDelv.getOrders();
-                myCaptinRecived.getOrders();
-                turnSwipes("OFF");
-            }
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
-    }
-
 
     private void setCaptinsData() {
         // --------- Main Account Date -------------
@@ -187,7 +180,7 @@ public class MyCaptinInfo extends AppCompatActivity {
         // --------- Wallet Money Number ----------- \\
         txtWalletMoney.setText(user.getWalletmoney() + "");
         int currentMoney = user.getWalletmoney();
-        if(currentMoney == 0) {
+        if (currentMoney == 0) {
             txtWalletMoney.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
         } else if (currentMoney > 0) {
             txtWalletMoney.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
@@ -206,27 +199,28 @@ public class MyCaptinInfo extends AppCompatActivity {
                 String three = "0";
                 String four = "0";
                 String five = "0";
-                if(snapshot.child("rating").child("one").exists()) {
+                if (snapshot.child("rating").child("one").exists()) {
                     one = snapshot.child("rating").child("one").getValue().toString();
                 }
-                if(snapshot.child("rating").child("two").exists()) {
+                if (snapshot.child("rating").child("two").exists()) {
                     two = snapshot.child("rating").child("two").getValue().toString();
                 }
-                if(snapshot.child("rating").child("three").exists()) {
+                if (snapshot.child("rating").child("three").exists()) {
                     three = snapshot.child("rating").child("three").getValue().toString();
                 }
-                if(snapshot.child("rating").child("four").exists()) {
+                if (snapshot.child("rating").child("four").exists()) {
                     four = snapshot.child("rating").child("four").getValue().toString();
                 }
-                if(snapshot.child("rating").child("five").exists()) {
+                if (snapshot.child("rating").child("five").exists()) {
                     five = snapshot.child("rating").child("five").getValue().toString();
                 }
                 Ratings _rat = new Ratings();
-                rbProfile.setRating(_rat.calculateRating(one,two,three,four,five));
+                rbProfile.setRating(_rat.calculateRating(one, two, three, four, five));
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 

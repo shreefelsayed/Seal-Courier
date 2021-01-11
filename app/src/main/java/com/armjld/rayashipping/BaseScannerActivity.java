@@ -1,12 +1,8 @@
 package com.armjld.rayashipping;
 
 import android.view.MenuItem;
-import android.widget.Toolbar;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.armjld.rayashipping.R;
 
 public class BaseScannerActivity extends AppCompatActivity {
     @Override

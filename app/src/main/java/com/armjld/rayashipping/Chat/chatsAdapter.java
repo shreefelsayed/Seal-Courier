@@ -13,8 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.Home;
+import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.models.Chat;
 import com.armjld.rayashipping.models.ChatsData;
@@ -31,14 +31,14 @@ import java.util.Objects;
 
 public class chatsAdapter extends RecyclerView.Adapter<chatsAdapter.MyViewHolder> {
 
+    public static caculateTime _cacu = new caculateTime();
+    private final DatabaseReference messageDatabase, uDatabase;
     Context context;
     ArrayList<ChatsData> chatData;
     boolean unRead = false;
-    private final DatabaseReference messageDatabase, uDatabase;
     String TAG = "Chat Adapter";
-    public static caculateTime _cacu = new caculateTime();
 
-    public chatsAdapter(Context context,  ArrayList<ChatsData> chatData) {
+    public chatsAdapter(Context context, ArrayList<ChatsData> chatData) {
         this.context = context;
         this.chatData = chatData;
         messageDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("chatRooms");
@@ -49,7 +49,7 @@ public class chatsAdapter extends RecyclerView.Adapter<chatsAdapter.MyViewHolder
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view  = inflater.inflate(R.layout.card_chat,parent,false);
+        View view = inflater.inflate(R.layout.card_chat, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -67,9 +67,9 @@ public class chatsAdapter extends RecyclerView.Adapter<chatsAdapter.MyViewHolder
             context.startActivity(intent);
             Messages.cameFrom = "Chats";
             ChatFragmet.cameFrom = "Chat";
-            if(unRead) {
-                Home.msgCount --;
-                if(Home.msgCount != 0) {
+            if (unRead) {
+                Home.msgCount--;
+                if (Home.msgCount != 0) {
                     Home.chatsBadge.setNumber(Home.msgCount);
                 } else {
                     Home.bottomNavigationView.removeBadge(R.id.chats);
@@ -86,7 +86,8 @@ public class chatsAdapter extends RecyclerView.Adapter<chatsAdapter.MyViewHolder
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
 
         messageDatabase.child(chat.getRoomid()).orderByChild("timestamp").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -94,12 +95,12 @@ public class chatsAdapter extends RecyclerView.Adapter<chatsAdapter.MyViewHolder
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Chat chatS = snapshot.getValue(Chat.class);
                 assert chatS != null;
-                for(DataSnapshot ds : snapshot.getChildren()) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
                     holder.txtBody.setText(Objects.requireNonNull(ds.child("msg").getValue()).toString());
                     String startDate = Objects.requireNonNull(ds.child("timestamp").getValue()).toString();
                     holder.txtNotidate.setText(_cacu.setPostDate(startDate));
 
-                    if(Objects.requireNonNull(ds.child("newMsg").getValue()).toString().equals("true") && !ds.child("senderid").getValue().toString().equals(UserInFormation.getId())) {
+                    if (Objects.requireNonNull(ds.child("newMsg").getValue()).toString().equals("true") && !ds.child("senderid").getValue().toString().equals(UserInFormation.getId())) {
                         unRead = true;
                         holder.indec.setVisibility(View.VISIBLE);
                     } else {
@@ -109,7 +110,8 @@ public class chatsAdapter extends RecyclerView.Adapter<chatsAdapter.MyViewHolder
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
 
     }
@@ -125,8 +127,8 @@ public class chatsAdapter extends RecyclerView.Adapter<chatsAdapter.MyViewHolder
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txtName,txtBody,txtNotidate;
-        ImageView imgEditPhoto,indec;
+        TextView txtName, txtBody, txtNotidate;
+        ImageView imgEditPhoto, indec;
         View myview;
 
         public MyViewHolder(@NonNull View itemView) {

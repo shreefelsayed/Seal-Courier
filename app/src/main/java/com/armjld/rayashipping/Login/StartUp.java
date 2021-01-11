@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -27,14 +28,12 @@ import java.util.TimerTask;
 
 public class StartUp extends AppCompatActivity {
 
-    public static double rate = 1;
-    SharedPreferences sharedPreferences = null;
-    private final String TAG = "StartUp";
-    int codee = 10001;
-    static DatabaseReference uDatabase;
-    boolean doubleBackToExitPressedOnce = false;
     public static double minVersion;
     public static double lastVersion;
+    static DatabaseReference uDatabase;
+    SharedPreferences sharedPreferences = null;
+    int codee = 10001;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public void onBackPressed() {
@@ -45,7 +44,7 @@ public class StartUp extends AppCompatActivity {
 
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "اضغط مرة اخري للخروج من التطبيق", Toast.LENGTH_SHORT).show();
-        new Handler().postDelayed(() -> doubleBackToExitPressedOnce=false, 2000);
+        new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +77,8 @@ public class StartUp extends AppCompatActivity {
                 lastVersion = mFirebaseRemoteConfig.getDouble("last_version_rayah");
                 sharedPreferences = getSharedPreferences("com.armjld.rayashipping", MODE_PRIVATE);
 
-                if(dVersion >= minVersion) {
-                    if(dVersion >= lastVersion) {
+                if (dVersion >= minVersion) {
+                    if (dVersion >= lastVersion) {
                         whatToDo();
                     } else {
                         MaterialDialog materialDialog = new MaterialDialog.Builder(StartUp.this).setTitle("يوجد تحديث جديد").setMessage("هل ترغب في التحديث الأن ؟").setCancelable(false).setPositiveButton("تحديث الان", (dialogInterface, which) -> {
@@ -116,7 +115,7 @@ public class StartUp extends AppCompatActivity {
     }
 
     public void openWebURL(String inURL) {
-        Intent browse = new Intent( Intent.ACTION_VIEW , Uri.parse(inURL) );
+        Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse(inURL));
         startActivity(browse);
     }
 
@@ -125,7 +124,7 @@ public class StartUp extends AppCompatActivity {
             @Override
             public void run() {
                 sharedPreferences = getSharedPreferences("com.armjld.rayashipping", MODE_PRIVATE);
-                if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     LoginManager _lgnMn = new LoginManager();
                     _lgnMn.setMyInfo(StartUp.this);
                     FirebaseCrashlytics.getInstance().setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -147,9 +146,6 @@ public class StartUp extends AppCompatActivity {
             }
         }
     }
-
-
-
 
 
 }

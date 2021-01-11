@@ -10,7 +10,8 @@ public class requestsData {
     String orderId = "";
     String supervisor = "";
 
-    public requestsData(){ }
+    public requestsData() {
+    }
 
     public requestsData(String id, String date, String statue, String notes, String owner, String noti, String orderId, String supervisor) {
         this.id = id;
@@ -40,7 +41,9 @@ public class requestsData {
         this.orderId = orderId;
     }
 
-    public String getNoti() { return noti; }
+    public String getNoti() {
+        return noti;
+    }
 
     public void setNoti(String noti) {
         this.noti = noti;

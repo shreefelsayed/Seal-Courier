@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AllOrders;
-import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.notiData;
 import com.google.firebase.database.DatabaseReference;
@@ -30,19 +30,19 @@ import java.util.ArrayList;
 @SuppressLint("StaticFieldLeak")
 public class NotificationFragment extends Fragment {
 
+    public static NotiAdaptere notiAdaptere;
+    public static Context mContext;
+    public static ArrayList<notiData> filterList = new ArrayList<>();
     private static DatabaseReference nDatabase;
     private static SwipeRefreshLayout refresh;
-    public static NotiAdaptere notiAdaptere;
     private static LinearLayout EmptyPanel;
     private static RecyclerView recyclerView;
     String uId = UserInFormation.getId();
-    public static Context mContext;
-    public static ArrayList<notiData> filterList = new ArrayList<>();
 
     public NotificationFragment() {
         // Required empty public constructor
     }
-    
+
     public static NotificationFragment newInstance() {
         NotificationFragment fragment = new NotificationFragment();
         Bundle args = new Bundle();
@@ -50,7 +50,27 @@ public class NotificationFragment extends Fragment {
         return fragment;
     }
 
+    public static void setNoti() {
+        filterList = Home.notiList;
+        notiAdaptere = new NotiAdaptere(mContext, filterList, mContext, filterList.size());
+        if (recyclerView != null) {
+            recyclerView.setAdapter(notiAdaptere);
+            updateNone(filterList.size());
+            for (int i = 0; i < Home.notiList.size(); i++) {
+                if (filterList.get(i).getIsRead().equals("false") && !filterList.get(i).getNotiID().equals("")) {
+                    nDatabase.child(UserInFormation.getId()).child(Home.notiList.get(i).getNotiID()).child("isRead").setValue("true");
+                }
+            }
+        }
+    }
 
+    private static void updateNone(int listSize) {
+        if (listSize > 0) {
+            EmptyPanel.setVisibility(View.GONE);
+        } else {
+            EmptyPanel.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,7 +79,7 @@ public class NotificationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_notification, container, false);
+        View view = inflater.inflate(R.layout.fragment_notification, container, false);
 
         ImageView btnBack = view.findViewById(R.id.btnBack);
         ImageView btnClear = view.findViewById(R.id.btnClear);
@@ -75,7 +95,7 @@ public class NotificationFragment extends Fragment {
         //Recycler
         recyclerView = view.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager= new LinearLayoutManager(getActivity());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
@@ -90,7 +110,7 @@ public class NotificationFragment extends Fragment {
 
 
         // ----------- Clear All Noti ------------ //
-        btnClear.setOnClickListener(v-> {
+        btnClear.setOnClickListener(v -> {
             MaterialDialog materialDialog = new MaterialDialog.Builder(requireActivity()).setMessage("هل تريد الغاء كل الاشعارات ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_delete_white, (dialogInterface, which) -> {
                 nDatabase.child(uId).removeValue();
                 recyclerView.setAdapter(null);
@@ -107,28 +127,14 @@ public class NotificationFragment extends Fragment {
 
         Home.bottomNavigationView.removeBadge(R.id.noti);
 
-        btnBack.setOnClickListener(v->{
+        btnBack.setOnClickListener(v -> {
             Home.whichFrag = "Home";
             assert getFragmentManager() != null;
             getFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), Home.whichFrag).addToBackStack("Home").commit();
             Home.bottomNavigationView.setSelectedItemId(R.id.home);
         });
-        
-        return view;
-    }
 
-    public static void setNoti() {
-            filterList = Home.notiList;
-            notiAdaptere = new NotiAdaptere(mContext, filterList, mContext, filterList.size());
-            if(recyclerView != null) {
-                recyclerView.setAdapter(notiAdaptere);
-                updateNone(filterList.size());
-                for(int i = 0; i < Home.notiList.size(); i++) {
-                    if(filterList.get(i).getIsRead().equals("false") && !filterList.get(i).getNotiID().equals("")) {
-                        nDatabase.child(UserInFormation.getId()).child(Home.notiList.get(i).getNotiID()).child("isRead").setValue("true");
-                    }
-                }
-            }
+        return view;
     }
 
     @Override
@@ -142,13 +148,5 @@ public class NotificationFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mContext = null;
-    }
-
-    private static void updateNone(int listSize) {
-        if(listSize > 0) {
-            EmptyPanel.setVisibility(View.GONE);
-        } else {
-            EmptyPanel.setVisibility(View.VISIBLE);
-        }
     }
 }

@@ -6,8 +6,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_5sdp"
     android:background="@color/colorBack"
-    android:layoutDirection="ltr"
     android:elevation="@dimen/_30sdp"
+    android:layoutDirection="ltr"
     app:cardCornerRadius="@dimen/_8sdp">
 
     <LinearLayout
@@ -29,8 +29,47 @@
             android:textColor="#FFFFFF"
             android:visibility="visible" />
 
+        <TextView
+            android:id="@+id/txtUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:layout_marginRight="@dimen/_4sdp"
+            android:fontFamily="@font/_markazi"
+            android:gravity="center"
+            android:text="Shreef El Sayed"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/txtPostDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_8sdp" />
+
+        <TextView
+            android:id="@+id/txtTrackId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:layout_marginRight="@dimen/_4sdp"
+            android:fontFamily="@font/_markazi"
+            android:gravity="center"
+            android:text="R71230932"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="normal" />
+
         <LinearLayout
-            android:id="@+id/linToFrom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -78,18 +117,7 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtPostDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textAlignment="center"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/_8sdp" />
-
         <LinearLayout
-            android:id="@+id/linOrderInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -98,7 +126,6 @@
             android:paddingBottom="@dimen/_5sdp">
 
             <LinearLayout
-                android:id="@+id/linInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -249,14 +276,12 @@
                 android:visibility="gone">
 
                 <LinearLayout
-                    android:id="@+id/linGGet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/textView4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="مصاريف التوصيل"
@@ -327,7 +352,6 @@
             android:visibility="gone" />
 
     </LinearLayout>
-
 
 
 </androidx.cardview.widget.CardView>

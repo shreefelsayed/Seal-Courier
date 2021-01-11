@@ -21,7 +21,8 @@ public class Chat {
         this.url = url;
     }
 
-    public Chat () { }
+    public Chat() {
+    }
 
     public String getMsgid() {
         return msgid;
