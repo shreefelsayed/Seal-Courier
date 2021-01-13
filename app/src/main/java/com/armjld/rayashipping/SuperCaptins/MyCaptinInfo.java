@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -90,18 +91,22 @@ public class MyCaptinInfo extends AppCompatActivity {
                 }
 
                 // ------- Sort According to Date
-                placed.sort((o1, o2) -> {
-                    String one = o1.getpDate();
-                    String two = o2.getpDate();
-                    return two.compareTo(one);
-                });
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    placed.sort((o1, o2) -> {
+                        String one = o1.getpDate();
+                        String two = o2.getpDate();
+                        return two.compareTo(one);
+                    });
+                }
 
                 // ------- Sort According to Date
-                delv.sort((o1, o2) -> {
-                    String one = o1.getDDate();
-                    String two = o2.getDDate();
-                    return two.compareTo(one);
-                });
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    delv.sort((o1, o2) -> {
+                        String one = o1.getDDate();
+                        String two = o2.getDDate();
+                        return two.compareTo(one);
+                    });
+                }
 
                 myCaptinDelv.getOrders();
                 myCaptinRecived.getOrders();

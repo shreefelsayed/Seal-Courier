@@ -64,6 +64,16 @@
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/_12sdp" />
 
+        <TextView
+            android:id="@+id/txtTrackId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            android:gravity="center|right"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_12sdp" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -232,6 +242,48 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/linSuperVisor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_weight="0.5"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnAsignOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_alignParentTop="false"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_bad_square"
+                    android:text="تسليم لكابتن اخر"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="visible" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnCapRecived"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_32sdp"
+                    android:layout_alignParentTop="false"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_defult_square"
+                    android:text="استلم الكابتن الشحنه"
+                    android:textColor="@color/background"
+
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/_5sdp"
@@ -239,23 +291,6 @@
                 android:layout_weight="0.5"
                 android:orientation="horizontal"
                 android:visibility="visible">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnChat"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_32sdp"
-                    android:layout_alignParentTop="false"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_5sdp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/btn_defult_square"
-                    android:text="تواصل مع التاجر"
-
-                    android:textColor="@color/colorBack"
-                    android:textSize="@dimen/_12sdp"
-                    android:visibility="gone" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnDenied"
@@ -343,7 +378,7 @@
                     android:layout_weight="0.5"
                     android:background="@drawable/btn_defult_square"
                     android:text="مرتجع"
-                    android:textColor="@color/colorAccent"
+                    android:textColor="@color/background"
 
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />

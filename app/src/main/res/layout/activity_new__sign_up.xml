@@ -136,7 +136,38 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="@dimen/_40sdp"
+                            android:layout_marginRight="@dimen/_20sdp"
+                            android:orientation="vertical">
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btnRun"
+                                android:layout_width="@dimen/_75sdp"
+                                android:layout_height="@dimen/_75sdp"
+                                android:background="@drawable/btn_bad"
+                                android:drawableStart="@drawable/ic_run"
+                                android:drawableTint="@color/colorAccent"
+                                android:paddingStart="@dimen/_30sdp"
+                                android:scaleX="2.6"
+                                android:scaleY="2.6"
+                                android:visibility="visible" />
+
+                            <RadioButton
+                                android:id="@+id/rdRun"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:clickable="false"
+                                android:enabled="true"
+                                android:foregroundGravity="center"
+                                android:gravity="center"
+                                android:text="مترجل"
+                                android:textSize="@dimen/_12sdp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/_20sdp"
                             android:orientation="vertical">
 
                             <androidx.appcompat.widget.AppCompatButton

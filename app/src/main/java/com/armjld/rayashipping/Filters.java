@@ -2,6 +2,7 @@ package com.armjld.rayashipping;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -213,9 +214,27 @@ public class Filters extends AppCompatActivity {
         filterList.clear();
 
         if (what.equals("recive")) {
-            filterList = (ArrayList<Data>) mainListm.stream().filter(x -> x.getTxtPState().equals(gov) && x.getmPRegion().equals(city)).collect(Collectors.toList());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                filterList = (ArrayList<Data>) mainListm.stream().filter(x -> x.getTxtPState().equals(gov) && x.getmPRegion().equals(city)).collect(Collectors.toList());
+            } else {
+                for(int i = 0; i < mainListm.size(); i ++) {
+                    Data x = mainListm.get(i);
+                    if(x.getTxtPState().equals(gov) && x.getmPRegion().equals(city)) {
+                        filterList.add(x);
+                    }
+                }
+            }
         } else if (what.equals("drop")) {
-            filterList = (ArrayList<Data>) mainListm.stream().filter(x -> x.getTxtDState().equals(gov) && x.getmDRegion().equals(city)).collect(Collectors.toList());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                filterList = (ArrayList<Data>) mainListm.stream().filter(x -> x.getTxtDState().equals(gov) && x.getmDRegion().equals(city)).collect(Collectors.toList());
+            } else {
+                for(int i = 0; i < mainListm.size(); i ++) {
+                    Data x = mainListm.get(i);
+                    if(x.getTxtDState().equals(gov) && x.getmDRegion().equals(city)) {
+                        filterList.add(x);
+                    }
+                }
+            }
 
         }
 

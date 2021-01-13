@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,12 +39,12 @@ import java.util.ArrayList;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public static caculateTime _cacu = new caculateTime();
-    Context context;
+    Context mContext;
     ArrayList<Data> filtersData;
     String from;
 
-    public MyAdapter(Context context, ArrayList<Data> filtersData, String from) {
-        this.context = context;
+    public MyAdapter(Context mContext, ArrayList<Data> filtersData, String from) {
+        this.mContext = mContext;
         this.filtersData = filtersData;
         this.from = from;
     }
@@ -52,7 +53,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        view = LayoutInflater.from(context).inflate(R.layout.card_main, parent, false);
+        view = LayoutInflater.from(mContext).inflate(R.layout.card_main, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -116,7 +117,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             }
         });
 
-        holder.isBid = rquests.getRequests().stream().anyMatch(x -> x.getOrderId().equals(orderID));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            holder.isBid = rquests.getRequests().stream().anyMatch(x -> x.getOrderId().equals(orderID));
+        }
+
         if (!holder.isBid) {
             holder.setBid("false");
         } else {
@@ -125,41 +129,59 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
 
         holder.btnMore.setOnClickListener(v -> {
-            Intent intent = new Intent(context, OrderInfo.class);
+            Intent intent = new Intent(mContext, OrderInfo.class);
             OrderInfo.orderData = filtersData.get(position);
             intent.putExtra("position", position);
             intent.putExtra("from", from);
-            ((Activity) context).startActivityForResult(intent, 1);
+            ((Activity) mContext).startActivityForResult(intent, 1);
         });
 
 
         holder.btnAccept.setOnClickListener(v -> {
-            Intent intent = new Intent(context, AsignOrder.class);
+            Intent intent = new Intent(mContext, AsignOrder.class);
             AsignOrder.assignToCaptin.clear();
             AsignOrder.assignToCaptin.add(filtersData.get(position));
-            ((Activity) context).startActivityForResult(intent, 1);
+            ((Activity) mContext).startActivityForResult(intent, 1);
         });
 
         holder.btnBid.setOnClickListener(v1 -> {
             if (holder.isBid) {
-                BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) context).setMessage("هل انت متأكد من انك تريد الغاء التقديم علي هذه الشحنه ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
+                BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل انت متأكد من انك تريد الغاء التقديم علي هذه الشحنه ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                     // ------------------- Send Request -------------------- //
-                    rquests _rquests = new rquests(context);
+                    rquests _rquests = new rquests(mContext);
                     _rquests.deleteReq(orderID, owner, filtersData.get(position).getProvider());
                     holder.isBid = false;
                     // ------------------ Notificatiom ------------------ //
                     holder.setBid("false");
-                    Toast.makeText(context, "تم الغاء التقديم", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "تم الغاء التقديم", Toast.LENGTH_SHORT).show();
                     dialogInterface.dismiss();
                 }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
                 mBottomSheetDialog.show();
             } else {
-                Intent intent = new Intent(context, AsignOrder.class);
+                Intent intent = new Intent(mContext, AsignOrder.class);
                 AsignOrder.assignToCaptin.clear();
                 AsignOrder.assignToCaptin.add(filtersData.get(position));
-                ((Activity) context).startActivityForResult(intent, 1);
+                ((Activity) mContext).startActivityForResult(intent, 1);
             }
         });
+
+        /*// ---- Set Selected
+        holder.myview.setOnClickListener(v-> {
+            if (!row_index.contains(position)) {
+                row_index.add(position);
+                holder.favplayIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_starfilled, null ));
+
+            } else {
+                row_index.removeAt(row_index.indexOf(position));
+                holder.favplayIcon.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_starborder, null))  ;
+            }
+        });
+
+        if (!row_index.contains(position)) {
+            holder.favplayIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_starborder, null);
+        } else {
+            holder.favplayIcon.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_starfilled, null);
+        }*/
     }
 
     @Override
@@ -207,9 +229,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         private void setBid(String type) {
             if (type.equals("true")) {
                 btnBid.setText("الغاء الطلب");
-                btnBid.setBackground(ContextCompat.getDrawable(context, R.drawable.btn_bad_square));
+                btnBid.setBackground(ContextCompat.getDrawable(mContext, R.drawable.btn_bad_square));
             } else {
-                btnBid.setBackgroundColor(ContextCompat.getColor(context, R.color.yellow));
+                btnBid.setBackgroundColor(ContextCompat.getColor(mContext, R.color.yellow));
                 btnBid.setText("تقديم طلب توصيل");
             }
         }
@@ -249,13 +271,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 txtgMoney.setVisibility(View.VISIBLE);
 
                 txtProvider.setText("Esh7nly");
-                txtProvider.setBackgroundColor(context.getResources().getColor(R.color.yellow));
+                txtProvider.setBackgroundColor(mContext.getResources().getColor(R.color.yellow));
             } else if (provider.equals("Raya")) {
                 linAgree.setVisibility(View.GONE);
                 txtgMoney.setVisibility(View.GONE);
 
                 txtProvider.setText("Envio");
-                txtProvider.setBackgroundColor(context.getResources().getColor(R.color.ic_profile_background));
+                txtProvider.setBackgroundColor(mContext.getResources().getColor(R.color.ic_profile_background));
 
             }
         }

@@ -2,6 +2,7 @@ package com.armjld.rayashipping;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -41,6 +42,8 @@ import com.hypertrack.sdk.TrackingStateObserver;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -171,12 +174,17 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
                         Home.mm.add(orderData);
                         Home.avillableIDS.add(orderData.getId());
                     }
+
                     // ------- Sort According to Date
-                    Home.mm.sort((o1, o2) -> {
-                        String one = o1.getpDate();
-                        String two = o2.getpDate();
-                        return two.compareTo(one);
-                    });
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Home.mm.sort((o1, o2) -> {
+                            String one = o1.getpDate();
+                            String two = o2.getpDate();
+                            return two.compareTo(one);
+                        });
+                    } else {
+                        Collections.sort(Home.mm, (lhs, rhs) -> rhs.getpDate().compareTo(lhs.getpDate()));
+                    }
                 }
 
                 // -------- Add data to Fragment
@@ -236,11 +244,15 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
                 }
 
                 // ------- Sort According to Date
-                Home.delvOrders.sort((o1, o2) -> {
-                    String one = o1.getDDate();
-                    String two = o2.getDDate();
-                    return two.compareTo(one);
-                });
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Home.delvOrders.sort((o1, o2) -> {
+                        String one = o1.getDDate();
+                        String two = o2.getDDate();
+                        return two.compareTo(one);
+                    });
+                } else {
+                    Collections.sort(Home.delvOrders, (lhs, rhs) -> rhs.getDDate().compareTo(lhs.getDDate()));
+                }
 
                 //set in Fragment -------
                 SuperRecived.getOrders();
@@ -352,18 +364,27 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
                 }
 
                 // ------- Sort According to Date
-                Home.captinAvillable.sort((o1, o2) -> {
-                    String one = o1.getpDate();
-                    String two = o2.getpDate();
-                    return two.compareTo(one);
-                });
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Home.captinAvillable.sort((o1, o2) -> {
+                        String one = o1.getpDate();
+                        String two = o2.getpDate();
+                        return two.compareTo(one);
+                    });
+                } else {
+                    Collections.sort(Home.captinAvillable, (lhs, rhs) -> rhs.getpDate().compareTo(lhs.getpDate()));
+                }
 
                 // ------- Sort According to Date
-                Home.captinDelv.sort((o1, o2) -> {
-                    String one = o1.getDDate();
-                    String two = o2.getDDate();
-                    return two.compareTo(one);
-                });
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Home.captinDelv.sort((o1, o2) -> {
+                        String one = o1.getDDate();
+                        String two = o2.getDDate();
+                        return two.compareTo(one);
+                    });
+                } else {
+                    Collections.sort(Home.captinDelv, (lhs, rhs) -> rhs.getDDate().compareTo(lhs.getDDate()));
+
+                }
 
                 // -------- Set orders in Fragment
                 capAvillable.getOrders();

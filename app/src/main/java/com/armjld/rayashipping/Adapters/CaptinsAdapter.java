@@ -39,12 +39,13 @@ import java.util.ArrayList;
 
 public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHolder> implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final int PHONE_CALL_CODE = 100;
-    static Context mContext;
+    @SuppressLint("StaticFieldLeak")
+    public static Context mContext;
     ArrayList<userData> captinList;
     String from;
 
     public CaptinsAdapter(Context mContext, ArrayList<userData> captinList, String from) {
-        this.mContext = mContext;
+        CaptinsAdapter.mContext = mContext;
         this.captinList = captinList;
         this.from = from;
     }
@@ -129,6 +130,7 @@ public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHo
         for (int i = 0; i < AsignOrder.assignToCaptin.size(); i++) {
             Data orderData = AsignOrder.assignToCaptin.get(i);
             switch (orderData.getStatue()) {
+                case "accepted":
                 case "placed":
                     if (!orderData.getProvider().equals("Esh7nly")) {
                         ordersClass.assignToCaptin(orderData, capId);
@@ -138,6 +140,7 @@ public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHo
                     SuperAvillable.orderAdapter.notifyItemChanged(AsignOrder.position);
                     break;
                 case "supD":
+                case "readyD":
                     ordersClass.asignDelv(orderData, capId);
                     SuperRecived.orderAdapter.notifyItemChanged(AsignOrder.position);
                     break;

@@ -1,4 +1,4 @@
-package com.armjld.rayashipping;
+package com.armjld.rayashipping.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.armjld.rayashipping.R;
+import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.models.CaptinMoney;
 
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         holder.txtMoney.setText(captinMoney.getMoney() + " ج");
         holder.setState(captinMoney.getTransType());
         holder.txtDate.setText(_cacu.setPostDate(captinMoney.getDate()));
+
     }
 
     @Override
@@ -78,7 +81,6 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
                 case "recived":
                     txtMoney.setTextColor(Color.GREEN);
                     txtStatue.setText("استلام شحنه");
-
                     break;
                 case "denied":
                     txtMoney.setTextColor(Color.GREEN);

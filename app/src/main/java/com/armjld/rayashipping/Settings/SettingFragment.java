@@ -54,14 +54,12 @@ public class SettingFragment extends Fragment {
     private static final int READ_EXTERNAL_STORAGE_CODE = 101;
     static String TAG = "Settings";
     TextView txtName, txtType, txtPhone;
-    TextView txtPassSettings, txtReports, txtSignOut, txtContact, txtAbout, txtShare, txtPrivacy, txtWalletMoney, txtRate, txtChangePhone;
-    TextView txtCount;
+    TextView txtPassSettings, txtSignOut, txtAbout, txtShare, txtPrivacy, txtWalletMoney, txtRate, txtChangePhone;
     ImageView imgPPP, btnBack;
     LinearLayout linNoti, linWallet;
     DatabaseReference uDatabase;
     FirebaseAuth mAuth;
     String uId;
-    LinearLayout linStatics;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch switchNotiGov, switchNotiCity;
     int TAKE_IMAGE_CODE = 10001;
@@ -200,18 +198,14 @@ public class SettingFragment extends Fragment {
         txtWalletMoney = view.findViewById(R.id.txtWalletMoney);
         txtPassSettings = view.findViewById(R.id.txtPassSettings);
         linWallet = view.findViewById(R.id.linWallet);
-        txtReports = view.findViewById(R.id.txtReports);
         txtSignOut = view.findViewById(R.id.txtSignOut);
         btnBack = view.findViewById(R.id.btnBack);
-        txtContact = view.findViewById(R.id.txtContact);
         txtAbout = view.findViewById(R.id.txtAbout);
         txtShare = view.findViewById(R.id.txtShare);
         switchNotiGov = view.findViewById(R.id.switchNotiGov);
         switchNotiCity = view.findViewById(R.id.switchNotiCity);
         txtPrivacy = view.findViewById(R.id.txtPrivacy);
         txtRate = view.findViewById(R.id.txtRate);
-        txtCount = view.findViewById(R.id.txtCount);
-        linStatics = view.findViewById(R.id.linStatics);
 
         //Title Bar
         TextView tbTitle = view.findViewById(R.id.toolbar_title);
@@ -309,12 +303,10 @@ public class SettingFragment extends Fragment {
         if (UserInFormation.getAccountType().equals("Supervisor")) {
             txtType.setText("مشرف");
             linWallet.setVisibility(View.GONE);
-            linStatics.setVisibility(View.GONE);
             txtPhone.setText(UserInFormation.getSup_code());
         } else {
             txtType.setText("مندوب شحن");
             linWallet.setVisibility(View.VISIBLE);
-            linStatics.setVisibility(View.VISIBLE);
             txtPhone.setText("+2" + UserInFormation.getuPhone());
 
         }

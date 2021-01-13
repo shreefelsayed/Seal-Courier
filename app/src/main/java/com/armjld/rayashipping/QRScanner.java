@@ -198,7 +198,7 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
 
                 // -------------- Start Scanning Again in 5 Secs ----------
                 loading.setVisibility(View.GONE);
-                startCounter(5000);
+                startCounter(3000);
             }
 
             @Override

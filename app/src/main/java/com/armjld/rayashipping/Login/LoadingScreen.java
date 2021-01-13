@@ -2,6 +2,7 @@ package com.armjld.rayashipping.Login;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -149,18 +150,22 @@ public class LoadingScreen extends AppCompatActivity {
                 }
 
                 // ------- Sort According to Date
-                Home.captinAvillable.sort((o1, o2) -> {
-                    String one = o1.getpDate();
-                    String two = o2.getpDate();
-                    return two.compareTo(one);
-                });
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Home.captinAvillable.sort((o1, o2) -> {
+                        String one = o1.getpDate();
+                        String two = o2.getpDate();
+                        return two.compareTo(one);
+                    });
+                }
 
                 // ------- Sort According to Date
-                Home.captinDelv.sort((o1, o2) -> {
-                    String one = o1.getDDate();
-                    String two = o2.getDDate();
-                    return two.compareTo(one);
-                });
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Home.captinDelv.sort((o1, o2) -> {
+                        String one = o1.getDDate();
+                        String two = o2.getDDate();
+                        return two.compareTo(one);
+                    });
+                }
 
                 // -------- Set orders in Fragment
                 capAvillable.getOrders();
@@ -242,11 +247,13 @@ public class LoadingScreen extends AppCompatActivity {
                     }
 
                     // ------- Sort According to Date
-                    Home.mm.sort((o1, o2) -> {
-                        String one = o1.getDate();
-                        String two = o2.getDate();
-                        return one.compareTo(two);
-                    });
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Home.mm.sort((o1, o2) -> {
+                            String one = o1.getDate();
+                            String two = o2.getDate();
+                            return one.compareTo(two);
+                        });
+                    }
                 }
 
             }
@@ -277,11 +284,13 @@ public class LoadingScreen extends AppCompatActivity {
                     }
 
                     // ------- Sort According to Date
-                    Home.mm.sort((o1, o2) -> {
-                        String one = o1.getpDate();
-                        String two = o2.getpDate();
-                        return two.compareTo(one);
-                    });
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Home.mm.sort((o1, o2) -> {
+                            String one = o1.getpDate();
+                            String two = o2.getpDate();
+                            return two.compareTo(one);
+                        });
+                    }
                 }
 
                 // -------- Add data to Fragment

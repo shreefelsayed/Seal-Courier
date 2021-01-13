@@ -159,45 +159,6 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/linStatics"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10sdp"
-                    android:orientation="vertical"
-                    android:paddingRight="@dimen/_16sdp">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/_16sdp"
-                        android:layout_marginBottom="@dimen/_5sdp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableRight="@drawable/ic_vespa"
-                            android:drawablePadding="@dimen/_8sdp"
-                            android:gravity="center|right"
-                            android:text="عدد الشحنات"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/_18sdp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/txtCount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center|right"
-                            android:text="20 شحنه"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/_18sdp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
-
-                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_10sdp"
@@ -312,21 +273,6 @@
 
                     </LinearLayout>
 
-
-                    <TextView
-                        android:id="@+id/txtReports"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_16sdp"
-                        android:layout_marginRight="@dimen/_16sdp"
-                        android:layout_marginBottom="@dimen/_16sdp"
-                        android:drawableRight="@drawable/ic_info"
-                        android:drawablePadding="@dimen/_8sdp"
-                        android:gravity="center|right"
-                        android:text="التقارير"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/_18sdp" />
-
                 </LinearLayout>
 
                 <LinearLayout
@@ -412,20 +358,6 @@
                         android:layout_marginRight="@dimen/_15sdp"
                         android:text="اخري"
                         android:textAlignment="center"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/_18sdp" />
-
-                    <TextView
-                        android:id="@+id/txtContact"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_16sdp"
-                        android:layout_marginRight="@dimen/_16sdp"
-                        android:layout_marginBottom="@dimen/_16sdp"
-                        android:drawableRight="@drawable/ic_add_email"
-                        android:drawablePadding="@dimen/_8sdp"
-                        android:gravity="center|right"
-                        android:text="رسائل المساعدة و الدعم"
                         android:textColor="@color/colorAccent"
                         android:textSize="@dimen/_18sdp" />
 

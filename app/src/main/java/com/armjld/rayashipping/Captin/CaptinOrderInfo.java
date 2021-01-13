@@ -58,22 +58,24 @@ public class CaptinOrderInfo extends AppCompatActivity {
     private static final int PHONE_CALL_CODE = 100;
     public static Data orderData;
     public static boolean toClick = true;
-    Button btnDelivered, btnChat, btnRecived, btnOrderBack, btnDelete;
+    Button btnDelivered, btnRecived, btnOrderBack, btnDelete;
     ImageView supPP, btnOrderMap;
     TextView orderid;
     TextView ddUsername;
     RatingBar ddRate;
-    TextView txtCustomerName, txtDDate, txtDAddress, txtPostDate2, orderto, OrderFrom, txtPack, txtPDate, txtPAddress, txtWeight, txtCash, txtFees, txtOrder;
+    TextView txtCustomerName, txtDDate, txtDAddress, txtPostDate2, orderto, OrderFrom, txtPack, txtPDate, txtPAddress, txtWeight, txtCash, txtOrder;
     DatabaseReference nDatabase, rDatabase, uDatabase;
     ImageView btnClose, icTrans;
     String hID = "";
-    FloatingActionButton btnCall;
+    FloatingActionButton btnCall, btnCallSupplier;
     TextView txtNotes;
     caculateTime _cacu = new caculateTime();
-    LinearLayout linSupplier, linPackage, advice;
-    ConstraintLayout constClient;
+    LinearLayout linPackage, advice;
+    ConstraintLayout constClient,linSupplier;
     TextView txtMoreOrders;
     private boolean hasMore = false;
+
+    String strOwnerPhone = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +107,6 @@ public class CaptinOrderInfo extends AppCompatActivity {
         txtPAddress = findViewById(R.id.txtPAddress);
         txtWeight = findViewById(R.id.txtWeight);
         txtCash = findViewById(R.id.txtCash);
-        txtFees = findViewById(R.id.txtFees);
         btnClose = findViewById(R.id.btnClose);
         supPP = findViewById(R.id.supPP);
         ddUsername = findViewById(R.id.ddUsername);
@@ -114,7 +115,6 @@ public class CaptinOrderInfo extends AppCompatActivity {
         txtMoreOrders = findViewById(R.id.txtMoreOrders);
 
         btnDelivered = findViewById(R.id.btnDelivered);
-        btnChat = findViewById(R.id.btnChat);
         btnRecived = findViewById(R.id.btnRecived);
         btnOrderBack = findViewById(R.id.btnOrderBack);
         btnCall = findViewById(R.id.btnCall);
@@ -129,6 +129,8 @@ public class CaptinOrderInfo extends AppCompatActivity {
         advice = findViewById(R.id.advice);
 
         txtNotes = findViewById(R.id.txtNotes);
+
+        btnCallSupplier = findViewById(R.id.btnCallSupplier);
 
         boolean toPick = orderData.getStatue().equals("placed") || orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived");
         boolean toDelv = orderData.getStatue().equals("readyD") || orderData.getStatue().equals("supD") || orderData.getStatue().equals("capDenied") || orderData.getStatue().equals("supDenied");
@@ -173,27 +175,22 @@ public class CaptinOrderInfo extends AppCompatActivity {
             linSupplier.setVisibility(View.VISIBLE);
             constClient.setVisibility(View.VISIBLE);
             advice.setVisibility(View.VISIBLE);
-            txtFees.setVisibility(View.VISIBLE);
         } else {
             advice.setVisibility(View.GONE);
-            txtFees.setVisibility(View.GONE);
             switch (orderData.getStatue()) {
                 case "accepted":
                 case "recived":
                 case "recived2":
-                    linSupplier.setVisibility(View.VISIBLE);
-                    linPackage.setVisibility(View.GONE);
-                    constClient.setVisibility(View.GONE);
-                    break;
-                case "readyD":
-                    linSupplier.setVisibility(View.GONE);
-                    linPackage.setVisibility(View.VISIBLE);
-                    constClient.setVisibility(View.VISIBLE);
-                    break;
                 case "capDenied":
                     linSupplier.setVisibility(View.VISIBLE);
                     linPackage.setVisibility(View.VISIBLE);
                     constClient.setVisibility(View.GONE);
+                    break;
+
+                case "readyD":
+                    linSupplier.setVisibility(View.GONE);
+                    linPackage.setVisibility(View.VISIBLE);
+                    constClient.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -203,6 +200,23 @@ public class CaptinOrderInfo extends AppCompatActivity {
             ClipData clip = ClipData.newPlainText("TrackID", orderData.getTrackid());
             clipboard.setPrimaryClip(clip);
             Toast.makeText(this, "تم نسخ رقم التتبع الخاص بالشحنه", Toast.LENGTH_LONG).show();
+        });
+
+        btnCallSupplier.setOnClickListener(v-> {
+            if(strOwnerPhone.equals("")) return;
+
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(CaptinOrderInfo.this).setMessage("هل تريد الاتصال بالتاجر ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
+                checkPermission(Manifest.permission.CALL_PHONE, PHONE_CALL_CODE);
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + strOwnerPhone));
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                startActivity(callIntent);
+
+                dialogInterface.dismiss();
+            }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
+            mBottomSheetDialog.show();
         });
 
         btnCall.setOnClickListener(v -> {
@@ -256,11 +270,6 @@ public class CaptinOrderInfo extends AppCompatActivity {
             mBottomSheetDialog.show();
         });
 
-        btnChat.setOnClickListener(v -> {
-            chatListclass _chatList = new chatListclass();
-            _chatList.startChating(UserInFormation.getId(), orderData.getuId(), this);
-            Messages.cameFrom = "Profile";
-        });
     }
 
     private void setUserData(String owner) {
@@ -272,6 +281,7 @@ public class CaptinOrderInfo extends AppCompatActivity {
                 String dsPP = Objects.requireNonNull(snapshot.child("ppURL").getValue()).toString();
                 Picasso.get().load(Uri.parse(dsPP)).into(supPP);
                 ddUsername.setText(ownerName);
+                String strOwnerPhone = Objects.requireNonNull(snapshot.child("phone").getValue()).toString();
 
                 String one = "0";
                 String two = "0";
@@ -330,7 +340,6 @@ public class CaptinOrderInfo extends AppCompatActivity {
         switch (Statue) {
             case "accepted": {
                 btnDelivered.setVisibility(View.GONE);
-                btnChat.setVisibility(View.VISIBLE);
                 btnRecived.setVisibility(View.GONE);
                 btnOrderBack.setVisibility(View.GONE);
                 btnOrderMap.setVisibility(View.VISIBLE);
@@ -339,7 +348,6 @@ public class CaptinOrderInfo extends AppCompatActivity {
                 break;
             }
             case "recived": {
-                btnChat.setVisibility(View.VISIBLE);
                 btnRecived.setVisibility(View.VISIBLE);
                 btnDelivered.setVisibility(View.GONE);
                 btnOrderBack.setVisibility(View.GONE);
@@ -349,7 +357,6 @@ public class CaptinOrderInfo extends AppCompatActivity {
             }
 
             case "recived2": {
-                btnChat.setVisibility(View.GONE);
                 btnDelivered.setVisibility(View.GONE);
                 btnRecived.setVisibility(View.GONE);
                 btnOrderBack.setVisibility(View.GONE);
@@ -359,7 +366,6 @@ public class CaptinOrderInfo extends AppCompatActivity {
             }
 
             case "readyD": {
-                btnChat.setVisibility(View.GONE);
                 btnDelivered.setVisibility(View.VISIBLE);
                 btnRecived.setVisibility(View.GONE);
                 btnOrderBack.setVisibility(View.GONE);
@@ -369,7 +375,6 @@ public class CaptinOrderInfo extends AppCompatActivity {
             }
 
             case "capDenied": {
-                btnChat.setVisibility(View.GONE);
                 btnDelivered.setVisibility(View.GONE);
                 btnRecived.setVisibility(View.GONE);
                 btnOrderBack.setVisibility(View.VISIBLE);
@@ -379,7 +384,6 @@ public class CaptinOrderInfo extends AppCompatActivity {
             }
 
             default: {
-                btnChat.setVisibility(View.GONE);
                 btnDelivered.setVisibility(View.GONE);
                 btnRecived.setVisibility(View.GONE);
                 btnOrderBack.setVisibility(View.GONE);
@@ -403,7 +407,6 @@ public class CaptinOrderInfo extends AppCompatActivity {
         txtPDate.setText(orderData.getpDate());
         txtPAddress.setText("عنوان الاستلام : " + orderData.reStateP() + " - " + orderData.getmPAddress());
         txtWeight.setText("وزن الشحنه : " + orderData.getPackWeight() + " كيلو");
-        txtFees.setText("مصاريف التوصيل : " + orderData.getGGet() + " ج");
         txtCash.setText("سعر الشحنه : " + orderData.getGMoney() + " ج");
         orderid.setText("رقم تتبع الشحنه : " + orderData.getTrackid());
         setIcon(UserInFormation.getTrans());

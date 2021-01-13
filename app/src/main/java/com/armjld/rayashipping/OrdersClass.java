@@ -88,7 +88,7 @@ public class OrdersClass {
         // --- Send notification to Supervisor
         String message = "قام " + UserInFormation.getUserName() + " بفشل في تسليم شحنه " + orderData.getDName();
         notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "nothing", UserInFormation.getUserName(), UserInFormation.getUserURL());
-        nDatabase.child(orderData.getuId()).push().setValue(Noti);
+        nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
 
         // ---- Add Log
         String Log = "قام المندوب " + UserInFormation.getUserName() + " بفشل تسليم الشحنه " + orderData.getuId();
@@ -110,7 +110,7 @@ public class OrdersClass {
         // --- Send notification to Supervisor
         String message = "قام " + UserInFormation.getUserName() + " بتسليم المرتجع الي " + orderData.getOwner();
         notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "nothing", UserInFormation.getUserName(), UserInFormation.getUserURL());
-        nDatabase.child(orderData.getuId()).push().setValue(Noti);
+        nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
 
         // ---- Add Log
         String Log = "قام المندوب " + UserInFormation.getId() + " بتسليم المرتجع الي " + orderData.getOwner();
@@ -144,6 +144,11 @@ public class OrdersClass {
         notiData Noti = new notiData(orderData.getuAccepted(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
         nDatabase.child(orderData.getuId()).push().setValue(Noti);
 
+        // ---- Send Notifications to Supervisor
+        message = "تم تسليم شحنه " + orderData.getDName() + " بنجاح";
+        Noti = new notiData(orderData.getuAccepted(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
+
         // --- Add Money to Supplier Wallet
         if (!orderData.getProvider().equals("Esh7nly"))
             wallet.addToSupplier(orderData.getGMoney(), orderData.getuId(), orderData);
@@ -151,7 +156,7 @@ public class OrdersClass {
         // --- Add Money to Captins PackMoney
         int CurrentPackMoney = Integer.parseInt(UserInFormation.getPackMoney());
         int finalMoney = CurrentPackMoney + Integer.parseInt(orderData.getGMoney());
-
+        wallet.addToUser(UserInFormation.getId(), CurrentPackMoney,orderData, "ourmoney");
         uDatabase.child(UserInFormation.getId()).child("packMoney").setValue(finalMoney + "");
         UserInFormation.setPackMoney(finalMoney + "");
 
@@ -262,6 +267,27 @@ public class OrdersClass {
         // ---- Toast
         Toast.makeText(mContext, "تم تسليم الشحنه للمندوب", Toast.LENGTH_SHORT).show();
         Timber.i("Order Assigned Succefully");
+    }
+
+    // ----------- Assign As Recived By SuperVisor
+    public void setRecived(Data orderData) {
+        // --- Update Databse
+        getRefrence ref = new getRefrence();
+        DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
+        mDatabase.child(orderData.getId()).child("statue").setValue("recived");
+        mDatabase.child(orderData.getId()).child("recivedTime").setValue(datee);
+
+        // ---- Send noti to Delivery Worker
+        String message = "قام " + UserInFormation.getUserName() + " بتسليمك الشحنةاضغط هنا لتأكيد استلام الشحنه.";
+        notiData Noti = new notiData(UserInFormation.getId() ,orderData.getuAccepted() , orderData.getId(),message,datee,"false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        nDatabase.child(orderData.getuAccepted()).push().setValue(Noti);
+
+        // --- Toast
+        Toast.makeText(mContext, "تم تسليم الشحنه للمندوب، في انظار تأكيد الاستلام", Toast.LENGTH_SHORT).show();
+
+        // --- Logs
+        String Log = "قام المشرف " + UserInFormation.getUserName() + " بتسليم الشحنه رقم : " + orderData.getTrackid() + " للمندوب " + orderData.getuAccepted() + " بدلا من التاجر " + orderData.getOwner();
+        logOrder(mDatabase, orderData.getId(), Log);
     }
 
     // ------- Add Logs to Order

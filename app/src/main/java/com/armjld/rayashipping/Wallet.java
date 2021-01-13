@@ -55,7 +55,7 @@ public class Wallet {
         });
     }
 
-    private void addToUser(String id, int onRecivMoney, Data orderData, String Action) {
+    public void addToUser(String id, int onRecivMoney, Data orderData, String Action) {
         String pId = Action.substring(0, 1) + orderData.getTrackid();
         CaptinMoney captinMoney = new CaptinMoney(orderData.getId(), Action, datee, "false", orderData.getTrackid(), String.valueOf(onRecivMoney));
         uDatabase.child(id).child("payments").child(pId).setValue(captinMoney);
@@ -70,8 +70,7 @@ public class Wallet {
                 if (snapshot.child("walletmoney").exists()) {
                     int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
                     uDatabase.child(id).child("walletmoney").setValue((int) (currentValue + onDelvMoney));
-                    if (UserInFormation.getId().equals(id))
-                        UserInFormation.setWalletmoney(String.valueOf(currentValue + onDelvMoney));
+                    if (UserInFormation.getId().equals(id)) UserInFormation.setWalletmoney(String.valueOf(currentValue + onDelvMoney));
                 } else {
                     uDatabase.child(id).child("walletmoney").setValue(onDelvMoney);
                     if (UserInFormation.getId().equals(id))
@@ -131,8 +130,16 @@ public class Wallet {
                 } else {
                     uDatabase.child(uId).child("packMoney").setValue((money) + "");
                 }
+
+                if (snapshot.child("totalMoney").exists()) {
+                    int myMoney = Integer.parseInt(Objects.requireNonNull(snapshot.child("totalMoney").getValue()).toString());
+                    uDatabase.child(uId).child("totalMoney").setValue((myMoney + money) + "");
+                } else {
+                    uDatabase.child(uId).child("totalMoney").setValue((money) + "");
+                }
+
                 Timber.i("Added Money To Supplier %s", Objects.requireNonNull(snapshot.child("name").getValue()).toString());
-                addToUser(UserInFormation.getId(), Integer.parseInt(gMoney), orderData, "ourmoney");
+                addToUser(uId, Integer.parseInt(gMoney), orderData, "ourmoney");
             }
 
             @Override

@@ -6,6 +6,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.armjld.rayashipping.models.CaptinMoney;
+import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.models.notiData;
 import com.armjld.rayashipping.models.userData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +23,8 @@ public class EnvioMoney {
 
     DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users");
     DatabaseReference Envio = FirebaseDatabase.getInstance().getReference().child("Envio");
+    DatabaseReference nDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("notificationRequests");
+
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
     String datee = sdf.format(new Date());
 
@@ -54,6 +58,11 @@ public class EnvioMoney {
             }
         });
 
+        // ---- Send noti to Captin
+        String message = "تم استلام المستحقات و قيمتها " + walletMoney + " بنجاح";
+        notiData Noti = new notiData(UserInFormation.getId(), "", user.getId(), message, datee, "false", "wallet", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        nDatabase.child(user.getId()).push().setValue(Noti);
+
         Toast.makeText(mContext, "تم دفع المستحقات بنجاح", Toast.LENGTH_SHORT).show();
     }
 
@@ -82,6 +91,11 @@ public class EnvioMoney {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
+        // ---- Send noti to Captin
+        String message = "تم تسليمك البونص و قيمته " + walletMoney + " بنجاح";
+        notiData Noti = new notiData(UserInFormation.getId(), "", user.getId(), message, datee, "false", "wallet", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        nDatabase.child(user.getId()).push().setValue(Noti);
 
         /*// ---- Add Money to Outcome
         int minus = Integer.parseInt(walletMoney) * -1;

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -56,7 +57,6 @@ public class OrderInfo extends AppCompatActivity {
     String owner;
     TextView date3, date, orderto, OrderFrom, txtPack, txtWeight, ordercash2, fees2, txtPostDate2;
     TextView dsUsername;
-    TextView txtTitle;
     TextView ddCount;
     TextView dsPAddress, dsDAddress, txtCallCustomer, txtCustomerName;
     ImageView supPP, btnOrderMap;
@@ -115,7 +115,6 @@ public class OrderInfo extends AppCompatActivity {
         dsUsername = findViewById(R.id.ddUsername);
         dsPAddress = findViewById(R.id.ddPhone);
         dsDAddress = findViewById(R.id.dsDAddress);
-        txtTitle = findViewById(R.id.txtTitle);
         supPP = findViewById(R.id.supPP);
         rbUser = findViewById(R.id.ddRate);
         ddCount = findViewById(R.id.ddCount);
@@ -200,7 +199,9 @@ public class OrderInfo extends AppCompatActivity {
         if (toPick || toDelv) btnOrderMap.setVisibility(View.VISIBLE);
 
         // ----------- Set the Bidding Statue
-        isBid = rquests.getRequests().stream().anyMatch(x -> x.getOrderId().equals(orderID));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            isBid = rquests.getRequests().stream().anyMatch(x -> x.getOrderId().equals(orderID));
+        }
 
         if (!isBid) {
             setBid("false");
@@ -229,7 +230,6 @@ public class OrderInfo extends AppCompatActivity {
 
         // ------ Accept for Raya Orders
         btnAccept.setOnClickListener(v -> {
-
             Intent intent = new Intent(this, AsignOrder.class);
             AsignOrder.assignToCaptin.clear();
             AsignOrder.assignToCaptin.add(orderData);
@@ -422,7 +422,9 @@ public class OrderInfo extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        isBid = rquests.getRequests().stream().anyMatch(x -> x.getOrderId().equals(orderID));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            isBid = rquests.getRequests().stream().anyMatch(x -> x.getOrderId().equals(orderID));
+        }
         if (!isBid) {
             setBid("false");
         } else {

@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -285,8 +286,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public boolean onMarkerClick(Marker marker) {
         String gID = (String) marker.getTag();
-        Data orderData;
-        orderData = filterList.stream().filter(x -> x.getId().equals(gID)).findFirst().get();
+        Data orderData = null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            orderData = filterList.stream().filter(x -> x.getId().equals(gID)).findFirst().get();
+        } else {
+            for(int i = 0; i < filterList.size(); i ++) {
+                if (filterList.get(i).getId().equals(gID)) {
+                    orderData = filterList.get(i);
+                    break;
+                }
+            }
+        }
+
+
         setCardDate(orderData);
 
         recyclerView2.setVisibility(View.VISIBLE);

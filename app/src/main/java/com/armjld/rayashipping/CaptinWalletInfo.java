@@ -1,6 +1,7 @@
 package com.armjld.rayashipping;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.armjld.rayashipping.Adapters.WalletAdapter;
 import com.armjld.rayashipping.models.CaptinMoney;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.userData;
@@ -23,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CaptinWalletInfo extends AppCompatActivity {
 
@@ -83,14 +86,14 @@ public class CaptinWalletInfo extends AppCompatActivity {
             if (UserInFormation.getAccountType().equals("Supervisor")) {
                 refreshData();
             } else if (UserInFormation.getAccountType().equals("Delivery Worker")) {
-
+                capRefresh();
             }
         });
 
         // --- Click to Pay Pack Money
         linPack.setOnClickListener(v -> {
             if (UserInFormation.getAccountType().equals("Supervisor") && !packMoney.equals("0")) {
-                BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(this).setMessage("هل قمت باستلام من " + user.getName() + " مبلغ " + walletMoney + " ج مستحقات التسليم ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
+                BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(this).setMessage("هل قمت باستلام من " + user.getName() + " مبلغ " + packMoney + " ج مستحقات التسليم ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                     EnvioMoney envioMoney = new EnvioMoney(this);
                     envioMoney.payPackMoney(user, packMoney);
                     refreshData();
@@ -139,6 +142,34 @@ public class CaptinWalletInfo extends AppCompatActivity {
         });
     }
 
+    private void capRefresh() {
+        swipeRefresh.setRefreshing(true);
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userData _user = snapshot.getValue(userData.class);
+                assert _user != null;
+
+                walletMoney = String.valueOf(_user.getWalletmoney());
+                packMoney = _user.getPackMoney();
+
+                UserInFormation.setWalletmoney(walletMoney);
+                UserInFormation.setPackMoney(packMoney);
+
+
+                txtBouns.setText(walletMoney + " ج");
+                txtMoney.setText(packMoney + " ج");
+
+                getMoney(_user.getId());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
     private void getMoney(String uId) {
         capMoneyList.clear();
         capMoneyList.trimToSize();
@@ -154,6 +185,17 @@ public class CaptinWalletInfo extends AppCompatActivity {
                             capMoneyList.add(captinMoney);
                         }
                     }
+                }
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    capMoneyList.sort((o1, o2) -> {
+                        String one = o1.getDate();
+                        String two = o2.getDate();
+                        return one.compareTo(two);
+                    });
+                } else {
+                    Collections.sort(capMoneyList, (lhs, rhs) -> lhs.getDate().compareTo(rhs.getDate()));
                 }
 
                 walletAdapter = new WalletAdapter(capMoneyList, CaptinWalletInfo.this);

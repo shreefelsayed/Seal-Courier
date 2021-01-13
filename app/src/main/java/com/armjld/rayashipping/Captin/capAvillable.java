@@ -2,6 +2,7 @@ package com.armjld.rayashipping.Captin;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,11 +40,13 @@ public class capAvillable extends Fragment {
         Timber.i("Setting orders in Home Fragment");
         filterList = Home.captinAvillable;
 
-        filterList.sort((o1, o2) -> {
-            String one = o1.getStatue();
-            String two = o2.getStatue();
-            return two.compareTo(one);
-        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            filterList.sort((o1, o2) -> {
+                String one = o1.getStatue();
+                String two = o2.getStatue();
+                return two.compareTo(one);
+            });
+        }
 
         if (mContext != null) {
             orderAdapter = new DeliveryAdapter(mContext, filterList, "Home");

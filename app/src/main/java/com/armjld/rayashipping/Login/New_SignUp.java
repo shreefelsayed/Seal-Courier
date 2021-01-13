@@ -91,12 +91,13 @@ public class New_SignUp extends AppCompatActivity {
     public static String newPass = "";
     public String mVerificationId = "";
     FloatingActionButton btnNext;
+
     EditText txtFirstName, txtLastName, txtEmail, txtPass1, txtPass2, txtPhone, txtSuperVisor;
     OtpView txtCode;
     ImageView btnBack;
     SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
     String acDate = sdf2.format(new Date());
-    RadioButton rdMotor, rdCar;
+    RadioButton rdMotor, rdCar, rdRun;
     String phoneNumb;
     TextView txtPrivacy;
     String newType = "Delivery Worker";
@@ -105,10 +106,11 @@ public class New_SignUp extends AppCompatActivity {
     String cCode = "+20";
     String isCar = "false";
     String isMotor = "false";
+    String isTrans = "false";
     String strCity = "";
     String strGov = "";
     CountDownTimer resend;
-    Button btnCar, btnMotor;
+    Button btnCar, btnMotor, btnRun;
     String trans;
     TextInputLayout tlFirstName, tlLastName, tlPass1, tlPass2, tlEmail, tlPhone, tlSuperVisor;
     SmartMaterialSpinner spnGov, spnCity;
@@ -253,8 +255,11 @@ public class New_SignUp extends AppCompatActivity {
 
         btnCar = findViewById(R.id.btnCar);
         btnMotor = findViewById(R.id.btnMotor);
+        btnRun = findViewById(R.id.btnRun);
         rdCar = findViewById(R.id.rdCar);
+        rdRun = findViewById(R.id.rdRun);
         rdMotor = findViewById(R.id.rdMotor);
+
         spnGov = findViewById(R.id.spnGov);
         spnCity = findViewById(R.id.spnCity);
 
@@ -350,25 +355,54 @@ public class New_SignUp extends AppCompatActivity {
 
             isCar = "true";
             isMotor = "false";
+            isTrans = "false";
+
             trans = "Car";
 
             btnCar.setBackgroundResource(R.drawable.btn_defult);
             btnMotor.setBackgroundResource(R.drawable.btn_bad);
+            btnRun.setBackgroundResource(R.drawable.btn_bad);
+
             rdCar.setChecked(true);
+            rdRun.setChecked(false);
             rdMotor.setChecked(false);
         });
 
         btnMotor.setOnClickListener(v -> {
             isCar = "false";
             isMotor = "true";
+            isTrans = "false";
+
             trans = "Motor";
 
 
             btnMotor.setBackgroundResource(R.drawable.btn_defult);
             btnCar.setBackgroundResource(R.drawable.btn_bad);
+            btnRun.setBackgroundResource(R.drawable.btn_bad);
 
             rdCar.setChecked(false);
+            rdRun.setChecked(false);
+
             rdMotor.setChecked(true);
+        });
+
+        btnMotor.setOnClickListener(v -> {
+            isCar = "false";
+            isMotor = "false";
+            isTrans = "true";
+
+            trans = "Trans";
+
+
+            btnMotor.setBackgroundResource(R.drawable.btn_bad);
+            btnCar.setBackgroundResource(R.drawable.btn_bad);
+            btnRun.setBackgroundResource(R.drawable.btn_defult);
+
+
+            rdCar.setChecked(false);
+            rdMotor.setChecked(false);
+            rdRun.setChecked(true);
+
         });
 
 
@@ -531,7 +565,7 @@ public class New_SignUp extends AppCompatActivity {
         hideKeyboard(this);
         switch (viewFlipper.getDisplayedChild()) {
             case 0: {
-                if (isCar.equals("false") && isMotor.equals("false")) {
+                if (isCar.equals("false") && isMotor.equals("false") && isTrans.equals("false")) {
                     Toast.makeText(this, "الرجاء اختيار وسيلة نقل واحدة", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -772,9 +806,10 @@ public class New_SignUp extends AppCompatActivity {
         // ------- set extra values
         uDatabase.child(id).child("transType").setValue(trans);
         uDatabase.child(id).child("isCar").setValue(isCar);
-        uDatabase.child(id).child("isBike").setValue("false");
         uDatabase.child(id).child("isMotor").setValue(isMotor);
-        uDatabase.child(id).child("isTrans").setValue("false");
+        uDatabase.child(id).child("isTrans").setValue(isTrans);
+
+        uDatabase.child(id).child("isBike").setValue("false");
 
         uDatabase.child(id).child("mySuper").setValue(supCode);
         uDatabase.child(id).child("mySuperId").setValue(supId);
