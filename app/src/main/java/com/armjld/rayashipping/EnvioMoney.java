@@ -2,9 +2,7 @@ package com.armjld.rayashipping;
 
 import android.content.Context;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import com.armjld.rayashipping.models.CaptinMoney;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.notiData;
@@ -14,7 +12,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -46,7 +43,19 @@ public class EnvioMoney {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         CaptinMoney captinMoney = ds.getValue(CaptinMoney.class);
                         String key = ds.getKey();
+                        assert captinMoney != null;
+
                         if (captinMoney.getTransType().equals("ourmoney")) {
+                            int finalPack = Integer.parseInt(UserInFormation.getPackMoney()) + Integer.parseInt(captinMoney.getMoney());
+                            UserInFormation.setPackMoney(finalPack + "");
+                            // --- Add Money To Supplier Wallet
+                            captinMoney.setTransType("pack");
+                            captinMoney.setDate(datee);
+                            uDatabase.child(UserInFormation.getId()).child("payments").push().setValue(captinMoney);
+                            uDatabase.child(UserInFormation.getId()).child("packMoney").setValue(finalPack + "");
+
+                            // ---- Set as Paid in Captins Wallet
+                            assert key != null;
                             uDatabase.child(user.getId()).child("payments").child(key).child("isPaid").setValue("true");
                         }
                     }
@@ -81,6 +90,17 @@ public class EnvioMoney {
                         assert captinMoney != null;
                         if (!captinMoney.getTransType().equals("ourmoney")) {
                             assert key != null;
+
+                            // --- Add Money To Supplier Wallet
+                            int finalWallet = Integer.parseInt(UserInFormation.getWalletmoney()) + Integer.parseInt(captinMoney.getMoney());
+                            UserInFormation.setWalletmoney(finalWallet + "");
+
+                            captinMoney.setTransType("captin");
+                            captinMoney.setDate(datee);
+                            uDatabase.child(UserInFormation.getId()).child("payments").child(key).setValue(captinMoney);
+                            uDatabase.child(UserInFormation.getId()).child("walletmoney").setValue(finalWallet);
+
+                            // --- Mark as Paid in Captins Wallet
                             uDatabase.child(user.getId()).child("payments").child(key).child("isPaid").setValue("true");
                         }
                     }
@@ -96,25 +116,5 @@ public class EnvioMoney {
         String message = "تم تسليمك البونص و قيمته " + walletMoney + " بنجاح";
         notiData Noti = new notiData(UserInFormation.getId(), "", user.getId(), message, datee, "false", "wallet", UserInFormation.getUserName(), UserInFormation.getUserURL());
         nDatabase.child(user.getId()).push().setValue(Noti);
-
-        /*// ---- Add Money to Outcome
-        int minus = Integer.parseInt(walletMoney) * -1;
-        Envio.child("outcome").child("totalOutcome").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()) {
-                    int already = Integer.parseInt(snapshot.getValue().toString());
-                    int final_ = already + minus;
-                    Envio.child("outcome").child("totalOutcome").setValue(final_);
-                } else {
-                    Envio.child("outcome").child("totalOutcome").setValue(minus);
-                }
-
-                Envio.child("outcome").
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });*/
     }
 }

@@ -31,11 +31,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.armjld.rayashipping.CaptinWalletInfo;
+import com.armjld.rayashipping.SuperCaptins.CaptinWalletInfo;
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.Login.LoginManager;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AllOrders;
+import com.armjld.rayashipping.SuperVisor.SupperVisorWallet;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -234,7 +235,14 @@ public class SettingFragment extends Fragment {
         txtAbout.setOnClickListener(v -> startActivity(new Intent(getActivity(), About.class)));
 
         /*txtContact.setOnClickListener(v->startActivity(new Intent(getActivity(), Tickets.class)));*/
-        linWallet.setOnClickListener(v -> startActivity(new Intent(getActivity(), CaptinWalletInfo.class)));
+        linWallet.setOnClickListener(v -> {
+            if(UserInFormation.getAccountType().equals("Delivery Worker")) {
+                startActivity(new Intent(getActivity(), CaptinWalletInfo.class));
+
+            } else {
+                startActivity(new Intent(getActivity(), SupperVisorWallet.class));
+            }
+        });
 
         txtWalletMoney.setText(UserInFormation.getWalletmoney());
 
@@ -302,11 +310,9 @@ public class SettingFragment extends Fragment {
 
         if (UserInFormation.getAccountType().equals("Supervisor")) {
             txtType.setText("مشرف");
-            linWallet.setVisibility(View.GONE);
             txtPhone.setText(UserInFormation.getSup_code());
         } else {
             txtType.setText("مندوب شحن");
-            linWallet.setVisibility(View.VISIBLE);
             txtPhone.setText("+2" + UserInFormation.getuPhone());
 
         }

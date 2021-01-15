@@ -55,15 +55,43 @@ public class Wallet {
         });
     }
 
+    // ----- Add Money to Delv on Denied
+    public void addDeniedMoney(String id, Data orderData) {
+        uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("walletmoney").exists()) {
+                    int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
+                    uDatabase.child(id).child("walletmoney").setValue(currentValue + onDeniedMoney);
+                    if (UserInFormation.getId().equals(id))
+                        UserInFormation.setWalletmoney(String.valueOf((currentValue + onDeniedMoney)));
+                } else {
+                    uDatabase.child(id).child("walletmoney").setValue(onDeniedMoney);
+                    if (UserInFormation.getId().equals(id))
+                        UserInFormation.setWalletmoney(String.valueOf((onDeniedMoney)));
+                }
+
+                addToUser(id, onDeniedMoney, orderData, "denied");
+                Timber.i("Added Money to Wallet");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
     public void addToUser(String id, int onRecivMoney, Data orderData, String Action) {
-        String pId = Action.substring(0, 1) + orderData.getTrackid();
         CaptinMoney captinMoney = new CaptinMoney(orderData.getId(), Action, datee, "false", orderData.getTrackid(), String.valueOf(onRecivMoney));
-        uDatabase.child(id).child("payments").child(pId).setValue(captinMoney);
+        uDatabase.child(id).child("payments").push().setValue(captinMoney);
         Timber.i("Add Money in Logs");
     }
 
     // ----- Add Money to Delv
     public void addDelvMoney(String id, Data orderData) {
+
+        if(orderData.getTxtDState().equals("الجيزة")) onDelvMoney = 15;
+
         uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

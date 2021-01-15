@@ -23,6 +23,7 @@ import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AsignOrder;
 import com.armjld.rayashipping.SuperVisor.OrderInfo;
+import com.armjld.rayashipping.SuperVisor.SuperAvillable;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.getRefrence;
 import com.armjld.rayashipping.models.Data;
@@ -76,7 +77,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.setPostDate(filtersData.get(position).getDate());
         holder.setBid(type);
         holder.switchLayout(filtersData.get(position).getProvider());
-        holder.setState(filtersData.get(position).getProvider(), filtersData.get(position).getStatue());
+        holder.setState(filtersData.get(position));
         holder.setData(orderData);
 
         // ----------- Listener to Hide Buttons when order deleted or became accepted ------------ //
@@ -138,10 +139,34 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
 
         holder.btnAccept.setOnClickListener(v -> {
-            Intent intent = new Intent(mContext, AsignOrder.class);
-            AsignOrder.assignToCaptin.clear();
-            AsignOrder.assignToCaptin.add(filtersData.get(position));
-            ((Activity) mContext).startActivityForResult(intent, 1);
+            if(orderData.getStatue().equals("placed")) { // Check if it's Placed
+                BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل تريد تسليم تلك الشحنه فقط للمندوب ام جميع شحنات التاجر المتاحه ؟").setCancelable(true).setPositiveButton("جميع الشحنات", R.drawable.ic_tick_green, (dialogInterface, which) -> {
+                    Intent intent = new Intent(mContext, AsignOrder.class);
+                    AsignOrder.assignToCaptin.clear();
+
+                    for(int i = 0; i < SuperAvillable.filterList.size(); i ++) {
+                        Data oData = SuperAvillable.filterList.get(i);
+                        if(oData.getuId().equals(orderData.getuId())) {
+                            AsignOrder.assignToCaptin.add(SuperAvillable.filterList.get(i));
+                        }
+                    }
+
+                    ((Activity) mContext).startActivityForResult(intent, 1);
+                    dialogInterface.dismiss();
+                }).setNegativeButton("هذه الشحنه فقط", R.drawable.ic_tick_green, (dialogInterface, which) -> {
+                    Intent intent = new Intent(mContext, AsignOrder.class);
+                    AsignOrder.assignToCaptin.clear();
+                    AsignOrder.assignToCaptin.add(filtersData.get(position));
+                    ((Activity) mContext).startActivityForResult(intent, 1);
+                    dialogInterface.dismiss();
+                }).build();
+                mBottomSheetDialog.show();
+            } else {
+                Intent intent = new Intent(mContext, AsignOrder.class);
+                AsignOrder.assignToCaptin.clear();
+                AsignOrder.assignToCaptin.add(filtersData.get(position));
+                ((Activity) mContext).startActivityForResult(intent, 1);
+            }
         });
 
         holder.btnBid.setOnClickListener(v1 -> {
@@ -203,6 +228,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         public LinearLayout linerDate, linAgree;
         public ImageView icTrans;
         public boolean isBid = false;
+        public TextView txtStatue;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -224,6 +250,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             txtProvider = myview.findViewById(R.id.txtProvider);
             txtUsername = myview.findViewById(R.id.txtUsername);
             txtTrackId = myview.findViewById(R.id.txtTrackId);
+            txtStatue = myview.findViewById(R.id.txtStatue);
         }
 
         private void setBid(String type) {
@@ -251,7 +278,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         @SuppressLint("SetTextI18n")
         public void setOrdercash(String ordercash) {
-            txtgMoney.setText("سعر الشحنة  " + ordercash + " ج");
+            txtgMoney.setText("سعر الشحنة " + ordercash + " ج");
         }
 
         @SuppressLint("SetTextI18n")
@@ -282,10 +309,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             }
         }
 
-        public void setState(String provider, String statue) {
-            switch (statue) {
+        public void setState(Data orderData) {
+            switch (orderData.getStatue()) {
                 case "placed":
-                    if (!provider.equals("Esh7nly")) {
+                    if (!orderData.getProvider().equals("Esh7nly")) {
                         btnAccept.setVisibility(View.VISIBLE);
                         btnBid.setVisibility(View.GONE);
                     } else {
@@ -293,15 +320,36 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                         btnBid.setVisibility(View.VISIBLE);
                     }
                     btnMore.setVisibility(View.VISIBLE);
+
+                    txtStatue.setText("قيد الاستلام");
+                    txtStatue.setBackgroundColor(Color.YELLOW);
+
+                    if(!orderData.getpHubName().equals("")) txtOrderTo.setText(orderData.getpHubName());
                     break;
 
-                case "supDenied":
                 case "supD":
                     btnAccept.setVisibility(View.VISIBLE);
                     btnBid.setVisibility(View.GONE);
                     btnMore.setVisibility(View.VISIBLE);
+
+                    txtStatue.setText("قيد التسليم");
+                    txtStatue.setBackgroundColor(Color.YELLOW);
+
+                    if(!orderData.getdHubName().equals("")) txtOrderFrom.setText(orderData.getdHubName());
+                    break;
+                case "supDenied":
+                    btnAccept.setVisibility(View.VISIBLE);
+                    btnBid.setVisibility(View.GONE);
+                    btnMore.setVisibility(View.VISIBLE);
+
+                    txtStatue.setText("مرتجع للتاجر");
+                    txtStatue.setBackgroundColor(Color.MAGENTA);
+
+                    if(!orderData.getdHubName().equals("")) txtOrderFrom.setText(orderData.getpHubName());
+                    txtOrderTo.setText(orderData.reStateP());
                     break;
                 default:
+                    txtStatue.setVisibility(View.GONE);
                     btnAccept.setVisibility(View.GONE);
                     btnBid.setVisibility(View.GONE);
                     btnMore.setVisibility(View.GONE);

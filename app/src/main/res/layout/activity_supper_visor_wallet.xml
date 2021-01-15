@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SuperCaptins.CaptinWalletInfo">
+    tools:context=".SuperVisor.SupperVisorWallet">
 
     <include
         android:id="@+id/dsToolbar"
@@ -63,7 +63,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="بونص"
+                android:text="مدفوعات"
                 android:textAlignment="center"
                 android:textSize="@dimen/_20sdp" />
 
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textAlignment="center"
-                android:textColor="#00E676"
+                android:textColor="#FFEA00"
                 android:textSize="@dimen/_18sdp" />
 
         </LinearLayout>
@@ -93,7 +93,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="مستحقات"
+                android:text="استلامات"
                 android:textAlignment="center"
                 android:textSize="@dimen/_20sdp" />
 

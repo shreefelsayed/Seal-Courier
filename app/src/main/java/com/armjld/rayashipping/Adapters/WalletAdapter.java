@@ -84,8 +84,7 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
                     break;
                 case "denied":
                     txtMoney.setTextColor(Color.GREEN);
-                    txtStatue.setText("محاولتين تسليم");
-
+                    txtStatue.setText("محاوله تسليم");
                     break;
                 case "deniedback":
                     txtMoney.setTextColor(Color.GREEN);
@@ -94,6 +93,14 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
                 case "ourmoney":
                     txtMoney.setTextColor(Color.RED);
                     txtStatue.setText("مستحقات شحنه");
+                    break;
+                case "pack" :
+                    txtMoney.setTextColor(Color.RED);
+                    txtStatue.setText("مستحقات شحنه");
+                    break;
+                case "captin" :
+                    txtMoney.setTextColor(Color.YELLOW);
+                    txtStatue.setText("مستحقات مندوب شحن");
                     break;
             }
         }

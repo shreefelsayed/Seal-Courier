@@ -197,9 +197,10 @@ public class LoginManager {
         UserInFormation.setCurrentdate(user.getCurrentDate());
         UserInFormation.setSendGovNoti(user.getSendOrderNoti());
         UserInFormation.setSendCityNoti(user.getSendOrderNotiCity());
-        UserInFormation.setWalletmoney(String.valueOf(user.getWalletmoney()));
         UserInFormation.setIsConfirm(user.getIsConfirmed());
         UserInFormation.setProvider(user.getProvider());
+
+        UserInFormation.setWalletmoney(String.valueOf(user.getWalletmoney()));
         UserInFormation.setPackMoney(user.getPackMoney());
 
         // ------- Set My Supervisor Codes -------- \\

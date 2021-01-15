@@ -26,12 +26,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RayaShipping"
         tools:ignore="AllowBackup,LockedOrientationActivity">
+        <activity android:name=".SuperVisor.SupperVisorWallet"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".CaptinWalletInfo" />
+        <activity android:name=".SuperCaptins.CaptinWalletInfo" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -80,7 +82,6 @@
         <receiver android:name=".Notifications.Brodcast" />
 
         <activity android:name=".Notifications.DirectReplyReciver" />
-
         <activity
             android:name="com.google.firebase.auth.internal.FederatedSignInActivity"
             android:launchMode="standard"

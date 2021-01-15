@@ -93,35 +93,7 @@ public class LoadingScreen extends AppCompatActivity {
         }
     }
 
-    private void getDeliveryOrders() {
-        txtLoading.setText("جاري تحضير شحنات الشركاء ..");
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef("Esh7nly");
-
-        mDatabase.orderByChild("uAccepted").equalTo(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        Data orderData = ds.getValue(Data.class);
-                        assert orderData != null;
-                        if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
-                            // ------ Add to Avillabe
-                            Home.captinAvillable.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied")) {
-                            // ------ Add to to Delivered
-                            Home.captinDelv.add(orderData);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
-
+    // --- Captins
     private void getForRaya() {
         txtLoading.setText("جاري تحضير شحنات الشركه ..");
         getRefrence ref = new getRefrence();
@@ -142,7 +114,7 @@ public class LoadingScreen extends AppCompatActivity {
                         if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             // ------ Add to Avillabe
                             Home.captinAvillable.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied")) {
+                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied") || orderData.getStatue().equals("capDenied")) {
                             // ------ Add to to Delivered
                             Home.captinDelv.add(orderData);
                         }
@@ -209,61 +181,6 @@ public class LoadingScreen extends AppCompatActivity {
         });
     }
 
-    // ------------- Get Avillable Esh7nly Orders ------------ \\
-    @SuppressLint("SetTextI18n")
-    public void getOrdersByLatest() {
-        txtLoading.setText("جاري تحضير الشحنات المتاحة ..");
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef("Esh7nly");
-        mDatabase.orderByChild("statue").equalTo("placed").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // --------- Get Avillable Orders Data ------
-                Home.mm.clear();
-                Home.mm.trimToSize();
-                Home.avillableIDS.clear();
-                Home.avillableIDS.trimToSize();
-
-                if (snapshot.exists()) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        if (ds.getChildrenCount() < 5) return;
-                        Data orderData = ds.getValue(Data.class);
-                        assert orderData != null;
-                        Date orderDate = null;
-                        Date myDate = null;
-                        try {
-                            orderDate = format.parse(Objects.requireNonNull(ds.child("ddate").getValue()).toString());
-                            myDate = format.parse(format.format(Calendar.getInstance().getTime()));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        assert orderDate != null;
-                        assert myDate != null;
-
-                        if (orderDate.compareTo(myDate) >= 0 && cities.contains(orderData.getmPRegion()) && cities.contains(orderData.getmDRegion())) {
-                            Home.mm.add(orderData);
-                            Home.avillableIDS.add(orderData.getId());
-                        }
-                    }
-
-                    // ------- Sort According to Date
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        Home.mm.sort((o1, o2) -> {
-                            String one = o1.getDate();
-                            String two = o2.getDate();
-                            return one.compareTo(two);
-                        });
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
-
     // -------------- Get Avillable Company Orders ------------ \\
     private void getRayaOrders() {
         getRefrence ref = new getRefrence();
@@ -320,7 +237,7 @@ public class LoadingScreen extends AppCompatActivity {
                     for (DataSnapshot notDelv : allOrders.getChildren()) {
                         Data orderData = notDelv.getValue(Data.class);
                         assert orderData != null;
-                        if (orderData.getStatue().equals("supD")) {
+                        if (orderData.getStatue().equals("supD") || orderData.getStatue().equals("supDenied")) {
                             Home.delvOrders.add(orderData);
                         }
                     }
@@ -329,33 +246,6 @@ public class LoadingScreen extends AppCompatActivity {
                 //set in Fragment -------
                 SuperRecived.getOrders();
                 getNoti();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
-
-    // ---------- Get To Deliver Esh7nly Orders --------- \\
-    private void getEsh7nlyDelv() {
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef("Esh7nly");
-        txtLoading.setText("جاري تحضير الشحنات ..");
-        mDatabase.orderByChild("dSupervisor").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot allOrders) {
-                if (allOrders.exists()) {
-                    for (DataSnapshot notDelv : allOrders.getChildren()) {
-                        Data orderData = notDelv.getValue(Data.class);
-                        assert orderData != null;
-                        if (orderData.getStatue().equals("supD")) {
-                            Home.delvOrders.add(orderData);
-                        }
-                    }
-                }
-
-
             }
 
             @Override

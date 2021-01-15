@@ -87,7 +87,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendRegistrationToServer(String token) {
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void chatNoti(String title, String body, String roomid, String to) {
         Home.getMessageCount();
         // ------------ Click Notification Event ------------------- //

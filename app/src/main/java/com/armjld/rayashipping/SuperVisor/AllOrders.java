@@ -1,7 +1,10 @@
 package com.armjld.rayashipping.SuperVisor;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -29,6 +34,7 @@ public class AllOrders extends Fragment {
 
     public static Context mContext;
     public static TabLayout tabs;
+    public static int CAMERA_CODE = 80;
 
 
     public AllOrders() {
@@ -59,8 +65,13 @@ public class AllOrders extends Fragment {
 
 
         btnScan.setOnClickListener(v -> {
-            Intent i = new Intent(mContext, QRScanner.class);
-            mContext.startActivity(i);
+            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_DENIED) {
+                Intent i = new Intent(mContext, QRScanner.class);
+                mContext.startActivity(i);
+            } else {
+                ActivityCompat.requestPermissions((Activity) mContext, new String[] {Manifest.permission.CAMERA}, CAMERA_CODE);
+            }
+
         });
 
         btnFilters.setOnClickListener(v -> OpenFilters());

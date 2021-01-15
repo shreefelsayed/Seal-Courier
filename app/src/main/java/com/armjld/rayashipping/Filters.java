@@ -87,6 +87,8 @@ public class Filters extends AppCompatActivity {
         tlCity = findViewById(R.id.tlCity);
         tlGov = findViewById(R.id.tlGov);
 
+        btnAsignAll.setVisibility(View.GONE);
+
         String[] cities = getResources().getStringArray(R.array.arrayCities);
         for (String city : cities) {
             String[] filterSep = city.split(", ");

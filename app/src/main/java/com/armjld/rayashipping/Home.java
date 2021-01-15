@@ -237,7 +237,7 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
                     for (DataSnapshot notDelv : allOrders.getChildren()) {
                         Data orderData = notDelv.getValue(Data.class);
                         assert orderData != null;
-                        if (orderData.getStatue().equals("supD")) {
+                        if (orderData.getStatue().equals("supD") || orderData.getStatue().equals("supDenied")) {
                             delvOrders.add(orderData);
                         }
                     }
@@ -357,7 +357,7 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
                         assert orderData != null;
                         if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             captinAvillable.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied")) {
+                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied") || orderData.getStatue().equals("capDenied")) {
                             captinDelv.add(orderData);
                         }
                     }

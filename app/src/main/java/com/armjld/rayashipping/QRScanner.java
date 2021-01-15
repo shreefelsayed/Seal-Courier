@@ -125,12 +125,15 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Data orderData = ds.getValue(Data.class);
+                        OrdersClass ordersClass = new OrdersClass(QRScanner.this);
                         if (orderData.getStatue().equals("supD") && ds.child("dSupervisor").getValue().toString().equals(UserInFormation.getMySup())) {
-                            OrdersClass ordersClass = new OrdersClass(QRScanner.this);
                             ordersClass.asignDelv(orderData, UserInFormation.getId());
+                        } else if(orderData.getStatue().equals("supDenied")) {
+                            ordersClass.asignDenied(orderData, UserInFormation.getId());
                         } else {
                             Toast.makeText(QRScanner.this, "لا يمكنك استلام تلك الشحنه من المشرف", Toast.LENGTH_SHORT).show();
                         }
+                        break;
                     }
                 } else {
                     Toast.makeText(QRScanner.this, "رقم التتبع غير صحيح، حاول مره اخري ..", Toast.LENGTH_SHORT).show();
@@ -187,6 +190,16 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
                             mDatabase.child(orderData.getId()).child("logs").child(logC).setValue(Log);
 
                             Toast.makeText(QRScanner.this, "تم استلام الشحنه بنجاح", Toast.LENGTH_SHORT).show();
+                        } else if(orderData.getStatue().equals("hub2Denied")) {
+                            // --------- Update Values
+                            mDatabase.child(orderData.getId()).child("statue").setValue("supDenied");
+                            mDatabase.child(orderData.getId()).child("supDeniedTime").setValue(datee);
+
+                            // ---------------- Add Log
+                            String Log = "تم استلام المرتجع من المخزن. ";
+                            mDatabase.child(orderData.getId()).child("logs").child(logC).setValue(Log);
+
+                            Toast.makeText(QRScanner.this, "تم استلام المرتجع من المخزن", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(QRScanner.this, "لا يمكنك استلام تلك الشحنه راجع الشحنه مع المخزن", Toast.LENGTH_SHORT).show();
                         }

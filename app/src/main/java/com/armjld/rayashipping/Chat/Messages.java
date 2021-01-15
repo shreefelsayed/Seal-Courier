@@ -255,6 +255,8 @@ public class Messages extends AppCompatActivity {
                     txtType.setText("تاجر");
                 } else if (Objects.requireNonNull(snapshot.child("accountType").getValue()).toString().equals("Delivery Worker")) {
                     txtType.setText("كابتن");
+                }  else if (Objects.requireNonNull(snapshot.child("accountType").getValue()).toString().equals("Supervisor")) {
+                    txtType.setText("مشرف");
                 } else {
                     txtType.setText("خدمة العملاء");
                 }

@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 
-import com.armjld.rayashipping.CaptinWalletInfo;
 import com.armjld.rayashipping.Chat.Messages;
 import com.armjld.rayashipping.Chat.chatListclass;
 import com.armjld.rayashipping.R;
@@ -93,8 +92,8 @@ public class MyCaptinInfo extends AppCompatActivity {
                 // ------- Sort According to Date
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     placed.sort((o1, o2) -> {
-                        String one = o1.getpDate();
-                        String two = o2.getpDate();
+                        String one = o1.getStatue();
+                        String two = o2.getStatue();
                         return two.compareTo(one);
                     });
                 }
@@ -102,8 +101,8 @@ public class MyCaptinInfo extends AppCompatActivity {
                 // ------- Sort According to Date
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     delv.sort((o1, o2) -> {
-                        String one = o1.getDDate();
-                        String two = o2.getDDate();
+                        String one = o1.getStatue();
+                        String two = o2.getStatue();
                         return two.compareTo(one);
                     });
                 }

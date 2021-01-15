@@ -67,7 +67,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         // Get Post Date
         holder.setData(data);
 
-        holder.setDilveredButton(data.getStatue());
+        holder.setStatue(data);
         holder.checkDeleted(data.getRemoved());
         holder.setIcon(UserInFormation.getTrans());
         holder.setProvider(data.getProvider());
@@ -101,7 +101,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
                 // -------- Update Adapter
                 filtersData.get(position).setStatue("recived2");
-                holder.setDilveredButton("recived2");
+                holder.setStatue(filtersData.get(position));
 
                 dialogInterface.dismiss();
             }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
@@ -135,7 +135,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
                 // ----- Update Adapter
                 filtersData.get(position).setStatue("denied");
-                holder.setDilveredButton("denied");
+                holder.setStatue(filtersData.get(position));
                 notifyItemChanged(position);
 
                 dialogInterface.dismiss();
@@ -176,6 +176,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
             // ---- Update Adatper
             filtersData.get(position).setStatue("recived");
+            holder.setStatue(filtersData.get(position));
             notifyItemChanged(position);
         });
 
@@ -256,8 +257,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         }
 
 
-        public void setDilveredButton(String state) {
-            switch (state) {
+        public void setStatue(Data orderData) {
+            switch (orderData.getStatue()) {
                 case "accepted": {
                     btnDelivered.setVisibility(View.GONE);
                     btnRecived.setVisibility(View.GONE);
@@ -268,6 +269,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setBackgroundColor(Color.YELLOW);
                     txtGetStat.setText("قيد الاستلام");
                     txtGetStat.setVisibility(View.VISIBLE);
+
+                    if(!orderData.getpHubName().equals("")) txtOrderTo.setText(orderData.getpHubName());
                     break;
                 }
                 case "recived": {
@@ -280,6 +283,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setText("في انتظار تأكيد الاستلام");
                     txtGetStat.setVisibility(View.VISIBLE);
                     txtGetStat.setBackgroundColor(Color.RED);
+                    if(!orderData.getpHubName().equals("")) txtOrderTo.setText(orderData.getpHubName());
                     break;
                 }
 
@@ -293,6 +297,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setVisibility(View.VISIBLE);
                     txtGetStat.setBackgroundColor(Color.GREEN);
                     txtGetStat.setText(" تم استلام الشحنه");
+                    if(!orderData.getpHubName().equals("")) txtOrderTo.setText(orderData.getpHubName());
                     break;
                 }
 
@@ -306,6 +311,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setBackgroundColor(Color.YELLOW);
                     txtGetStat.setText("قيد التسليم");
                     txtGetStat.setVisibility(View.VISIBLE);
+                    if(!orderData.getdHubName().equals("")) txtOrderFrom.setText(orderData.getdHubName());
                     break;
                 }
 
@@ -319,6 +325,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setVisibility(View.VISIBLE);
                     txtGetStat.setBackgroundColor(Color.RED);
                     txtGetStat.setText("مرتجع يسلم للمخزن");
+                    if(!orderData.getdHubName().equals("")) txtOrderFrom.setText(orderData.getdHubName());
                     break;
                 }
 
@@ -332,6 +339,9 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setVisibility(View.VISIBLE);
                     txtGetStat.setText("تسليم للتاجر");
                     txtGetStat.setBackgroundColor(Color.MAGENTA);
+
+                    if(!orderData.getpHubName().equals("")) txtOrderFrom.setText(orderData.getpHubName());
+                    txtOrderTo.setText(orderData.reStateP());
                     break;
                 }
 

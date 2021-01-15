@@ -160,7 +160,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 currentLocation = location;
                 LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-                FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("latLang").setValue(String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()));
+                FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("latLang").setValue(location.getLatitude() + "," + location.getLongitude());
             }
         });
     }
