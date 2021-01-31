@@ -1,11 +1,13 @@
 package com.armjld.rayashipping.SuperCaptins;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MyCaptinInfo extends AppCompatActivity {
 
@@ -43,6 +46,7 @@ public class MyCaptinInfo extends AppCompatActivity {
     ConstraintLayout linWallet;
     TextView txtUsername, txtWalletMoney;
     RatingBar rbProfile;
+    ImageView imgIndec;
 
     private static void turnSwipes(String st) {
         if (st.equals("ON")) {
@@ -107,15 +111,17 @@ public class MyCaptinInfo extends AppCompatActivity {
                     });
                 }
 
+                Collections.sort(delv, (lhs, rhs) -> rhs.getDDate().compareTo(lhs.getDDate()));
+
+                Collections.sort(placed, (lhs, rhs) -> rhs.getpDate().compareTo(lhs.getpDate()));
+
                 myCaptinDelv.getOrders();
                 myCaptinRecived.getOrders();
                 turnSwipes("OFF");
             }
 
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 
@@ -137,6 +143,7 @@ public class MyCaptinInfo extends AppCompatActivity {
         txtWalletMoney = findViewById(R.id.txtWalletMoney);
         linWallet = findViewById(R.id.linWallet);
         btnTrack = findViewById(R.id.btnTrack);
+        imgIndec = findViewById(R.id.imgIndec);
 
 
         btnBack.setOnClickListener(v -> finish());
@@ -148,6 +155,8 @@ public class MyCaptinInfo extends AppCompatActivity {
 
 
         btnInfo.setOnClickListener(v -> {
+            MyCaptinEdit.user = user;
+            startActivity(new Intent(this, MyCaptinEdit.class));
         });
 
         linWallet.setOnClickListener(v -> {
@@ -155,14 +164,7 @@ public class MyCaptinInfo extends AppCompatActivity {
             startActivity(new Intent(this, CaptinWalletInfo.class));
         });
 
-        btnTrack.setOnClickListener(v -> {
-            if (user.getTrackId().equals("")) {
-                return;
-            }
-            MapCaptinTrack.user = user;
-            MapCaptinTrack.DEVICE_ID = user.getTrackId();
-            startActivity(new Intent(this, MapCaptinTrack.class));
-        });
+        btnTrack.setOnClickListener(v -> openMaps());
 
         btnMessage.setOnClickListener(v -> {
             chatListclass _chatList = new chatListclass();
@@ -170,10 +172,42 @@ public class MyCaptinInfo extends AppCompatActivity {
             Messages.cameFrom = "Profile";
         });
 
+        checkAvillablity();
         setCaptinsData();
         getRaya();
     }
 
+    private void checkAvillablity() {
+        if(user.getTrackId().equals("")) {
+            btnTrack.setVisibility(View.GONE);
+            imgIndec.setColorFilter(Color.GRAY);
+        } else {
+            btnTrack.setVisibility(View.VISIBLE);
+            imgIndec.setColorFilter(Color.GREEN);
+        }
+    }
+
+    private void openMaps() {
+        if (user.getTrackId().equals("")) {
+            return;
+        }
+
+        Intent i = new Intent(this, MapCaptinTrack.class);
+
+        MapCaptinTrack.user = user;
+        MapCaptinTrack.DEVICE_ID = user.getTrackId();
+
+        ArrayList<Data> bothLists = new ArrayList<>();
+
+        bothLists.addAll(placed);
+        bothLists.addAll(delv);
+
+        MapCaptinTrack.filterList = bothLists;
+
+        startActivityForResult(i, 1);
+    }
+
+    @SuppressLint("SetTextI18n")
     private void setCaptinsData() {
         // --------- Main Account Date -------------
         Picasso.get().load(Uri.parse(user.getPpURL())).into(imgPPP);

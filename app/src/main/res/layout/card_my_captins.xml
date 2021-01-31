@@ -114,6 +114,16 @@
                             android:textSize="@dimen/_14sdp"
                             android:textStyle="bold"
                             tools:ignore="HardcodedText,RtlHardcoded" />
+
+                        <ImageView
+                            android:id="@+id/imgIndec"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="5dp"
+                            app:srcCompat="@drawable/chat_indcator"
+                            app:tint="@color/colorGreen" />
                     </LinearLayout>
 
                     <TextView
@@ -149,6 +159,7 @@
         </LinearLayout>
 
         <View
+            android:id="@+id/viewSep"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginBottom="5dp"

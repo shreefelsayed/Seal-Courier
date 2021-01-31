@@ -23,11 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.armjld.rayashipping.Captin.CaptinOrderInfo;
 import com.armjld.rayashipping.Captin.captinRecived;
+import com.armjld.rayashipping.DeniedReasons;
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.OrdersClass;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AsignOrder;
 import com.armjld.rayashipping.SuperVisor.OrderInfo;
+import com.armjld.rayashipping.SuperVisor.SuperAvillable;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
@@ -92,9 +94,30 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
         // ---------------- Set order to Recived
         holder.btnRecived.setOnClickListener(v -> {
-            assert vibe != null;
-            vibe.vibrate(20);
-            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل قمت باستلام الشحنة من التاجر ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
+            int oCount = 0;
+
+            for(int i = 0; i < Home.captinAvillable.size(); i ++) {
+                Data oData = SuperAvillable.filterList.get(i);
+                if(oData.getuId().equals(data.getuId()) && oData.getStatue().equals("recived")) {
+                   oCount ++;
+                }
+            }
+
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("تأكيد استلام الشحنه").setCancelable(true).setPositiveButton("استلام " + oCount + " شحنه", R.drawable.ic_tick_green, (dialogInterface, which) -> {
+                for(int i = 0; i < Home.captinAvillable.size(); i ++) {
+                    Data oData = SuperAvillable.filterList.get(i);
+                    if(oData.getuId().equals(data.getuId()) && oData.getStatue().equals("recived")) {
+                        // ------- Update Database ------
+                        OrdersClass ordersClass = new OrdersClass(mContext);
+                        ordersClass.orderRecived(oData);
+
+                        // -------- Update Adapter
+                        Home.captinAvillable.get(i).setStatue("recived2");
+                        //holder.setStatue(filtersData.get(position));
+                    }
+                }
+                dialogInterface.dismiss();
+            }).setNegativeButton("استلام هذه الشحنه فقط", R.drawable.ic_close, (dialogInterface, which) -> {
                 // ------- Update Database ------
                 OrdersClass ordersClass = new OrdersClass(mContext);
                 ordersClass.orderRecived(data);
@@ -102,9 +125,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                 // -------- Update Adapter
                 filtersData.get(position).setStatue("recived2");
                 holder.setStatue(filtersData.get(position));
-
                 dialogInterface.dismiss();
-            }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
+            }).build();
             mBottomSheetDialog.show();
         });
 
@@ -128,19 +150,9 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
         // ----------------------- Set Order As Denied
         holder.btnDenied.setOnClickListener(v -> {
-            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("لم يستلم العميل الشحنه ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
-                // ------- Update Database ------
-                OrdersClass ordersClass = new OrdersClass(mContext);
-                ordersClass.orderDenied(data);
-
-                // ----- Update Adapter
-                filtersData.get(position).setStatue("denied");
-                holder.setStatue(filtersData.get(position));
-                notifyItemChanged(position);
-
-                dialogInterface.dismiss();
-            }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
-            mBottomSheetDialog.show();
+            DeniedReasons.orderData = data;
+            DeniedReasons.pos = position;
+            mContext.startActivity(new Intent(mContext, DeniedReasons.class));
         });
 
         // ----  Set ORDER as Delivered
@@ -170,14 +182,19 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
         // ----- Mark as Recived as a Supplier By Supper Visor
         holder.btnCapRecived.setOnClickListener(v-> {
-            // ------- Update Database ------
-            OrdersClass ordersClass = new OrdersClass(mContext);
-            ordersClass.setRecived(data);
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل قام المندوب باستلام تلك الشحنه من الراسل ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
+                // ------- Update Database ------
+                OrdersClass ordersClass = new OrdersClass(mContext);
+                ordersClass.setRecived(data);
 
-            // ---- Update Adatper
-            filtersData.get(position).setStatue("recived");
-            holder.setStatue(filtersData.get(position));
-            notifyItemChanged(position);
+                // ---- Update Adatper
+                filtersData.get(position).setStatue("recived");
+                holder.setStatue(filtersData.get(position));
+                notifyItemChanged(position);
+
+                dialogInterface.dismiss();
+            }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
+            mBottomSheetDialog.show();
         });
 
     }
@@ -248,10 +265,10 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
             txtTrackId.setText(data.getTrackid());
             txtPostDate.setText(_cacu.setPostDate(data.getDate()));
             txtOrderTo.setText(data.reStateD());
-            txtDate.setText(data.getDDate());
-            pickDate.setText(data.getpDate());
+            txtDate.setText("تاريخ التسليم : " + data.getDDate());
+            pickDate.setText("تاريخ الاستلام : " + data.getpDate());
             txtgGet.setText("مصاريف الشحن  " + data.getGGet() + " ج");
-            txtgMoney.setText("ثمن الرسالة  " + data.getGMoney() + " ج");
+            txtgMoney.setText("اجمالي التحصيل : " + data.getGMoney() + " ج");
             txtOrderFrom.setText(data.reStateP());
             txtUsername.setText(data.getOwner());
         }
@@ -259,7 +276,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
         public void setStatue(Data orderData) {
             switch (orderData.getStatue()) {
-                case "accepted": {
+                case "accepted":
                     btnDelivered.setVisibility(View.GONE);
                     btnRecived.setVisibility(View.GONE);
                     btnOrderBack.setVisibility(View.GONE);
@@ -269,11 +286,9 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setBackgroundColor(Color.YELLOW);
                     txtGetStat.setText("قيد الاستلام");
                     txtGetStat.setVisibility(View.VISIBLE);
-
                     if(!orderData.getpHubName().equals("")) txtOrderTo.setText(orderData.getpHubName());
                     break;
-                }
-                case "recived": {
+                case "recived":
                     btnDelivered.setVisibility(View.GONE);
                     btnOrderBack.setVisibility(View.GONE);
                     txtgMoney.setVisibility(View.GONE);
@@ -285,9 +300,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setBackgroundColor(Color.RED);
                     if(!orderData.getpHubName().equals("")) txtOrderTo.setText(orderData.getpHubName());
                     break;
-                }
-
-                case "recived2": {
+                case "recived2":
                     btnDelivered.setVisibility(View.GONE);
                     btnRecived.setVisibility(View.GONE);
                     btnOrderBack.setVisibility(View.GONE);
@@ -299,9 +312,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setText(" تم استلام الشحنه");
                     if(!orderData.getpHubName().equals("")) txtOrderTo.setText(orderData.getpHubName());
                     break;
-                }
-
-                case "readyD": {
+                case "readyD":
                     btnRecived.setVisibility(View.GONE);
                     btnOrderBack.setVisibility(View.GONE);
                     txtgMoney.setVisibility(View.VISIBLE);
@@ -313,11 +324,9 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setVisibility(View.VISIBLE);
                     if(!orderData.getdHubName().equals("")) txtOrderFrom.setText(orderData.getdHubName());
                     break;
-                }
-
-                case "denied": {
-                    btnDelivered.setVisibility(View.GONE);
-                    btnInfo.setVisibility(View.GONE);
+                case "denied":
+                    btnDelivered.setVisibility(View.VISIBLE);
+                    btnInfo.setVisibility(View.VISIBLE);
                     btnRecived.setVisibility(View.GONE);
                     btnOrderBack.setVisibility(View.GONE);
                     txtgMoney.setVisibility(View.GONE);
@@ -327,9 +336,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setText("مرتجع يسلم للمخزن");
                     if(!orderData.getdHubName().equals("")) txtOrderFrom.setText(orderData.getdHubName());
                     break;
-                }
-
-                case "capDenied": {
+                case "capDenied":
                     btnDelivered.setVisibility(View.GONE);
                     btnRecived.setVisibility(View.GONE);
                     txtgMoney.setVisibility(View.GONE);
@@ -339,13 +346,11 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setVisibility(View.VISIBLE);
                     txtGetStat.setText("تسليم للتاجر");
                     txtGetStat.setBackgroundColor(Color.MAGENTA);
-
                     if(!orderData.getpHubName().equals("")) txtOrderFrom.setText(orderData.getpHubName());
                     txtOrderTo.setText(orderData.reStateP());
                     break;
-                }
 
-                default: {
+                default:
                     btnDelivered.setVisibility(View.GONE);
                     btnInfo.setVisibility(View.GONE);
                     txtGetStat.setVisibility(View.GONE);
@@ -354,11 +359,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     btnDenied.setVisibility(View.GONE);
                     txtGetStat.setVisibility(View.GONE);
                     break;
-                }
             }
         }
-
-
 
         public void checkDeleted(String removed) {
             if (removed.equals("true")) {

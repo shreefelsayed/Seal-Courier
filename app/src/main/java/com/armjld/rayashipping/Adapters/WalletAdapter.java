@@ -98,6 +98,10 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
                     txtMoney.setTextColor(Color.RED);
                     txtStatue.setText("مستحقات شحنه");
                     break;
+                case "bouns":
+                    txtMoney.setTextColor(Color.GREEN);
+                    txtStatue.setText("بونص");
+                    break;
                 case "captin" :
                     txtMoney.setTextColor(Color.YELLOW);
                     txtStatue.setText("مستحقات مندوب شحن");

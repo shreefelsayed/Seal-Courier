@@ -33,8 +33,7 @@ public class capAvillable extends Fragment {
     static LinearLayout EmptyPanel;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    public capAvillable() {
-    }
+    public capAvillable() { }
 
     public static void getOrders() {
         Timber.i("Setting orders in Home Fragment");

@@ -4,15 +4,11 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Paint;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,14 +19,13 @@ import androidx.core.content.ContextCompat;
 
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.MapsActivity;
+import com.armjld.rayashipping.OrderStatue;
 import com.armjld.rayashipping.OrdersBySameUser;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.Ratings.Ratings;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.getRefrence;
 import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.rquests;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,14 +50,12 @@ public class OrderInfo extends AppCompatActivity {
     String orderID;
     DatabaseReference uDatabase, nDatabase;
     String owner;
-    TextView date3, date, orderto, OrderFrom, txtPack, txtWeight, ordercash2, fees2, txtPostDate2;
+    TextView date3, date, orderto, OrderFrom, txtPack, txtWeight, ordercash2, fees2, txtPostDate2,txtOrder;
     TextView dsUsername;
     TextView ddCount;
-    TextView dsPAddress, dsDAddress, txtCallCustomer, txtCustomerName;
+    TextView dsPAddress, dsDAddress, txtCustomerName;
     ImageView supPP, btnOrderMap;
-    RatingBar rbUser;
     ImageView btnClose;
-    Button btnBid, btnAccept;
     TextView txtMoreOrders;
     ImageView icTrans;
     TextView txtNotes;
@@ -71,7 +64,6 @@ public class OrderInfo extends AppCompatActivity {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
     SimpleDateFormat orderformat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
-    String datee = sdf.format(new Date());
     String orderState = "placed";
     String acceptedTime = "";
     String lastEdit = "";
@@ -79,10 +71,11 @@ public class OrderInfo extends AppCompatActivity {
     String ownerName = "";
     String dPhone = "";
     String ownerPhone;
-    boolean isBid = false;
     int position = 0;
     private boolean hasMore = false;
     private boolean toClick = true;
+    FloatingActionButton btnCallSupplier, btnCall;
+    OrderStatue orderStatue = new OrderStatue();
 
     @Override
     public void onBackPressed() {
@@ -113,17 +106,15 @@ public class OrderInfo extends AppCompatActivity {
         nDatabase = getInstance().getReference().child("Pickly").child("notificationRequests");
 
         dsUsername = findViewById(R.id.ddUsername);
-        dsPAddress = findViewById(R.id.ddPhone);
+        dsPAddress = findViewById(R.id.txtDAddress);
         dsDAddress = findViewById(R.id.dsDAddress);
         supPP = findViewById(R.id.supPP);
-        rbUser = findViewById(R.id.ddRate);
         ddCount = findViewById(R.id.ddCount);
         btnClose = findViewById(R.id.btnClose);
         txtPostDate2 = findViewById(R.id.txtPostDate2);
-        btnBid = findViewById(R.id.btnBid);
         txtMoreOrders = findViewById(R.id.txtMoreOrders);
+        txtOrder = findViewById(R.id.txtOrder);
         txtCustomerName = findViewById(R.id.txtCustomerName);
-        txtCallCustomer = findViewById(R.id.txtCallCustomer);
         btnOrderMap = findViewById(R.id.btnOrderMap);
         date3 = findViewById(R.id.date3);
         date = findViewById(R.id.date);
@@ -137,8 +128,8 @@ public class OrderInfo extends AppCompatActivity {
         txtNotes = findViewById(R.id.txtNotes);
         linSupplier = findViewById(R.id.linSupplier);
         advice = findViewById(R.id.advice);
-
-        btnAccept = findViewById(R.id.btnAccept);
+        btnCall = findViewById(R.id.btnCall);
+        btnCallSupplier = findViewById(R.id.btnCallSupplier);
 
         TextView tbTitle = findViewById(R.id.toolbar_title);
         tbTitle.setText("بيانات الشحنة");
@@ -158,35 +149,19 @@ public class OrderInfo extends AppCompatActivity {
         String from = orderData.reStateP();
         String to = orderData.reStateD();
 
-        String PAddress = "عنوان الاستلام : " + from + " - " + orderData.getmPAddress();
-        String DAddress = "عنوان التسليم : " + to;
-        String fees = "مصاريف التوصيل : " + orderData.getGGet();
-        String money = "سعر الشحنه : " + orderData.getGMoney();
-        String pDate = orderData.getpDate();
-        String dDate = orderData.getDDate();
+        String PAddress = "العنوان : " + from + " - " + orderData.getmPAddress();
+        String DAddress = "العنوان : " + to;
+        String fees = orderData.getReturnMoney();
+        String money = orderData.getGMoney() + " ج";
+        String pDate = "تاريخ الاستلام : " + orderData.getpDate();
+        String dDate = "تاريخ التسليم : " + orderData.getDDate();
         String pack = "المحتوي : " + orderData.getPackType();
         String weight = "الوزن : " + orderData.getPackWeight() + " كيلو";
         DAddress = DAddress + " - " + orderData.getDAddress();
 
-        // ------ Check what buttons to show depending on the provider & statue
-        if (orderState.equals("placed")) {
-            btnBid.setVisibility(View.VISIBLE);
-            btnAccept.setVisibility(View.VISIBLE);
-        } else if (orderState.equals("supD")) {
-            btnBid.setVisibility(View.GONE);
-            btnAccept.setVisibility(View.VISIBLE);
-        } else {
-            btnBid.setVisibility(View.GONE);
-            btnAccept.setVisibility(View.GONE);
-        }
-
         if (orderData.getProvider().equals("Esh7nly")) {
-            btnAccept.setVisibility(View.GONE);
-            fees2.setVisibility(View.VISIBLE);
             advice.setVisibility(View.VISIBLE);
         } else {
-            btnBid.setVisibility(View.GONE);
-            fees2.setVisibility(View.GONE);
             advice.setVisibility(View.GONE);
         }
 
@@ -198,71 +173,22 @@ public class OrderInfo extends AppCompatActivity {
 
         if (toPick || toDelv) btnOrderMap.setVisibility(View.VISIBLE);
 
-        // ----------- Set the Bidding Statue
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            isBid = rquests.getRequests().stream().anyMatch(x -> x.getOrderId().equals(orderID));
-        }
-
-        if (!isBid) {
-            setBid("false");
-        } else {
-            setBid("true");
-        }
-
         // ------- Set the Data
         fees2.setText(fees + " ج");
-        ordercash2.setText(money + " ج");
+        ordercash2.setText(money);
         date3.setText(pDate);
         date.setText(dDate);
         txtPack.setText(pack);
         txtWeight.setText(weight);
         orderto.setText(to);
         OrderFrom.setText(from);
-        setIcon(UserInFormation.getTrans());
         txtNotes.setText("الملاحظات : " + orderData.getNotes());
-        txtCallCustomer.setText("رقم هاتف العميل : " + dPhone);
-        txtCallCustomer.setPaintFlags(txtCallCustomer.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        txtCustomerName.setText(orderData.getDName());
+        txtCustomerName.setText("اسم المستلم : " + orderData.getDName());
         dsPAddress.setText(PAddress);
         dsDAddress.setText(DAddress);
+        txtOrder.setText(orderStatue.shortState(orderData.getStatue()));
 
-        // ------------------------- Buttons Functions ---------------------------- \\
-
-        // ------ Accept for Raya Orders
-        btnAccept.setOnClickListener(v -> {
-            Intent intent = new Intent(this, AsignOrder.class);
-            AsignOrder.assignToCaptin.clear();
-            AsignOrder.assignToCaptin.add(orderData);
-            startActivityForResult(intent, 1);
-        });
-
-        // ------- Request for Esh7nly Orders
-        btnBid.setOnClickListener(v1 -> {
-            if (isBid) {
-                BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(this).setMessage("هل انت متأكد من انك تريد الغاء التقديم علي هذه الشحنه ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
-                    // ------------------- Send Request -------------------- //
-                    rquests _rquests = new rquests(this);
-                    _rquests.deleteReq(orderID, owner, orderData.getProvider());
-
-                    // ------------------ Notificatiom ------------------ //
-                    setBid("false");
-                    isBid = false;
-                    Toast.makeText(this, "تم الغاء التقديم", Toast.LENGTH_SHORT).show();
-                    dialogInterface.dismiss();
-                }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
-                mBottomSheetDialog.show();
-            } else {
-                Intent intent = new Intent(this, AsignOrder.class);
-                intent.putExtra("orderId", orderID);
-                intent.putExtra("orderOwner", owner);
-                intent.putExtra("type", "bid");
-                intent.putExtra("dName", orderData.getDName());
-                intent.putExtra("position", position);
-                intent.putExtra("provider", orderData.getProvider());
-                startActivityForResult(intent, 1);
-            }
-        });
-
+        // --- Open Map of Order
         btnOrderMap.setOnClickListener(v -> {
             ArrayList<Data> order = new ArrayList<>();
             order.add(orderData);
@@ -272,6 +198,7 @@ public class OrderInfo extends AppCompatActivity {
             startActivity(map);
         });
 
+        // ---- See All Orders By Supplier
         supPP.setOnClickListener(v -> {
             if (hasMore && toClick) {
                 Intent otherOrders = new Intent(this, OrdersBySameUser.class);
@@ -287,24 +214,38 @@ public class OrderInfo extends AppCompatActivity {
             }
         });
 
-        txtCallCustomer.setOnClickListener(v -> {
-            if (!dPhone.equals("")) {
-                BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(OrderInfo.this).setMessage("هل تريد الاتصال بالعميل ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
+        // --- Call Customer
+        btnCall.setOnClickListener(v -> {
+            if (dPhone.equals(""))  return;
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(OrderInfo.this).setMessage("هل تريد الاتصال بالعميل ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
 
-                    checkPermission(Manifest.permission.CALL_PHONE, PHONE_CALL_CODE);
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:" + dPhone));
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    startActivity(callIntent);
+                checkPermission(Manifest.permission.CALL_PHONE, PHONE_CALL_CODE);
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + dPhone));
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                startActivity(callIntent);
 
-                    dialogInterface.dismiss();
-                }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
-                mBottomSheetDialog.show();
-            } else {
-                Toast.makeText(this, "التاجر لم يضع رقم هاتف", Toast.LENGTH_SHORT).show();
-            }
+                dialogInterface.dismiss();
+            }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
+            mBottomSheetDialog.show();
+        });
+
+        // --- Call Supplier
+        btnCallSupplier.setOnClickListener(v-> {
+            if (ownerPhone.equals(""))  return;
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(OrderInfo.this).setMessage("هل تريد الاتصال بالراسل ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
+                checkPermission(Manifest.permission.CALL_PHONE, PHONE_CALL_CODE);
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + ownerPhone));
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                startActivity(callIntent);
+                dialogInterface.dismiss();
+            }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
+            mBottomSheetDialog.show();
         });
 
         // ------- Set More Supplier Data ------- //
@@ -386,30 +327,6 @@ public class OrderInfo extends AppCompatActivity {
                 dsUsername.setText(ownerName);
                 ownerPhone = Objects.requireNonNull(snapshot.child("phone").getValue()).toString();
 
-                // Supplier Ratings ---
-                String one = "0";
-                String two = "0";
-                String three = "0";
-                String four = "0";
-                String five = "0";
-                if (snapshot.child("rating").child("one").exists()) {
-                    one = Objects.requireNonNull(snapshot.child("rating").child("one").getValue()).toString();
-                }
-                if (snapshot.child("rating").child("two").exists()) {
-                    two = Objects.requireNonNull(snapshot.child("rating").child("two").getValue()).toString();
-                }
-                if (snapshot.child("rating").child("three").exists()) {
-                    three = Objects.requireNonNull(snapshot.child("rating").child("three").getValue()).toString();
-                }
-                if (snapshot.child("rating").child("four").exists()) {
-                    four = Objects.requireNonNull(snapshot.child("rating").child("four").getValue()).toString();
-                }
-                if (snapshot.child("rating").child("five").exists()) {
-                    five = Objects.requireNonNull(snapshot.child("rating").child("five").getValue()).toString();
-                }
-                Ratings _rat = new Ratings();
-                rbUser.setRating(_rat.calculateRating(one, two, three, four, five));
-
                 linSupplier.setVisibility(View.VISIBLE); // Show the Info
             }
 
@@ -422,47 +339,11 @@ public class OrderInfo extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            isBid = rquests.getRequests().stream().anyMatch(x -> x.getOrderId().equals(orderID));
-        }
-        if (!isBid) {
-            setBid("false");
-        } else {
-            setBid("true");
-        }
     }
 
     public void setPostDate(String startDate) {
         caculateTime _cacu = new caculateTime();
         txtPostDate2.setText(_cacu.setPostDate(startDate));
-    }
-
-    @SuppressLint("UseCompatLoadingForDrawables")
-    public void setIcon(String trans) {
-        switch (trans) {
-            case "Trans":
-                icTrans.setImageDrawable(getResources().getDrawable(R.drawable.ic_run));
-                break;
-            case "Car":
-                icTrans.setImageDrawable(getResources().getDrawable(R.drawable.ic_car));
-                break;
-            case "Bike":
-                icTrans.setImageDrawable(getResources().getDrawable(R.drawable.ic_bicycle));
-                break;
-            case "Motor":
-                icTrans.setImageDrawable(getResources().getDrawable(R.drawable.ic_vespa));
-                break;
-        }
-    }
-
-    public void setBid(String type) {
-        if (type.equals("true")) {
-            btnBid.setText("الغاء الطلب");
-            btnBid.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_bad_square));
-        } else {
-            btnBid.setBackgroundColor(ContextCompat.getColor(this, R.color.yellow));
-            btnBid.setText("تقديم طلب توصيل");
-        }
     }
 
     public void checkPermission(String permission, int requestCode) {

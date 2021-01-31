@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="#F1F1F1"
+    android:backgroundTint="#F1F1F1"
     android:layoutDirection="ltr"
     tools:context="Captin.CaptinOrderInfo">
 
@@ -42,6 +43,7 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:backgroundTint="#F1F1F1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,314 +52,261 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/ic_profile_background"
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/linInfo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/txtOrder"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:layout_weight="1"
-                    android:text="مصاريف الشحن"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textSize="@dimen/_18sdp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/rounded_corner_top"
-                android:backgroundTint="@color/colorBack"
+                android:backgroundTint="#F1F1F1"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/_8sdp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:id="@+id/linSupplier"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_marginRight="@dimen/_16sdp"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:layout_weight="0.5"
+                        android:text="الراسل"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_14sdp"
+                        tools:ignore="RtlCompat" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:background="@color/background"
+                        android:padding="10dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            >
+
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/btnCallSupplier"
+                                android:layout_width="@dimen/_34sdp"
+                                android:layout_height="@dimen/_34sdp"
+                                android:backgroundTint="@color/green_500"
+                                android:clickable="true"
+                                app:elevation="8dp"
+                                app:fabCustomSize="@dimen/_34sdp"
+                                app:srcCompat="@drawable/ic_call_24" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="20"
+                                android:gravity="right"
+                                android:orientation="vertical"
+                                android:padding="10dp">
+
+                                <TextView
+                                    android:id="@+id/ddUsername"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="top"
+                                    android:layout_weight="0.5"
+                                    android:gravity="right"
+                                    android:text="الراسل"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/colorAccent"
+                                    android:textSize="@dimen/_12sdp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/cardView"
+                                    android:layout_width="@dimen/_40sdp"
+                                    android:layout_height="@dimen/_40sdp"
+                                    android:layout_marginTop="10dp"
+                                    app:cardCornerRadius="@dimen/_40sdp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <ImageView
+                                        android:id="@+id/supPP"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        app:srcCompat="@color/colorWhite" />
+                                </androidx.cardview.widget.CardView>
+
+                                <TextView
+                                    android:id="@+id/txtMoreOrders"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="@dimen/_12sdp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="2dp"
+                                    android:background="@drawable/round_shape"
+                                    android:backgroundTint="@color/red_500"
+                                    android:foregroundGravity="top"
+                                    android:gravity="center"
+                                    android:paddingLeft="@dimen/_3sdp"
+                                    android:paddingRight="@dimen/_3sdp"
+                                    android:text="5"
+                                    android:textColor="@color/colorBack"
+                                    android:textSize="@dimen/_8sdp"
+                                    android:textStyle="bold"
+                                    android:translationZ="90dp"
+                                    android:visibility="visible"
+                                    app:layout_constraintBottom_toBottomOf="@+id/cardView"
+                                    app:layout_constraintStart_toStartOf="@+id/cardView" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/txtPDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_gravity="center|right"
+                            android:layout_weight="1"
+                            android:drawableRight="@drawable/ic_date"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:gravity="center"
+                            android:text="تاريخ استلام الشحنة :"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/colorPrimary" />
+
+                        <TextView
+                            android:id="@+id/txtPAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:drawableRight="@drawable/ic_add_address"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:gravity="center"
+                            android:text="عنوان المستلم :"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/colorAccent"
+                            android:textColorHint="@color/colorBack"
+                            android:textSize="@dimen/_12sdp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/constClient"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/_16sdp"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:layout_marginRight="@dimen/_16sdp"
-                    android:background="@drawable/bold_round_bg"
-                    android:padding="@dimen/_10sdp">
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:text="المستلم"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="@dimen/_14sdp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/background"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="@dimen/_10sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/_8sdp"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_8sdp"
-                            android:layout_weight="0.5"
-                            android:gravity="center|right"
-                            android:text="التاجر"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/_12sdp"
-                            android:textStyle="bold" />
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/cardView"
-                                android:layout_width="@dimen/_80sdp"
-                                android:layout_height="@dimen/_80sdp"
-                                android:layout_marginTop="10dp"
-                                app:cardCornerRadius="@dimen/_40sdp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent">
-
-                                <ImageView
-                                    android:id="@+id/supPP"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    app:srcCompat="@color/colorWhite" />
-                            </androidx.cardview.widget.CardView>
-
-                            <TextView
-                                android:id="@+id/txtMoreOrders"
-                                android:layout_width="wrap_content"
-                                android:layout_height="@dimen/_18sdp"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="5dp"
-                                android:background="@drawable/round_shape"
-                                android:backgroundTint="@color/red_500"
-                                android:foregroundGravity="top"
-                                android:gravity="center"
-                                android:paddingLeft="@dimen/_7sdp"
-                                android:paddingRight="@dimen/_7sdp"
-                                android:text="5"
-                                android:textColor="@color/colorBack"
-                                android:textSize="@dimen/_14sdp"
-                                android:textStyle="bold"
-                                android:translationZ="90dp"
-                                android:visibility="visible"
-                                app:layout_constraintBottom_toBottomOf="@+id/cardView"
-                                app:layout_constraintStart_toStartOf="@+id/cardView" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <TextView
-                            android:id="@+id/ddUsername"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:foregroundGravity="center"
-                            android:gravity="center"
-                            android:text="اسم التاجر"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/_14sdp" />
-
-                        <RatingBar
-                            android:id="@+id/ddRate"
-                            style="@style/Widget.AppCompat.RatingBar.Small"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="false"
-                            android:focusableInTouchMode="false"
-                            android:isIndicator="true"
-                            android:stepSize="0.5"
-                            android:theme="@style/RatingBar" />
+                        android:padding="10dp">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_gravity="right"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_marginBottom="@dimen/_5sdp"
-                            android:gravity="right"
                             android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/txtPDate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center|right"
-                                android:gravity="center|right"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/colorAccent"
-                                android:textSize="@dimen/_12sdp" />
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/btnCall"
+                                android:layout_width="@dimen/_34sdp"
+                                android:layout_height="@dimen/_34sdp"
+                                android:backgroundTint="@color/green_500"
+                                android:clickable="true"
+                                app:elevation="8dp"
+                                app:fabCustomSize="@dimen/_34sdp"
+                                app:srcCompat="@drawable/ic_call_24" />
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:id="@+id/txtCustomerName"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_40sdp"
                                 android:layout_gravity="center|right"
-                                android:layout_marginLeft="@dimen/_4sdp"
                                 android:layout_weight="1"
-                                android:drawableRight="@drawable/ic_date"
+                                android:drawableRight="@drawable/ic_clients"
                                 android:drawablePadding="@dimen/_5sdp"
-                                android:text="تاريخ استلام الشحنة :"
+                                android:gravity="center"
+                                android:text="اسم المستلم : "
                                 android:textAlignment="viewEnd"
                                 android:textColor="@color/colorAccent"
                                 android:textSize="@dimen/_12sdp" />
-
                         </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/txtPAddress"
+                        <View
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/_30sdp"
-                            android:layout_marginTop="0dp"
-                            android:layout_marginBottom="@dimen/_5sdp"
-                            android:drawableRight="@drawable/ic_add_address"
+                            android:layout_height="0.5dp"
+                            android:background="@color/colorPrimary" />
+
+                        <TextView
+                            android:id="@+id/txtDDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_gravity="center|right"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_weight="1"
+                            android:drawableRight="@drawable/ic_date"
                             android:drawablePadding="@dimen/_5sdp"
-                            android:gravity="center|right"
-                            android:paddingRight="@dimen/_15sdp"
-                            android:text="عنوان استلام الشحنه بالتفصيل"
+                            android:gravity="center"
+                            android:text="تاريخ التسليم : "
                             android:textAlignment="viewEnd"
                             android:textColor="@color/colorAccent"
-                            android:textColorHint="@color/colorBack"
                             android:textSize="@dimen/_12sdp" />
-                    </LinearLayout>
 
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/btnCallSupplier"
-                        android:layout_width="@dimen/_38sdp"
-                        android:layout_height="@dimen/_38sdp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/btndesign"
-                        android:backgroundTint="@color/ic_profile_background"
-                        android:cropToPadding="false"
-                        android:src="@drawable/ic_call_24"
-                        app:ensureMinTouchTargetSize="false"
-                        app:fabCustomSize="@dimen/_38sdp"
-                        app:fabSize="auto"
-                        app:layout_constraintBottom_toBottomOf="@+id/linSupplier"
-                        app:layout_constraintStart_toStartOf="@+id/linSupplier"
-                        app:rippleColor="@color/colorBack" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constClient"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="@dimen/_16sdp"
-                    android:background="@drawable/bold_round_bg"
-                    android:padding="@dimen/_10sdp">
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <TextView
+                        <View
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/_8sdp"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_8sdp"
-                            android:layout_weight="0.5"
-                            android:gravity="center|right"
-                            android:text="المستلم"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/_12sdp"
-                            android:textStyle="bold" />
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="@dimen/_80sdp"
-                            android:layout_height="@dimen/_80sdp"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_weight="0.5"
-                            app:cardCornerRadius="@dimen/_40sdp">
-
-                            <ImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                app:srcCompat="@drawable/ic_supplier" />
-                        </androidx.cardview.widget.CardView>
-
-                        <TextView
-                            android:id="@+id/txtCustomerName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/_8sdp"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_8sdp"
-                            android:layout_weight="0.5"
-                            android:gravity="center|right"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/_12sdp"
-                            android:textStyle="bold" />
-
-                        <LinearLayout
-                            android:id="@+id/linerDate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="right"
-                            android:layout_marginLeft="@dimen/_8sdp"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_marginBottom="@dimen/_8sdp"
-                            android:gravity="right"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/txtDDate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center|right"
-                                android:gravity="center|right"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/colorAccent"
-                                android:textSize="@dimen/_12sdp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center|right"
-                                android:layout_marginLeft="@dimen/_4sdp"
-                                android:layout_weight="1"
-                                android:drawableRight="@drawable/ic_date"
-                                android:drawablePadding="@dimen/_5sdp"
-                                android:text="تاريخ التسليم : "
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/colorAccent"
-                                android:textSize="@dimen/_12sdp" />
-
-                        </LinearLayout>
+                            android:layout_height="0.5dp"
+                            android:background="@color/colorPrimary" />
 
                         <TextView
                             android:id="@+id/txtDAddress"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="@dimen/_30sdp"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
                             android:drawableRight="@drawable/ic_add_address"
                             android:drawablePadding="@dimen/_5sdp"
-                            android:gravity="right"
-                            android:paddingRight="@dimen/_15sdp"
-                            android:text="عنوان تسليم الشحنه بالتفصيل"
+                            android:gravity="center"
+                            android:text="عنوان المستلم :"
                             android:textAlignment="viewEnd"
                             android:textColor="@color/colorAccent"
                             android:textColorHint="@color/colorBack"
@@ -365,283 +314,257 @@
 
 
                     </LinearLayout>
-
-                    <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/btnCall"
-                        android:layout_width="@dimen/_38sdp"
-                        android:layout_height="@dimen/_38sdp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/btndesign"
-                        android:backgroundTint="@color/ic_profile_background"
-                        android:cropToPadding="false"
-                        android:src="@drawable/ic_call_24"
-                        app:ensureMinTouchTargetSize="false"
-                        app:fabCustomSize="@dimen/_38sdp"
-                        app:fabSize="auto"
-                        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-                        app:layout_constraintStart_toStartOf="@+id/linearLayout"
-                        app:rippleColor="@color/colorBack" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/linPackage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:layout_marginEnd="@dimen/_16sdp"
-                    android:background="@drawable/bold_round_bg"
-                    android:gravity="center"
+                    android:layout_marginBottom="@dimen/_16sdp"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/orderid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
                         android:layout_weight="0.5"
-                        android:gravity="center"
-                        android:text="رقم تتبع الشحنه : ٠٤٥٣٤٥٣"
-                        android:textAlignment="center"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:gravity="center|right"
+                        android:text="الشحنة"
+                        android:textAlignment="viewEnd"
                         android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/_10sdp" />
+                        android:textSize="@dimen/_14sdp" />
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="@dimen/_80sdp"
-                        android:layout_height="@dimen/_80sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_weight="0.5"
-                        app:cardCornerRadius="@dimen/_40sdp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/background"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-                        <ImageView
+                        <TextView
+                            android:id="@+id/orderid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+                            android:text="رقم تتبع الشحنه : ٠٤٥٣٤٥٣"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <TextView
+                            android:id="@+id/txtPostDate2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/_8sdp" />
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:srcCompat="@drawable/ic_package" />
-                    </androidx.cardview.widget.CardView>
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+                            android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/txtPostDate2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:gravity="center"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/_8sdp" />
+                            <TextView
+                                android:id="@+id/txtOrder"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:background="@drawable/round_bg_no_padding"
+                                android:backgroundTint="@color/ic_profile_background"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/_5sdp"
+                                android:paddingTop="@dimen/_1sdp"
+                                android:paddingRight="@dimen/_5sdp"
+                                android:paddingBottom="@dimen/_1sdp"
+                                android:text="TextView"
+                                android:textAlignment="center"
+                                android:textColor="#000000"
+                                android:textSize="@dimen/_14sdp" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_4sdp"
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_35sdp"
+                                android:layout_marginTop="0dp"
+                                android:layout_weight="0.5"
+                                android:drawableRight="@drawable/ic_weight"
+                                android:drawablePadding="@dimen/_5sdp"
+                                android:gravity="center"
+                                android:text="حاله الشحنه :"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/colorAccent"
+                                android:textColorHint="@color/colorBack"
+                                android:textSize="@dimen/_12sdp" />
 
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_weight="0.5"
+                            android:background="@color/colorPrimary" />
 
                         <TextView
-                            android:id="@+id/orderto"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/_4sdp"
-                            android:layout_marginRight="@dimen/_4sdp"
+                            android:id="@+id/txtWeight"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_marginTop="0dp"
+                            android:layout_weight="1"
+                            android:drawableRight="@drawable/ic_weight"
+                            android:drawablePadding="@dimen/_5sdp"
                             android:gravity="center"
-                            android:textAlignment="center"
+                            android:text="الوزن"
+                            android:textAlignment="viewEnd"
                             android:textColor="@color/colorAccent"
+                            android:textColorHint="@color/colorBack"
                             android:textSize="@dimen/_12sdp" />
 
-                        <ImageView
-                            android:id="@+id/icTrans"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginEnd="0dp"
-                            app:srcCompat="@drawable/ic_vespa" />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/colorPrimary" />
 
                         <TextView
-                            android:id="@+id/OrderFrom"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/_4sdp"
-                            android:layout_marginRight="@dimen/_4sdp"
+                            android:id="@+id/txtPack"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_weight="1"
+                            android:drawableRight="@drawable/ic_package"
+                            android:drawablePadding="@dimen/_5sdp"
                             android:gravity="center"
-                            android:textAlignment="center"
+                            android:text="الرساله"
+                            android:textAlignment="viewEnd"
                             android:textColor="@color/colorAccent"
+                            android:textColorHint="@color/colorBack"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/colorPrimary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/txtCash"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:background="@drawable/round_bg_no_padding"
+                                android:backgroundTint="@color/green_500"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/_5sdp"
+                                android:paddingTop="@dimen/_1sdp"
+                                android:paddingRight="@dimen/_5sdp"
+                                android:paddingBottom="@dimen/_1sdp"
+                                android:text="TextView"
+                                android:textAlignment="center"
+                                android:textColor="#000000"
+                                android:textSize="@dimen/_14sdp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_35sdp"
+                                android:layout_marginTop="0dp"
+                                android:layout_weight="0.5"
+                                android:drawableRight="@drawable/ic_add_money"
+                                android:drawablePadding="@dimen/_5sdp"
+                                android:gravity="center"
+                                android:text="اجمالي التحصيل :"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/colorAccent"
+                                android:textColorHint="@color/colorBack"
+                                android:textSize="@dimen/_12sdp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/colorPrimary" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/txtGGet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:background="@drawable/round_bg_no_padding"
+                                android:backgroundTint="@color/red_500"
+                                android:gravity="center"
+                                android:paddingLeft="@dimen/_5sdp"
+                                android:paddingTop="@dimen/_1sdp"
+                                android:paddingRight="@dimen/_5sdp"
+                                android:paddingBottom="@dimen/_1sdp"
+                                android:text="TextView"
+                                android:textAlignment="center"
+                                android:textColor="#000000"
+                                android:textSize="@dimen/_14sdp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_35sdp"
+                                android:layout_marginTop="0dp"
+                                android:layout_weight="0.5"
+                                android:drawableRight="@drawable/ic_add_money"
+                                android:drawablePadding="@dimen/_5sdp"
+                                android:gravity="center"
+                                android:text="مصاريف الشحن :"
+                                android:textAlignment="viewEnd"
+                                android:textColor="@color/colorAccent"
+                                android:textColorHint="@color/colorBack"
+                                android:textSize="@dimen/_12sdp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:background="@color/colorPrimary" />
+
+                        <TextView
+                            android:id="@+id/txtNotes"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_35sdp"
+                            android:layout_weight="1"
+                            android:drawableRight="@drawable/ic_notes"
+                            android:drawablePadding="@dimen/_5sdp"
+                            android:gravity="center"
+                            android:text="الملاحظات"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/colorAccent"
+                            android:textColorHint="@color/colorBack"
                             android:textSize="@dimen/_12sdp" />
 
                     </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/txtPack"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_marginRight="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:drawableRight="@drawable/ic_package"
-                        android:drawablePadding="@dimen/_5sdp"
-                        android:gravity="center|right"
-                        android:text="الرساله"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/colorAccent"
-                        android:textColorHint="@color/colorBack"
-                        android:textSize="@dimen/_12sdp" />
-
-                    <TextView
-                        android:id="@+id/txtWeight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-
-                        android:drawableRight="@drawable/ic_weight"
-                        android:drawablePadding="@dimen/_5sdp"
-                        android:gravity="center|right"
-                        android:text="الوزن"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/colorAccent"
-                        android:textColorHint="@color/colorBack"
-                        android:textSize="@dimen/_12sdp" />
-
-                    <TextView
-                        android:id="@+id/txtCash"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center|right"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:drawableEnd="@drawable/ic_add_money"
-                        android:drawablePadding="@dimen/_5sdp"
-                        android:gravity="center|right"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/_12sdp" />
-
-                    <TextView
-                        android:id="@+id/txtNotes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginTop="0dp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:layout_weight="1"
-                        android:drawableRight="@drawable/ic_notes"
-                        android:drawablePadding="@dimen/_5sdp"
-                        android:gravity="center|right"
-                        android:paddingRight="@dimen/_5sdp"
-                        android:text="الملاحظات"
-                        android:textAlignment="viewEnd"
-                        android:textColor="@color/colorAccent"
-                        android:textColorHint="@color/colorBack"
-                        android:textSize="@dimen/_12sdp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linerAll"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/_16sdp"
-                    android:layout_marginRight="@dimen/_16sdp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:layout_weight="0.5"
-                        android:orientation="horizontal"
-                        android:visibility="visible">
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnDelete"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_32sdp"
-                            android:layout_alignParentTop="false"
-                            android:layout_gravity="center"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:layout_weight="0.5"
-                            android:background="@drawable/btn_black_square"
-                            android:text="الغاء الشحنه"
-                            android:textColor="@color/colorBack"
-
-                            android:textSize="@dimen/_12sdp"
-                            android:visibility="gone" />
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnDelivered"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_32sdp"
-                            android:layout_alignParentTop="false"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_weight="0.5"
-                            android:background="@drawable/btn_defult_square"
-                            android:text="تم تسليم الشحنه للعميل"
-                            android:textColor="@color/colorBack"
-                            android:textSize="@dimen/_12sdp"
-
-                            android:visibility="visible" />
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnRecived"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_32sdp"
-                            android:layout_alignParentTop="false"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_weight="0.5"
-                            android:background="@drawable/btn_defult_square"
-                            android:text="تأكيد استلام الشحنة"
-                            android:textColor="@color/colorBack"
-                            android:textSize="@dimen/_12sdp"
-
-                            android:visibility="gone" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:orientation="horizontal"
-                        android:visibility="visible">
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnOrderBack"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_32sdp"
-                            android:layout_alignParentTop="false"
-                            android:layout_gravity="center"
-                            android:layout_weight="0.5"
-                            android:background="@drawable/btn_bad_square"
-                            android:text="مرتجع"
-                            android:textColor="#000000"
-
-                            android:textSize="@dimen/_12sdp"
-                            android:visibility="visible" />
-
-                    </LinearLayout>
-
                 </LinearLayout>
 
                 <include

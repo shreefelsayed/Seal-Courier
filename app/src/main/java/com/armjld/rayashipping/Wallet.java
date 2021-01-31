@@ -24,7 +24,7 @@ public class Wallet {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
     String datee = sdf.format(new Date());
 
-    int onDelvMoney = 10;
+    int onDelvMoney = 15;
     int onRecivMoney = 5;
     int onDeniedMoney = 5;
     int onDeniedReturn = 10;
@@ -81,37 +81,65 @@ public class Wallet {
         });
     }
 
-    public void addToUser(String id, int onRecivMoney, Data orderData, String Action) {
-        CaptinMoney captinMoney = new CaptinMoney(orderData.getId(), Action, datee, "false", orderData.getTrackid(), String.valueOf(onRecivMoney));
+    public void addBouns(String id, int money) {
+        uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("walletmoney").exists()) {
+                    int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
+                    uDatabase.child(id).child("walletmoney").setValue(currentValue + money);
+
+                    if (UserInFormation.getId().equals(id)) UserInFormation.setWalletmoney(String.valueOf((currentValue + money)));
+                } else {
+                    uDatabase.child(id).child("walletmoney").setValue(money);
+                    if (UserInFormation.getId().equals(id)) UserInFormation.setWalletmoney(String.valueOf((money)));
+                }
+
+                addBounsToUser(id, money, "bouns");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    public void addBounsToUser(String id, int money, String Action) {
+        CaptinMoney captinMoney = new CaptinMoney("", Action, datee, "false", "", String.valueOf(money));
+        uDatabase.child(id).child("payments").push().setValue(captinMoney);
+        Timber.i("Add Money to Bouns");
+    }
+
+    public void addToUser(String id, int money, Data orderData, String Action) {
+        CaptinMoney captinMoney = new CaptinMoney(orderData.getId(), Action, datee, "false", orderData.getTrackid(), String.valueOf(money));
         uDatabase.child(id).child("payments").push().setValue(captinMoney);
         Timber.i("Add Money in Logs");
     }
 
     // ----- Add Money to Delv
     public void addDelvMoney(String id, Data orderData) {
-
-        if(orderData.getTxtDState().equals("الجيزة")) onDelvMoney = 15;
+        if(orderData.getTxtDState().equals("القاهرة")) onDelvMoney = 20;
 
         uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.child("walletmoney").exists()) {
                     int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
-                    uDatabase.child(id).child("walletmoney").setValue((int) (currentValue + onDelvMoney));
+                    uDatabase.child(id).child("walletmoney").setValue(currentValue + onDelvMoney);
                     if (UserInFormation.getId().equals(id)) UserInFormation.setWalletmoney(String.valueOf(currentValue + onDelvMoney));
                 } else {
                     uDatabase.child(id).child("walletmoney").setValue(onDelvMoney);
                     if (UserInFormation.getId().equals(id))
                         UserInFormation.setWalletmoney(String.valueOf((onDelvMoney)));
                 }
+
                 Timber.i("Added Money to Wallet");
 
                 addToUser(id, onDelvMoney, orderData, "delivered");
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 

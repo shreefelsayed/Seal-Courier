@@ -36,23 +36,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.hypertrack.sdk.HyperTrack;
-import com.hypertrack.sdk.TrackingError;
-import com.hypertrack.sdk.TrackingStateObserver;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
-
 import timber.log.Timber;
 
-@SuppressLint("SimpleDateFormat")
-public class Home extends AppCompatActivity implements TrackingStateObserver.OnTrackingStateChangeListener {
+public class Home extends AppCompatActivity {
 
     // ---------- Super Visor Data ----------- \\
     public static ArrayList<Data> mm = new ArrayList<>(); // Avillable Orders Data
@@ -69,14 +58,81 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
     public static ArrayList<notiData> notiList = new ArrayList<>(); // Notifications Data
     public static ArrayList<ChatsData> mChat = new ArrayList<>(); // Chats Data
 
+    // ---- Tracking
+    boolean doubleBackToExitPressedOnce = false;
+
 
     public static int notiCount = 0;
     public static int msgCount = 0;
     public static String whichFrag = "Home";
     public static BottomNavigationView bottomNavigationView;
     public static BadgeDrawable badge, chatsBadge;
-    static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-    static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("Home");
+        if (fragment != null && fragment.isVisible()) {
+            if (doubleBackToExitPressedOnce) {
+                finishAffinity();
+                System.exit(0);
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "اضغط مرة اخري للخروج من التطبيق", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
+        } else {
+            whichFrag = "Home";
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), whichFrag).addToBackStack("Home").commit();
+            bottomNavigationView.setSelectedItemId(R.id.home);
+        }
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_supervisor_home);
+
+        if (UserInFormation.getId() == null) {
+            finish();
+            startActivity(new Intent(this, StartUp.class));
+        }
+
+        bottomNavigationView = findViewById(R.id.bottomNav);
+        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
+
+        Menu menu = bottomNavigationView.getMenu();
+        MenuItem item = menu.findItem(R.id.noti);
+        badge = bottomNavigationView.getOrCreateBadge(item.getItemId());
+        chatsBadge = bottomNavigationView.getOrCreateBadge(menu.findItem(R.id.chats).getItemId());
+
+
+        if (notiCount == 0) {
+            bottomNavigationView.removeBadge(R.id.noti);
+        } else {
+            badge.setNumber(notiCount);
+        }
+
+        if (msgCount == 0) {
+            bottomNavigationView.removeBadge(R.id.chats);
+        } else {
+            badge.setNumber(msgCount);
+        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, whichFrag(), whichFrag).addToBackStack("Home").commit();
+
+        if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+            bottomNavigationView.getMenu().removeItem(R.id.profile);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!LoginManager.dataset) {
+            finish();
+            startActivity(new Intent(this, StartUp.class));
+        }
+    }
+
     @SuppressLint("NonConstantResourceId")
     private final BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = item -> {
         Fragment fragment = null;
@@ -116,9 +172,6 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment, fragTag).addToBackStack("Home").commit();
         return true;
     };
-    boolean doubleBackToExitPressedOnce = false;
-    String htID = "00F4wm01NAr4ZHVE4gjrtQiQw8BxYC9dJNjeoM0LE4eEpm928geMz-2Tt8bZgOzJnTlE64SKDs_ZUEYyBJE4wQ";
-    HyperTrack sdkInstance;
 
     public static void getMessageCount() {
         if (chatsBadge == null || bottomNavigationView == null) {
@@ -214,7 +267,6 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
                 }
 
                 MyCaptins.getCaptins();
-
             }
 
             @Override
@@ -397,98 +449,6 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag("Home");
-        if (fragment != null && fragment.isVisible()) {
-            if (doubleBackToExitPressedOnce) {
-                finishAffinity();
-                System.exit(0);
-            }
-            this.doubleBackToExitPressedOnce = true;
-            Toast.makeText(this, "اضغط مرة اخري للخروج من التطبيق", Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
-        } else {
-            whichFrag = "Home";
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new AllOrders(), whichFrag).addToBackStack("Home").commit();
-            bottomNavigationView.setSelectedItemId(R.id.home);
-        }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!LoginManager.dataset) {
-            finish();
-            startActivity(new Intent(this, StartUp.class));
-        }
-
-        if (sdkInstance.isRunning()) {
-            onTrackingStart();
-        } else {
-            onTrackingStop();
-        }
-
-        sdkInstance.requestPermissionsIfNecessary();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        sdkInstance.removeTrackingListener(this);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_supervisor_home);
-
-        HyperTrack.enableDebugLogging();
-        sdkInstance = HyperTrack.getInstance(htID).addTrackingListener(Home.this);
-
-        sdkInstance.setDeviceName(UserInFormation.getUserName());
-        Map<String, Object> myMetadata = new HashMap<>();
-        myMetadata.put("vehicle_type", UserInFormation.getTrans());
-        myMetadata.put("group_id", UserInFormation.getAccountType());
-
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("trackId").setValue(sdkInstance.getDeviceID());
-
-        sdkInstance.setDeviceMetadata(myMetadata);
-        sdkInstance.start();
-
-        if (UserInFormation.getId() == null) {
-            finish();
-            startActivity(new Intent(this, StartUp.class));
-        }
-
-        bottomNavigationView = findViewById(R.id.bottomNav);
-        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
-
-        Menu menu = bottomNavigationView.getMenu();
-        MenuItem item = menu.findItem(R.id.noti);
-        badge = bottomNavigationView.getOrCreateBadge(item.getItemId());
-        chatsBadge = bottomNavigationView.getOrCreateBadge(menu.findItem(R.id.chats).getItemId());
-
-
-        if (notiCount == 0) {
-            bottomNavigationView.removeBadge(R.id.noti);
-        } else {
-            badge.setNumber(notiCount);
-        }
-
-        if (msgCount == 0) {
-            bottomNavigationView.removeBadge(R.id.chats);
-        } else {
-            badge.setNumber(msgCount);
-        }
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, whichFrag(), whichFrag).addToBackStack("Home").commit();
-
-        if (UserInFormation.getAccountType().equals("Delivery Worker")) {
-            bottomNavigationView.getMenu().removeItem(R.id.profile);
-        }
-    }
-
     private Fragment whichFrag() {
         Fragment frag = null;
         switch (whichFrag) {
@@ -525,23 +485,5 @@ public class Home extends AppCompatActivity implements TrackingStateObserver.OnT
         return frag;
     }
 
-    @Override
-    public void onError(TrackingError trackingError) {
 
-    }
-
-    @Override
-    public void onTrackingStart() {
-
-    }
-
-    @Override
-    public void onTrackingStop() {
-
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
 }

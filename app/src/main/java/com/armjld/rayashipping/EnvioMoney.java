@@ -34,6 +34,7 @@ public class EnvioMoney {
     // --------- Pay Pack Money For Captin by Super Visor --
     public void payPackMoney(userData user, String walletMoney) {
         uDatabase.child(user.getId()).child("packMoney").setValue("0");
+        user.setPackMoney("0");
 
         // ---- Set Payment as Paid
         uDatabase.child(user.getId()).child("payments").orderByChild("isPaid").equalTo("false").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -69,7 +70,7 @@ public class EnvioMoney {
 
         // ---- Send noti to Captin
         String message = "تم استلام المستحقات و قيمتها " + walletMoney + " بنجاح";
-        notiData Noti = new notiData(UserInFormation.getId(), "", user.getId(), message, datee, "false", "wallet", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        notiData Noti = new notiData(UserInFormation.getId(), "", user.getId(), message, datee, "false", "wallet", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(user.getId()).push().setValue(Noti);
 
         Toast.makeText(mContext, "تم دفع المستحقات بنجاح", Toast.LENGTH_SHORT).show();
@@ -78,6 +79,7 @@ public class EnvioMoney {
     // --------- Pay Bouns For Captin by Super visor --
     public void payBouns(userData user, String walletMoney) {
         uDatabase.child(user.getId()).child("walletmoney").setValue(0);
+        user.setWalletmoney(0);
 
         // ---- Set Payment as Paid
         uDatabase.child(user.getId()).child("payments").orderByChild("isPaid").equalTo("false").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -114,7 +116,7 @@ public class EnvioMoney {
 
         // ---- Send noti to Captin
         String message = "تم تسليمك البونص و قيمته " + walletMoney + " بنجاح";
-        notiData Noti = new notiData(UserInFormation.getId(), "", user.getId(), message, datee, "false", "wallet", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        notiData Noti = new notiData(UserInFormation.getId(), "", user.getId(), message, datee, "false", "wallet", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(user.getId()).push().setValue(Noti);
     }
 }

@@ -6,7 +6,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -181,11 +183,12 @@ public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHo
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public View myview;
+        public View myview, viewSep;
         public TextView txtName, txtAddress;
         public ImageView imgCaptin, icTrans;
         public ImageView btnCall, btnMessage, btnAsign, btnTrack;
         public LinearLayout linCaptin;
+        public ImageView imgIndec;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -199,11 +202,19 @@ public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHo
             btnTrack = myview.findViewById(R.id.btnTrack);
             txtAddress = myview.findViewById(R.id.txtAddress);
             icTrans = myview.findViewById(R.id.icTrans);
+            imgIndec = myview.findViewById(R.id.imgIndec);
+            viewSep = myview.findViewById(R.id.viewSep);
         }
 
         public void setData(userData user) {
             Picasso.get().load(Uri.parse(user.getPpURL())).into(imgCaptin);
             txtName.setText(user.getName());
+
+            if(user.getTrackId().equals("")) {
+                imgIndec.setColorFilter(Color.GRAY);
+            } else {
+                imgIndec.setColorFilter(Color.GREEN);
+            }
         }
 
         @SuppressLint("UseCompatLoadingForDrawables")
@@ -219,6 +230,10 @@ public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHo
                     icTrans.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_run));
                     break;
             }
+        }
+
+        public void hideSep() {
+            viewSep.setVisibility(View.GONE);
         }
     }
 }

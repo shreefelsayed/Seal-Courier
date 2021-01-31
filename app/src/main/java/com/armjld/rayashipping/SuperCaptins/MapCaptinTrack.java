@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -34,7 +35,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.armjld.rayashipping.Chat.Messages;
 import com.armjld.rayashipping.Chat.chatListclass;
+import com.armjld.rayashipping.MapsActivity;
 import com.armjld.rayashipping.R;
+import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.userData;
 import com.google.android.gms.common.ConnectionResult;
@@ -55,9 +58,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.hypertrack.sdk.views.DeviceUpdatesHandler;
 import com.hypertrack.sdk.views.HyperTrackViews;
@@ -74,6 +81,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -95,6 +104,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
     LatLng userLoc;
     private GoogleMap mMap;
     private HyperTrackViews mHyperTrackView;
+    public static ArrayList<Data> filterList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +131,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
         });
 
         btnCall.setOnClickListener(v -> {
-            @SuppressLint("UseCheckPermission") BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) this).setMessage("هل تريد الاتصال بالمندوب ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
+            BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) this).setMessage("هل تريد الاتصال بالمندوب ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
                 checkPermission(Manifest.permission.CALL_PHONE, PHONE_CALL_CODE);
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:" + user.getPhone()));
@@ -237,6 +247,9 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
         mMap = googleMap;
 
         checkGPS();
+
+
+        setOrders();
         //Initialize Google Play Services
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             buildGoogleAPIClient();
@@ -248,6 +261,91 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
         }
     }
+
+    private void setOrders() {
+        for (int i = 0; i < filterList.size(); i++) {
+            Data thisOrder = filterList.get(i);
+
+            String state = thisOrder.getStatue();
+            String provider = thisOrder.getProvider();
+            String orderId = thisOrder.getId();
+
+            boolean toPick = state.equals("placed") || state.equals("accepted") || state.equals("recived");
+            boolean toDelv = state.equals("readyD") || state.equals("supD") || state.equals("capDenied") || state.equals("supDenied");
+
+            if (toPick && !thisOrder.getLat().equals("") && !thisOrder.get_long().equals("")) {
+                double newLat = Double.parseDouble(thisOrder.getLat());
+                double newLong = Double.parseDouble(thisOrder.get_long());
+                LatLng latLng = new LatLng(newLat, newLong);
+                addOrder(latLng, state, provider, orderId);
+            } else if (toDelv) {
+                checkForDelvLocation(thisOrder.getDPhone(), state, provider, orderId);
+            }
+
+        }
+    }
+
+    private void addOrder(LatLng latLng, String state, String provider, String id) {
+        Drawable pinView = getDrawable(state, provider);
+        Marker marker = mMap.addMarker(new MarkerOptions().position(latLng).icon(bitmapDescriptorFromVector(MapCaptinTrack.this, pinView)));
+        marker.setTag(id);
+    }
+
+    private void checkForDelvLocation(String dPhone, String state, String provider, String id) {
+        Log.i("Maps", "Checking For Delivery");
+
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("clientsLocations").child(dPhone).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // -------- This client added his location to our Database
+                    double _lat = Double.parseDouble(Objects.requireNonNull(snapshot.child("_lat").getValue()).toString());
+                    double _long = Double.parseDouble(Objects.requireNonNull(snapshot.child("_long").getValue()).toString());
+                    LatLng latLng = new LatLng(_lat, _long);
+                    addOrder(latLng, state, provider, id);
+                    Log.i("Maps", "Order id for Map : " + id);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private Drawable getDrawable(String state, String provider) {
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_raya_pick);
+
+        boolean toPick = state.equals("placed") || state.equals("accepted") || state.equals("recived");
+        boolean toDelv = state.equals("readyD") || state.equals("supD") || state.equals("capDenied") || state.equals("supDenied");
+
+        if (!provider.equals("Esh7nly")) {
+            if (toPick) {
+                drawable = ContextCompat.getDrawable(this, R.drawable.ic_raya_delv);
+            } else if (toDelv) {
+                drawable = ContextCompat.getDrawable(this, R.drawable.ic_raya_pick);
+            }
+        } else {
+            if (toPick) {
+                drawable = ContextCompat.getDrawable(this, R.drawable.ic_eshh7nly_delv);
+            } else if (toDelv) {
+                drawable = ContextCompat.getDrawable(this, R.drawable.ic_eshh7nly_pick);
+            }
+        }
+
+        return drawable;
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, Drawable vectorDrawableResourceId) {
+        vectorDrawableResourceId.setBounds(0, 0, vectorDrawableResourceId.getIntrinsicWidth(), vectorDrawableResourceId.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawableResourceId.getIntrinsicWidth(), vectorDrawableResourceId.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawableResourceId.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
 
     private void buildAlertMessageNoGps() {
         BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(MapCaptinTrack.this).setMessage("الرجاء فتح اعدادات اللوكيشن ؟").setCancelable(true).setPositiveButton("حسنا", R.drawable.ic_tick_green, (dialogInterface, which) -> {
@@ -432,17 +530,20 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
 
         protected void onPostExecute(Bitmap bitmap) {
             mMap.clear();
+
+            setOrders();
+
             if (userLoc != null) {
                 if (bitmap != null) {
                     View custom_layout = ((LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.places_pin_layout, null);
-                    ImageView iv_category_logo = (ImageView) custom_layout.findViewById(R.id.profile_image);
+                    ImageView iv_category_logo = custom_layout.findViewById(R.id.profile_image);
                     Bitmap pinbit = Bitmap.createScaledBitmap(bitmap, 40, 60, false);
                     iv_category_logo.setImageBitmap(pinbit);
                     BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(createDrawableFromView(MapCaptinTrack.this, custom_layout));
-                    mMap.addMarker(new MarkerOptions().position(userLoc).icon(bitmapDescriptor));
+                    mMap.addMarker(new MarkerOptions().position(userLoc).icon(bitmapDescriptor)).setTag(user.getId());
                 } else {
                     // Add the new marker to the map
-                    mMap.addMarker(new MarkerOptions().position(userLoc));
+                    mMap.addMarker(new MarkerOptions().position(userLoc)).setTag(user.getId());
                 }
             }
         }

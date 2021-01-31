@@ -48,6 +48,7 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
         } else {
             Home.getDeliveryOrders();
         }
+        
         finish();
     }
 

@@ -3,13 +3,19 @@ package com.armjld.rayashipping;
 import android.content.Context;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.armjld.rayashipping.Chat.chatListclass;
+import com.armjld.rayashipping.models.CaptinMoney;
 import com.armjld.rayashipping.models.Data;
 import com.armjld.rayashipping.models.UserInFormation;
 import com.armjld.rayashipping.models.notiData;
 import com.armjld.rayashipping.models.requestsData;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -43,9 +49,8 @@ public class OrdersClass {
         mDatabase.child(orderData.getId()).child("recived2Time").setValue(datee);
 
         // ---- Send Notification to Supervisor
-        Toast.makeText(mContext, UserInFormation.getSupId(), Toast.LENGTH_SHORT).show();
         String message = "قام " + UserInFormation.getUserName() + " بتأكيد استلام شحنه " + orderData.getOwner();
-        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
 
         // ---- in Case of Esh7nly Add money to Esh7nly Wallet
@@ -64,7 +69,7 @@ public class OrdersClass {
             }
         }
 
-        if (toPay) wallet.addRecivedMoney(UserInFormation.getId(), orderData);
+        //if (toPay) wallet.addRecivedMoney(UserInFormation.getId(), orderData);
 
         // --- Add Log
         String Log = "قام المندوب " + UserInFormation.getId() + " بتأكيد استلام الشحنه من التاجر " + orderData.getuId();
@@ -75,7 +80,7 @@ public class OrdersClass {
     }
 
     // ----- When Captin say the client didn't deliver the order
-    public void orderDenied(Data orderData) {
+    public void orderDenied(Data orderData, String Msg) {
         getRefrence ref = new getRefrence();
         Wallet wallet = new Wallet();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
@@ -86,11 +91,17 @@ public class OrdersClass {
         mDatabase.child(orderData.getId()).child("statue").setValue("denied");
         mDatabase.child(orderData.getId()).child("tries").setValue(tries + "");
         mDatabase.child(orderData.getId()).child("deniedTime").setValue(datee);
+        mDatabase.child(orderData.getId()).child("denied_reason").setValue(Msg);
 
         // --- Send notification to Supervisor
-        String message = "قام " + UserInFormation.getUserName() + " بفشل في تسليم شحنه " + orderData.getDName();
-        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "nothing", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        String message = "قام " + UserInFormation.getUserName() + " بفشل في تسليم شحنه " + orderData.getDName() + " بسبب " + Msg;
+        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "nothing", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
+
+        // --- Send notification to Supplier
+        message = "لم يتم تسليم الشحنه " + orderData.getDName() + " بسبب " + Msg;
+        Noti = new notiData(UserInFormation.getId(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+        nDatabase.child(orderData.getuId()).push().setValue(Noti);
 
         // ---- Add Money To Wallet
         wallet.addDeniedMoney(UserInFormation.getId(), orderData);
@@ -114,7 +125,7 @@ public class OrdersClass {
 
         // --- Send notification to Supervisor
         String message = "قام " + UserInFormation.getUserName() + " بتسليم المرتجع الي " + orderData.getOwner();
-        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "nothing", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "nothing", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
 
         // ---- Add Log
@@ -142,12 +153,12 @@ public class OrdersClass {
 
         // ---- Send Notifications to Supplier
         String message = "تم تسليم شحنه " + orderData.getDName() + " بنجاح";
-        notiData Noti = new notiData(orderData.getuAccepted(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        notiData Noti = new notiData(orderData.getuAccepted(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(orderData.getuId()).push().setValue(Noti);
 
         // ---- Send Notifications to Supervisor
         message = "تم تسليم شحنه " + orderData.getDName() + " بنجاح";
-        Noti = new notiData(orderData.getuAccepted(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        Noti = new notiData(orderData.getuAccepted(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
 
         // --- Add Money to Supplier Wallet
@@ -188,12 +199,12 @@ public class OrdersClass {
 
         // ----- Send Notification To Captin
         String msg = "قام " + UserInFormation.getUserName() + " بتسليمك شحنه جديده لاستلامها.";
-        notiData Noti = new notiData(UserInFormation.getId(), capID, orderData.getId(), msg, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        notiData Noti = new notiData(UserInFormation.getId(), capID, orderData.getId(), msg, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(capID).push().setValue(Noti);
 
         // -- Send Notification To Supplier
         msg = "تمت مراجعه شحنتك و سيتم استلامها في اقرب وقت";
-        Noti = new notiData(UserInFormation.getId(), orderData.getuId(), orderData.getId(), msg, datee, "false", "orderinfo", "Envio", UserInFormation.getUserURL());
+        Noti = new notiData(UserInFormation.getId(), orderData.getuId(), orderData.getId(), msg, datee, "false", "orderinfo", "Envio", UserInFormation.getUserURL(), "Raya");
         nDatabase.child(orderData.getuId()).push().setValue(Noti);
 
         // ----- Add Log
@@ -213,7 +224,7 @@ public class OrdersClass {
 
         // --- Notification to Supplier
         String message = "قامت شركه Envio بطلب لتوصيل شحنه " + orderData.getDName();
-        notiData Noti = new notiData(capID, orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", "Envio", UserInFormation.getUserURL());
+        notiData Noti = new notiData(capID, orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", "Envio", UserInFormation.getUserURL(), "Raya");
         assert notiKey != null;
         nDatabase.child(orderData.getuId()).child(notiKey).setValue(Noti);
 
@@ -239,7 +250,7 @@ public class OrdersClass {
 
         // ---- Send Notification To Captin
         String message = "قام المشرف بتسليمك شحنه مرتجعه";
-        notiData Noti = new notiData(supId ,captinId , orderData.getId(),message,datee,"false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        notiData Noti = new notiData(supId ,captinId , orderData.getId(),message,datee,"false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(captinId).push().setValue(Noti);
 
         // ---- Add Log
@@ -273,7 +284,7 @@ public class OrdersClass {
 
         // --- Send Notification To Captin
         String msg = "قام " + UserInFormation.getUserName() + " بتسليمك شحنه جديده لتسليمها.";
-        notiData Noti = new notiData(supId, capID, orderData.getId(), msg, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        notiData Noti = new notiData(supId, capID, orderData.getId(), msg, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(capID).push().setValue(Noti);
 
         // --- Add Log
@@ -295,7 +306,7 @@ public class OrdersClass {
 
         // ---- Send noti to Delivery Worker
         String message = "قام " + UserInFormation.getUserName() + " بتسليمك الشحنةاضغط هنا لتأكيد استلام الشحنه.";
-        notiData Noti = new notiData(UserInFormation.getId() ,orderData.getuAccepted() , orderData.getId(),message,datee,"false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL());
+        notiData Noti = new notiData(UserInFormation.getId() ,orderData.getuAccepted() , orderData.getId(),message,datee,"false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(orderData.getuAccepted()).push().setValue(Noti);
 
         // --- Toast
@@ -306,11 +317,61 @@ public class OrdersClass {
         logOrder(mDatabase, orderData.getId(), Log);
     }
 
+    // ------- Captin Took Money (1 - Add the money to captins wallet)
+    // 2- set Order as Paid if it's not already
+    // 3- if order is Paid, Remove the payment from User (if it's not paid)
+    // 4- if it's already paid we add money to the supplier
+
+    public void orderPaid(Data orderData) {
+        // Refrence
+        getRefrence ref = new getRefrence();
+        DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
+
+        // --- Add Money to Captin Wallet
+        Wallet wallet = new Wallet();
+        int CurrentPackMoney = Integer.parseInt(UserInFormation.getPackMoney());
+        int finalMoney = CurrentPackMoney + Integer.parseInt(orderData.getReturnMoney());
+        wallet.addToUser(UserInFormation.getId(), Integer.parseInt(orderData.getReturnMoney()),orderData, "shippingFees");
+
+        uDatabase.child(UserInFormation.getId()).child("packMoney").setValue(finalMoney + "");
+        UserInFormation.setPackMoney(finalMoney + "");
+
+        // Check if order is Paid Already --
+        if(orderData.getPaid().equals("true")) {
+            uDatabase.child(orderData.getuId()).child("payments").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot ds : snapshot.getChildren()) {
+                        CaptinMoney captinMoney = ds.getValue(CaptinMoney.class);
+                        if(captinMoney.getTrackId().equals(orderData.getTrackid()) && captinMoney.getTransType().equals("shippingFees")) {
+                            if(captinMoney.getIsPaid().equals("false")) {
+                                // --- If it's not paid but it's in the invoice
+                                uDatabase.child(orderData.getuId()).child("payments").child(ds.getKey()).removeValue();
+                            } else {
+                                // -- If The Supplier Already Paid The Money
+                                CaptinMoney newWallet = new CaptinMoney(orderData.getId(), "ourmoney", datee, "false", orderData.getTrackid(), orderData.getReturnMoney());
+                                uDatabase.child(orderData.getuId()).child("payments").push().setValue(newWallet);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) { }
+            });
+        }
+
+        // Set Order As Paid
+        mDatabase.child(orderData.getId()).child("paid").setValue("true");
+        mDatabase.child(orderData.getId()).child("gget").setValue(orderData.getReturnMoney());
+
+
+    }
+
     // ------- Add Logs to Order
     public void logOrder(DatabaseReference mDatabase, String id, String message) {
         long tsLong = System.currentTimeMillis() / 1000;
         String logC = Long.toString(tsLong);
         mDatabase.child(id).child("logs").child(logC).setValue(message);
     }
-
 }

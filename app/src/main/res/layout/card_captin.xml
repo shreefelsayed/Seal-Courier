@@ -141,77 +141,35 @@
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/_12sdp" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/pickDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginBottom="@dimen/_5sdp"
-            android:gravity="right"
-            android:orientation="horizontal">
+            android:layout_gravity="center|right"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/ic_date"
+            android:drawablePadding="@dimen/_5sdp"
+            android:paddingRight="@dimen/_5sdp"
+            android:text="تاريخ الاستلام"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_12sdp" />
 
-            <TextView
-                android:id="@+id/pickDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_gravity="center|right"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/_12sdp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|right"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:layout_weight="1"
-                android:drawableRight="@drawable/ic_date"
-                android:drawablePadding="@dimen/_5sdp"
-                android:paddingRight="@dimen/_5sdp"
-                android:text="تاريخ الاستلام"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/_12sdp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linerDate"
+        <TextView
+            android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginBottom="@dimen/_5sdp"
-
-            android:gravity="right"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:layout_gravity="center|right"
-                android:layout_marginRight="3dp"
-                android:gravity="center|right"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/_12sdp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|right"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:layout_weight="1"
-                android:drawableRight="@drawable/ic_date"
-                android:drawablePadding="@dimen/_5sdp"
-                android:paddingRight="@dimen/_5sdp"
-                android:text="تاريخ التسليم"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/_12sdp" />
-
-        </LinearLayout>
+            android:layout_gravity="center|right"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/ic_date"
+            android:drawablePadding="@dimen/_5sdp"
+            android:paddingRight="@dimen/_5sdp"
+            android:text="تاريخ التسليم"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/_12sdp" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="50dp"
     android:layout_height="50dp"
+    android:layoutDirection="ltr"
+
     android:background="@drawable/ic_place_pin">
 
     <de.hdodenhof.circleimageview.CircleImageView

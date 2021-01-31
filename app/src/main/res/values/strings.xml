@@ -1,6 +1,375 @@
 <resources>
     <string name="app_name">Envio Couriers</string>
 
+    <string-array name="zone1">
+        <item>الجيزة, أوسيم</item>
+        <item>الجيزة, إمبابة</item>
+        <item>الجيزة, الدقى</item>
+        <item>الجيزة, الرماية</item>
+        <item>الجيزة, الصحفيين</item>
+        <item>الجيزة, العجوزة</item>
+        <item>الجيزة, العزيزية</item>
+        <item>الجيزة, العمرانية</item>
+        <item>الجيزة, القرية الفرعونية</item>
+        <item>الجيزة, الكيت كات</item>
+        <item>الجيزة, المنيب</item>
+        <item>الجيزة, المهندسين</item>
+        <item>الجيزة, الهرم</item>
+        <item>الجيزة, الوراق</item>
+        <item>الجيزة, بشتيل</item>
+        <item>الجيزة, بولاق الدكرور</item>
+        <item>الجيزة, ترسا</item>
+        <item>الجيزة, حدائق الاهرام</item>
+        <item>الجيزة, حى الجيزة</item>
+        <item>الجيزة, دهشور</item>
+        <item>الجيزة, ساقية مكى</item>
+        <item>الجيزة, سقارة</item>
+        <item>الجيزة, صفط</item>
+        <item>الجيزة, فيصل</item>
+        <item>الجيزة, كرداسة</item>
+        <item>الجيزة, كفر طهرمس</item>
+        <item>الجيزة, مريوطية</item>
+        <item>الجيزة, ميت عقبة</item>
+        <item>الجيزة, ناهيا</item>
+        <item>الجيزة, اكتوبر - المنطقة الصناعية</item>
+        <item>الجيزة, اكتوبر- الاحياء</item>
+        <item>الجيزة, أكتوبر - منطقة الحصري</item>
+        <item>الجيزة, اكتوبر - المتميز والسياحية</item>
+        <item>الجيزة, اكتوبر - مدينة الشيخ زايد</item>
+        <item>الجيزة, الشيخ زايد- الاحياء</item>
+        <item>الجيزة, مدينة الخمايل</item>
+        <item>الجيزة, طريق الواحات</item>
+        <item>الجيزة, مدينة الفردوس</item>
+        <item>الجيزة, دريم لاند</item>
+        <item>الجيزة, حى الاشجار</item>
+        <item>الجيزة, مدينة الانتاج الاعلامى</item>
+        <item>الجيزة, هرم سيتى</item>
+        <item>الجيزة, القرية الذكية</item>
+        <item>الجيزة, ابورواش الصناعية</item>
+        <item>الجيزة, الطريق الصحراوي الى ال كيلو 28</item>
+        <item>الجيزة, البدرشين</item>
+        <item>الجيزة, البراجيل</item>
+        <item>الجيزة, الحوامدية</item>
+        <item>الجيزة, الصف</item>
+        <item>الجيزة, المنصورية</item>
+        <item>الجيزة, جزيرة الدهب وكولدير</item>
+        <item>القاهرة, الحلمية</item>
+        <item>القاهرة, الزمالك</item>
+        <item>القاهرة, الزيتون</item>
+        <item>القاهرة, الساحل</item>
+        <item>القاهرة, السيدة زينب</item>
+        <item>القاهرة, العباسية</item>
+        <item>القاهرة, المرج</item>
+        <item>القاهرة, المطرية</item>
+        <item>القاهرة, المعادي</item>
+        <item>القاهرة, المقطم</item>
+        <item>القاهرة, المنيل</item>
+        <item>القاهرة, النزهة</item>
+        <item>القاهرة, الوايلي</item>
+        <item>القاهرة, حدائق القبة</item>
+        <item>القاهرة, دار السلام</item>
+        <item>القاهرة, زهراء المعادى</item>
+        <item>القاهرة, شبرا</item>
+        <item>القاهرة, شيراتون</item>
+        <item>القاهرة, عزبة النخل</item>
+        <item>القاهرة, عين شمس</item>
+        <item>القاهرة, قصر النيل</item>
+        <item>القاهرة, مدينة السلام</item>
+        <item>القاهرة, مدينة نصر</item>
+        <item>القاهرة, مصر الجديدة</item>
+        <item>القاهرة, وسط البلد</item>
+        <item>القاهرة, حدائق حلوان</item>
+        <item>القاهرة, حلوان</item>
+        <item>القاهرة, مدينة 15 مايو</item>
+        <item>القليوبية, شبرا الخيمة</item>
+    </string-array>
+    <string-array name="zone2">
+        <item>القاهرة, العاصمة الإدارية الجديدة</item>
+        <item>القاهرة, مدينة الشروق</item>
+        <item>القاهرة, مدينة بدر</item>
+        <item>القاهرة, مدينتي</item>
+        <item>القاهرة, التجمع الأول</item>
+        <item>القاهرة, التجمع الثالث</item>
+        <item>القاهرة, التجمع الخامس</item>
+        <item>القاهرة, مدينة الرحاب</item>
+        <item>القليوبية, مدينة العبور</item>
+        <item>الشرقية, العاشر من رمضان</item>
+    </string-array>
+    <string-array name="zone3">
+        <item>الاسكندرية, أبو قير</item>
+        <item>الاسكندرية, الإبراهيمية</item>
+        <item>الاسكندرية, الجمرك</item>
+        <item>الاسكندرية, الحضرة</item>
+        <item>الاسكندرية, الدخيلة</item>
+        <item>الاسكندرية, السيوف</item>
+        <item>الاسكندرية, الظاهرية</item>
+        <item>الاسكندرية, العامرية</item>
+        <item>الاسكندرية, العصافرة</item>
+        <item>الاسكندرية, العوايد</item>
+        <item>الاسكندرية, المعمورة</item>
+        <item>الاسكندرية, المنتزه</item>
+        <item>الاسكندرية, المندرة</item>
+        <item>الاسكندرية, المنشية</item>
+        <item>الاسكندرية, النخيل</item>
+        <item>الاسكندرية, النزهة</item>
+        <item>الاسكندرية, الورديان</item>
+        <item>الاسكندرية, باكوس</item>
+        <item>الاسكندرية, بولكلي</item>
+        <item>الاسكندرية, جليم</item>
+        <item>الاسكندرية, سابا باشا</item>
+        <item>الاسكندرية, سان ستيفانو</item>
+        <item>الاسكندرية, سبورتنج</item>
+        <item>الاسكندرية, ستانلي</item>
+        <item>الاسكندرية, سموحة</item>
+        <item>الاسكندرية, سيدي بشر</item>
+        <item>الاسكندرية, سيدي جابر</item>
+        <item>الاسكندرية, شدس</item>
+        <item>الاسكندرية, عجمي</item>
+        <item>الاسكندرية, فلمنج</item>
+        <item>الاسكندرية, فيكتوريا</item>
+        <item>الاسكندرية, كامب شيزار</item>
+        <item>الاسكندرية, كفر عبدو</item>
+        <item>الاسكندرية, كليوباترا</item>
+        <item>الاسكندرية, لوران</item>
+        <item>الاسكندرية, محرّم بيك</item>
+        <item>الاسكندرية, محطة الرمل</item>
+        <item>الاسكندرية, ميامي</item>
+        <item>الاسكندرية, برج العرب</item>
+
+    </string-array>
+    <string-array name="zone4">
+        <item>بورسعيد, حي الجنوب</item>
+        <item>بورسعيد, حي الزهور</item>
+        <item>بورسعيد, حي الشرق</item>
+        <item>بورسعيد, حي الضواحي</item>
+        <item>بورسعيد, حي العرب</item>
+        <item>بورسعيد, حي المناخ</item>
+        <item>بورسعيد, مدينة بورفؤاد</item>
+
+        <item>الاسماعيلية, مدينة الإسماعيلية</item>
+        <item>الاسماعيلية, أبوصوير</item>
+        <item>الاسماعيلية, التل الكبير</item>
+        <item>الاسماعيلية, القصاصين</item>
+        <item>الاسماعيلية, القنطرة شرق</item>
+        <item>الاسماعيلية, القنطرة غرب</item>
+        <item>الاسماعيلية, فايد</item>
+        <item>السويس, حي السويس</item>
+        <item>السويس, فيصل</item>
+        <item>السويس, العين السخنة</item>
+        <item>السويس, حى الجناين</item>
+        <item>السويس, حي الأربعين</item>
+        <item>السويس, حي عتاقة</item>
+
+        <item>البحيرة, دمنهور</item>
+        <item>البحيرة, أبو المطامير</item>
+        <item>البحيرة, أبو حمص</item>
+        <item>البحيرة, إدكو</item>
+        <item>البحيرة, الدلنجات</item>
+        <item>البحيرة, الرحمانية</item>
+        <item>البحيرة, المحمودية</item>
+        <item>البحيرة, النوبارية الجديدة</item>
+        <item>البحيرة, ايتاي البارود</item>
+        <item>البحيرة, بدر</item>
+        <item>البحيرة, حوش عيسى</item>
+        <item>البحيرة, رشيد</item>
+        <item>البحيرة, شبراخيت</item>
+        <item>البحيرة, كفر الدوار</item>
+        <item>البحيرة, كوم حمادة</item>
+        <item>البحيرة, وادي النطرون</item>
+
+        <item>كفر الشيخ, مدينة كفر الشيخ</item>
+        <item>كفر الشيخ, البرلس</item>
+        <item>كفر الشيخ, الحامول</item>
+        <item>كفر الشيخ, الرياض</item>
+        <item>كفر الشيخ, بلطيم</item>
+        <item>كفر الشيخ, بيلا</item>
+        <item>كفر الشيخ, دسوق</item>
+        <item>كفر الشيخ, سيدى سالم</item>
+        <item>كفر الشيخ, فوه</item>
+        <item>كفر الشيخ, قلين</item>
+        <item>كفر الشيخ, مطوبس</item>
+
+        <item>الدقهلية, المنصورة</item>
+        <item>الدقهلية, أجا</item>
+        <item>الدقهلية, أخطاب</item>
+        <item>الدقهلية, الجمالية</item>
+        <item>الدقهلية, السنبلاوين</item>
+        <item>الدقهلية, المطرية</item>
+        <item>الدقهلية, المنزلة</item>
+        <item>الدقهلية, بلقاس</item>
+        <item>الدقهلية, بني عبيد</item>
+        <item>الدقهلية, تمى الامديد</item>
+        <item>الدقهلية, جمصه</item>
+        <item>الدقهلية, دكرنس</item>
+        <item>الدقهلية, شربين</item>
+        <item>الدقهلية, طلخا</item>
+        <item>الدقهلية, منية النصر</item>
+        <item>الدقهلية, ميت سلسيل</item>
+        <item>الدقهلية, ميت غمر</item>
+        <item>الدقهلية, نبروه</item>
+
+        <item>الشرقية, الزقازيق</item>
+        <item>الشرقية, أبو حماد</item>
+        <item>الشرقية, أبو كبير</item>
+        <item>الشرقية, أولاد صقر</item>
+        <item>الشرقية, الإبراهيمية</item>
+        <item>الشرقية, الحسينية</item>
+        <item>الشرقية, الصالحية الجديدة</item>
+        <item>الشرقية, بلبيس</item>
+        <item>الشرقية, ديرب نجم</item>
+        <item>الشرقية, فاقوس</item>
+        <item>الشرقية, كفر صقر</item>
+        <item>الشرقية, مشتول السوق</item>
+        <item>الشرقية, منيا القمح</item>
+        <item>الشرقية, ههيا</item>
+
+        <item>الغربية, طنطا</item>
+        <item>الغربية, المحلة الكبرى</item>
+        <item>الغربية, بسيون</item>
+        <item>الغربية, السنطة</item>
+        <item>الغربية, زفتى</item>
+        <item>الغربية, سمنود</item>
+        <item>الغربية, قطور</item>
+        <item>الغربية, كفر الزيات</item>
+
+        <item>القليوبية, بهتيم</item>
+        <item>القليوبية, بنها</item>
+        <item>القليوبية, الخانكة</item>
+        <item>القليوبية, ابوزعبل</item>
+        <item>القليوبية, الخصوص</item>
+        <item>القليوبية, القناطر الخيرية</item>
+        <item>القليوبية, شبين القناطر</item>
+        <item>القليوبية, طوخ</item>
+        <item>القليوبية, قليوب</item>
+        <item>القليوبية, قها</item>
+        <item>القليوبية, كفر شكر</item>
+
+        <item>المنوفية, أشمون</item>
+        <item>المنوفية, الباجور</item>
+        <item>المنوفية, الشهداء</item>
+        <item>المنوفية, بركة السبع</item>
+        <item>المنوفية, تلا</item>
+        <item>المنوفية, سرس الليان</item>
+        <item>المنوفية, شبين الكوم</item>
+        <item>المنوفية, قويسنا</item>
+        <item>المنوفية, منوف</item>
+        <item>المنوفية, ميت العز</item>
+        <item>المنوفية, السادات</item>
+    </string-array>
+    <string-array name="zone5">
+        <item>الفيوم, مدينة الفيوم</item>
+        <item>الفيوم, أطسا</item>
+        <item>الفيوم, إبشواي</item>
+        <item>الفيوم, الفيوم الجديدة</item>
+        <item>الفيوم, سنورس</item>
+        <item>الفيوم, طامية</item>
+        <item>الفيوم, يوسف الصديق</item>
+        <item>المنيا, مدينة المنيا</item>
+        <item>المنيا, أبو قرقاص</item>
+        <item>المنيا, العدوة</item>
+        <item>المنيا, المنيا الجديدة</item>
+        <item>المنيا, بني مزار</item>
+        <item>المنيا, دير مواس</item>
+        <item>المنيا, سمالوط</item>
+        <item>المنيا, مطاي</item>
+        <item>المنيا, مغاغة</item>
+        <item>المنيا, ملوي</item>
+        <item>بني سويف, مدينة بني سويف</item>
+        <item>بني سويف, إهناسيا</item>
+        <item>بني سويف, الفشن</item>
+        <item>بني سويف, الواسطى</item>
+        <item>بني سويف, ببا</item>
+        <item>بني سويف, بني سويف الجديدة</item>
+        <item>بني سويف, سمسطا</item>
+        <item>بني سويف, ناصر</item>
+    </string-array>
+    <string-array name="zone6">
+        <item>اسيوط, مدينة أسيوط</item>
+        <item>اسيوط, أبنوب</item>
+        <item>اسيوط, أبو تيج</item>
+        <item>اسيوط, أسيوط الجديدة</item>
+        <item>اسيوط, البدارى</item>
+        <item>اسيوط, الغنايم</item>
+        <item>اسيوط, الفتح</item>
+        <item>اسيوط, القوصيه</item>
+        <item>اسيوط, ديروط</item>
+        <item>اسيوط, ساحل سليم</item>
+        <item>اسيوط, صدفا</item>
+        <item>اسيوط, منفلوط</item>
+        <item>سوهاج, مدينة سوهاج</item>
+        <item>سوهاج, أخميم</item>
+        <item>سوهاج, البلينا</item>
+        <item>سوهاج, العسيرات</item>
+        <item>سوهاج, المراغة</item>
+        <item>سوهاج, المنشاة</item>
+        <item>سوهاج, جرجا</item>
+        <item>سوهاج, جهينة</item>
+        <item>سوهاج, دارالسلام</item>
+        <item>سوهاج, ساقلتة</item>
+        <item>سوهاج, طما</item>
+        <item>سوهاج, طهطا</item>
+        <item>قنا, مدينة قنا</item>
+        <item>قنا, أبو تشت</item>
+        <item>قنا, الوقف</item>
+        <item>قنا, شنا</item>
+        <item>قنا, فرشوط</item>
+        <item>قنا, قفط</item>
+        <item>قنا, قوص</item>
+        <item>قنا, نجع حمادي</item>
+        <item>قنا, نقادة</item>
+    </string-array>
+    <string-array name="zone7">
+        <item>اسوان, مدينة أسوان</item>
+        <item>اسوان, ابو الريش</item>
+        <item>اسوان, ابو سمبل</item>
+        <item>اسوان, ادفو</item>
+        <item>اسوان, البصيلية</item>
+        <item>اسوان, الرديسية</item>
+        <item>اسوان, السباعية</item>
+        <item>اسوان, دراو</item>
+        <item>اسوان, صحارى</item>
+        <item>اسوان, كلابشة</item>
+        <item>اسوان, كوم امبو</item>
+        <item>اسوان, نصر النوبة</item>
+        <item>الاقصر, مدينة الأقصر</item>
+        <item>الاقصر, أرمنت</item>
+        <item>الاقصر, إسنا</item>
+        <item>الاقصر, البياضية</item>
+        <item>الاقصر, الزينية</item>
+        <item>الاقصر, الطود</item>
+        <item>الاقصر, القرنه</item>
+    </string-array>
+    <string-array name="zone8">
+        <item>جنوب سيناء, شرم الشيخ</item>
+        <item>البحر الاحمر, الغردقة</item>
+    </string-array>
+    <string-array name="zone9">
+        <item>مطروح, مرسى مطروح</item>
+        <item>مطروح, الحمام</item>
+        <item>مطروح, الساحل الشمالي</item>
+        <item>مطروح, السلوم</item>
+        <item>مطروح, الضبعة</item>
+        <item>مطروح, العلمين</item>
+        <item>مطروح, النجيلة</item>
+        <item>مطروح, براني</item>
+        <item>مطروح, سيوة</item>
+        <item>مطروح, ماريناالعلمين</item>
+    </string-array>
+    <string-array name="zone10">
+        <item>البحر الاحمر, شلاتين</item>
+        <item>البحر الاحمر, مرسى علم</item>
+        <item>جنوب سيناء, طابا</item>
+        <item>جنوب سيناء, دهب</item>
+        <item>جنوب سيناء, نويبع</item>
+        <item>البحر الاحمر, رأس غارب</item>
+        <item>البحر الاحمر, رأس شقير</item>
+        <item>الوادي الجديد, الفرافره</item>
+        <item>الوادي الجديد, الخارجه</item>
+        <item>الوادي الجديد, الداخله</item>
+        <item>الوادي الجديد, باريس</item>
+        <item>الوادي الجديد, بحيرات توشكه</item>
+    </string-array>>
+
     <string-array name="arrayCities">
         <item>الجيزة, أوسيم</item>
         <item>الجيزة, إمبابة</item>
@@ -93,103 +462,6 @@
         <item>القليوبية, شبرا الخيمة</item>
         <item>القليوبية, مدينة العبور</item>
     </string-array>
-
-    <string-array name="zone1">
-        <item>أوسيم</item>
-        <item>إمبابة</item>
-        <item>الدقى</item>
-        <item>الرماية</item>
-        <item>الصحفيين</item>
-        <item>العجوزة</item>
-        <item>العزيزية</item>
-        <item>العمرانية</item>
-        <item>القرية الفرعونية</item>
-        <item>الكيت كات</item>
-        <item>المنيب</item>
-        <item>المهندسين</item>
-        <item>الهرم</item>
-        <item>الوراق</item>
-        <item>بشتيل</item>
-        <item>بولاق الدكرور</item>
-        <item>ترسا</item>
-        <item>حدائق الاهرام</item>
-        <item>حى الجيزة</item>
-        <item>ساقية مكى</item>
-        <item>سقارة</item>
-        <item>صفط</item>
-        <item>فيصل</item>
-        <item>كرداسة</item>
-        <item>كفر طهرمس</item>
-        <item>مريوطية</item>
-        <item>ميت عقبة</item>
-        <item>ناهيا</item>
-        <item>الحلمية</item>
-        <item>الزمالك</item>
-        <item>الزيتون</item>
-        <item>الساحل</item>
-        <item>السيدة زينب</item>
-        <item>العباسية</item>
-        <item>المرج</item>
-        <item>المطرية</item>
-        <item>المعادي</item>
-        <item>المقطم</item>
-        <item>المنيل</item>
-        <item>النزهة</item>
-        <item>الوايلي</item>
-        <item>حدائق القبة</item>
-        <item>دار السلام</item>
-        <item>زهراء المعادى</item>
-        <item>شبرا</item>
-        <item>شيراتون</item>
-        <item>عزبة النخل</item>
-        <item>عين شمس</item>
-        <item>قصر النيل</item>
-        <item>مدينة السلام</item>
-        <item>مدينة نصر</item>
-        <item>مصر الجديدة</item>
-        <item>وسط البلد</item>
-        <item>شبرا الخيمة</item>
-    </string-array>
-
-    <string-array name="zone2">
-        <item>اكتوبر - المنطقة الصناعية</item>
-        <item>اكتوبر-  الاحياء</item>
-        <item>أكتوبر - منطقة الحصري</item>
-        <item>اكتوبر - المتميز والسياحية</item>
-        <item>اكتوبر - مدينة الشيخ زايد</item>
-        <item>الشيخ زايد- الاحياء</item>
-        <item>مدينة الخمايل</item>
-        <item>طريق الواحات</item>
-        <item>مدينة الفردوس</item>
-        <item>دريم لاند</item>
-        <item>حى الاشجار</item>
-        <item>مدينة الانتاج الاعلامى</item>
-        <item>هرم سيتى</item>
-        <item>القرية الذكية</item>
-        <item>ابورواش الصناعية</item>
-        <item>الطريق الصحراوي الى ال كيلو 28</item>
-        <item>البدرشين</item>
-        <item>البراجيل</item>
-        <item>الصف</item>
-        <item>المنصورية</item>
-        <item>جزيرة الدهب وكولدير</item>
-        <item>حدائق حلوان</item>
-        <item>حلوان</item>
-        <item>مدينة   15 مايو</item>
-        <item>الحوامدية</item>
-        <item>دهشور</item>
-        <item>مدينة الشروق</item>
-        <item>مدينة بدر</item>
-        <item>مدينتي</item>
-        <item>التجمع الأول</item>
-        <item>التجمع الثالث</item>
-        <item>التجمع الخامس</item>
-        <item>مدينة الرحاب</item>
-        <item>العاشر من رمضان</item>
-        <item>بهتيم</item>
-        <item>مدينة العبور</item>
-    </string-array>
-
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

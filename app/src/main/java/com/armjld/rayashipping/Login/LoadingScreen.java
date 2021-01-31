@@ -40,16 +40,12 @@ import java.util.Objects;
 
 public class LoadingScreen extends AppCompatActivity {
 
-    public static ArrayList<String> cities = new ArrayList<>();
-
-    static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     @SuppressLint("StaticFieldLeak")
     private static TextView txtLoading;
     rquests _req = new rquests(this);
 
     @Override
-    public void onBackPressed() {
-    }
+    public void onBackPressed() { }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -70,26 +66,6 @@ public class LoadingScreen extends AppCompatActivity {
             getCaptins();
         } else if (UserInFormation.getAccountType().equals("Delivery Worker")) {
             getForRaya();
-        }
-
-        getCities();
-
-    }
-
-    private void getCities() {
-        cities.clear();
-        String[] citiess = getResources().getStringArray(R.array.zone1);
-        for (String city : citiess) {
-            String[] filterSep = city.split(", ");
-            String filterGov = filterSep[0].trim();
-            cities.add(filterGov);
-        }
-
-        citiess = getResources().getStringArray(R.array.zone2);
-        for (String city : citiess) {
-            String[] filterSep = city.split(", ");
-            String filterGov = filterSep[0].trim();
-            cities.add(filterGov);
         }
     }
 

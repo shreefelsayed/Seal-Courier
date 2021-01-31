@@ -23,6 +23,7 @@ import com.armjld.rayashipping.SuperVisor.AllOrders;
 import com.armjld.rayashipping.models.userData;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import timber.log.Timber;
 
@@ -42,6 +43,8 @@ public class MyCaptins extends Fragment {
     public static void getCaptins() {
         Timber.i("Setting orders in Home Fragment");
         captinList = Home.mCaptins;
+
+        Collections.sort(captinList, (lhs, rhs) -> lhs.getTrackId().compareTo(rhs.getTrackId()));
 
         if (mContext != null) {
             captinsAdapter = new CaptinsAdapter(mContext, captinList, "info");

@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:layoutDirection="ltr"
-
     android:orientation="vertical"
     tools:context=".Chat.Messages">
 

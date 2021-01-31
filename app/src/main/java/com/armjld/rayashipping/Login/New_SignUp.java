@@ -386,7 +386,7 @@ public class New_SignUp extends AppCompatActivity {
             rdMotor.setChecked(true);
         });
 
-        btnMotor.setOnClickListener(v -> {
+        btnRun.setOnClickListener(v -> {
             isCar = "false";
             isMotor = "false";
             isTrans = "true";
@@ -402,7 +402,6 @@ public class New_SignUp extends AppCompatActivity {
             rdCar.setChecked(false);
             rdMotor.setChecked(false);
             rdRun.setChecked(true);
-
         });
 
 

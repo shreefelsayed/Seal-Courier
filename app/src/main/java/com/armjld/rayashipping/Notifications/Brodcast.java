@@ -44,7 +44,7 @@ public class Brodcast extends BroadcastReceiver {
                     FirebaseDatabase.getInstance().getReference().child("Pickly").child("orders").child(orderID).child("statue").setValue("recived2");
                     FirebaseDatabase.getInstance().getReference().child("Pickly").child("orders").child(orderID).child(orderID).child("recived2Time").setValue(datee);
                     String message = "قام " + UserInFormation.getUserName() + " بتأكد استلام الاوردر";
-                    notiData Noti = new notiData(UserInFormation.getId(), owner, orderID, message, datee, "false", "profile", UserInFormation.getUserName(), UserInFormation.getUserURL());
+                    notiData Noti = new notiData(UserInFormation.getId(), owner, orderID, message, datee, "false", "profile", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
                     FirebaseDatabase.getInstance().getReference().child("Pickly").child("notificationRequests").child(owner).push().setValue(Noti);
                     Toast.makeText(context, "تم تأكيد استلام الشحنة", Toast.LENGTH_SHORT).show();
                 }

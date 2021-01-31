@@ -3,9 +3,9 @@ package com.armjld.rayashipping.models;
 public class CaptinMoney {
 
     String orderid; // Order id
-    String transType; // delivered / recived / denied / deniedback / ourmoney
+    String transType; // delivered / recived / denied / deniedback / ourmoney / bouns / shippingFees
     String date; // Transaction Date
-    String trackId; // Ordre track ID
+    String trackId; // Order track ID
     String isPaid = "fasle"; // is Transaction Paid
     String money;
 

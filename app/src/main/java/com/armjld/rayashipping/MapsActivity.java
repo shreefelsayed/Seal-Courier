@@ -4,18 +4,22 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -24,6 +28,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -54,6 +59,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -62,7 +68,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -78,9 +94,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     GoogleApiClient mGoogleApiClient;
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationRequest mLocationRequest;
-    RecyclerView recyclerView2;
     private GoogleMap mMap;
     private FloatingActionButton btnGCL;
+    private ProgressDialog progressDialog;
+    TextView txtPickLoc, txtPickDistance;
+    ConstraintLayout cardLocation;
+
 
     // Disable the Back Button
     @Override
@@ -92,15 +111,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        recyclerView2 = findViewById(R.id.recyclerView2);
-
-        recyclerView2.setVisibility(View.GONE);
-
-        recyclerView2.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
-        recyclerView2.setLayoutManager(layoutManager);
 
         final LocationManager manager2 = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (!manager2.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -113,6 +123,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ImageView btnHome = findViewById(R.id.btnHome);
         btnGCL = findViewById(R.id.btnGCL);
+
+        cardLocation = findViewById(R.id.cardLocation);
+        txtPickLoc = findViewById(R.id.txtPickLoc);
+        txtPickDistance = findViewById(R.id.txtPickDistance);
+        cardLocation.setVisibility(View.GONE);
+
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         assert mapFragment != null;
@@ -214,7 +230,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             boolean toPick = state.equals("placed") || state.equals("accepted") || state.equals("recived");
             boolean toDelv = state.equals("readyD") || state.equals("supD") || state.equals("capDenied") || state.equals("supDenied");
 
-            if (toPick && !thisOrder.getLat().equals("") && !thisOrder.get_long().equals("")) {
+            if (toPick) {
                 double newLat = Double.parseDouble(thisOrder.getLat());
                 double newLong = Double.parseDouble(thisOrder.get_long());
                 LatLng latLng = new LatLng(newLat, newLong);
@@ -241,6 +257,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void checkForDelvLocation(String dPhone, String state, String provider, String id) {
+        Log.i("Maps", "Checking For Delivery");
         FirebaseDatabase.getInstance().getReference().child("Pickly").child("clientsLocations").child(dPhone).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -250,13 +267,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     double _long = Double.parseDouble(Objects.requireNonNull(snapshot.child("_long").getValue()).toString());
                     LatLng latLng = new LatLng(_lat, _long);
                     addOrder(latLng, state, provider, id);
+                    Log.i("Maps", "Order id for Map : " + id);
                 }
 
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 
@@ -285,39 +302,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        String gID = (String) marker.getTag();
-        Data orderData = null;
+        if(!UserInFormation.getAccountType().equals("Supervisor") && currentLocation != null) {
+            for(int i = 0; i < filterList.size(); i++) {
+                if(filterList.get(i).getId().equals(marker.getTag())) {
+                    if(filterList.get(i).getStatue().equals("placed") || filterList.get(i).getStatue().equals("accepted") || filterList.get(i).getStatue().equals("capDenied") || filterList.get(i).getStatue().equals("supDenied")) {
+                        txtPickLoc.setText(filterList.get(i).getTxtPState() + " - " + filterList.get(i).getmPRegion() + " - " + filterList.get(i).getmPAddress());
+                    } else if (filterList.get(i).getStatue().equals("supD") || filterList.get(i).getStatue().equals("readyD")) {
+                        txtPickLoc.setText(filterList.get(i).getTxtDState() + " - " + filterList.get(i).getmDRegion() + " - " + filterList.get(i).getDAddress());
+                    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            orderData = filterList.stream().filter(x -> x.getId().equals(gID)).findFirst().get();
-        } else {
-            for(int i = 0; i < filterList.size(); i ++) {
-                if (filterList.get(i).getId().equals(gID)) {
-                    orderData = filterList.get(i);
+                    txtPickDistance.setText(getDistanceFromLatLonInKm(currentLocation.getLatitude(), currentLocation.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude) + " كم");
+                    cardLocation.setVisibility(View.VISIBLE);
+
+                    progressDialog = new ProgressDialog(MapsActivity.this);
+                    progressDialog.setMessage("جاري تحضير خط السير ..");
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
+
+                    LatLng current = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                    String url = getDirectionsUrl(current, marker.getPosition());
+                    DownloadTask downloadTask = new DownloadTask();
+                    downloadTask.execute(url);
                     break;
                 }
             }
         }
 
-
-        setCardDate(orderData);
-
-        recyclerView2.setVisibility(View.VISIBLE);
-        recyclerView2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slid_up));
         return true;
-    }
-
-    private void setCardDate(Data orderData) {
-        ArrayList<Data> list = new ArrayList<>();
-        list.add(orderData);
-        if (UserInFormation.getAccountType().equals("Supervisor")) {
-            MyAdapter myAdapter = new MyAdapter(this, list, "Home");
-            recyclerView2.setAdapter(myAdapter);
-        } else {
-            DeliveryAdapter myAdapter = new DeliveryAdapter(this, list, "Home");
-            recyclerView2.setAdapter(myAdapter);
-        }
-
     }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, Drawable vectorDrawableResourceId) {
@@ -329,8 +340,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onClick(View view) {
-    }
+    public void onClick(View view) { }
 
     private void checkGPS() {
 
@@ -371,33 +381,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-    }
+    public void onPointerCaptureChanged(boolean hasCapture) { }
 
     @Override
-    public void onInfoWindowClick(Marker marker) {
-
-    }
+    public void onInfoWindowClick(Marker marker) { }
 
     @Override
-    public void onLocationChanged(@NonNull Location location) {
-
-    }
+    public void onLocationChanged(@NonNull Location location) {}
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
 
     @Override
-    public void onProviderEnabled(@NonNull String provider) {
-
-    }
+    public void onProviderEnabled(@NonNull String provider) {}
 
     @Override
-    public void onProviderDisabled(@NonNull String provider) {
-
-    }
+    public void onProviderDisabled(@NonNull String provider) { }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -419,8 +418,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapClick(LatLng latLng) {
-        recyclerView2.setVisibility(View.GONE);
-        recyclerView2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slid_down));
+        /*recyclerView2.setVisibility(View.GONE);
+        recyclerView2.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slid_down));*/
     }
 
     @Override
@@ -463,6 +462,176 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class DownloadTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... url) {
+
+            String data = "";
+
+            try {
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ParserTask parserTask = new ParserTask();
+
+
+            parserTask.execute(result);
+
+        }
+    }
+
+
+    /**
+     * A class to parse the Google Places in JSON format
+     */
+    @SuppressLint("StaticFieldLeak")
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+        // Parsing the data in non-ui thread
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                routes = parser.parse(jObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+
+            progressDialog.dismiss();
+            Log.d("result", result.toString());
+            ArrayList points = null;
+            PolylineOptions lineOptions = null;
+
+            for (int i = 0; i < result.size(); i++) {
+                points = new ArrayList();
+                lineOptions = new PolylineOptions();
+
+                List<HashMap<String, String>> path = result.get(i);
+
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
+
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
+                    LatLng position = new LatLng(lat, lng);
+                    points.add(position);
+                }
+
+                lineOptions.addAll(points);
+                lineOptions.width(5);
+                lineOptions.color(Color.BLUE);
+                lineOptions.geodesic(true);
+
+            }
+
+// Drawing polyline in the Google Map for the i-th route
+            if(lineOptions != null) {
+                mMap.addPolyline(lineOptions);
+            } else {
+                progressDialog.dismiss();
+                Toast.makeText(MapsActivity.this, "لا يمكن تحديد خط سير للشحنه", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private String getDirectionsUrl(LatLng origin, LatLng dest) {
+
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+
+        // Sensor enabled
+        String sensor = "sensor=false";
+        String mode = "mode=driving";
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=AIzaSyCPGN2USqg7bCNaM9VBVYUAADbOK9m7JTc";
+
+
+        return url;
+    }
+
+    /**
+     * A method to download json data from url
+     */
+    private String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            urlConnection.connect();
+
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+
+            br.close();
+            Log.d("data", data);
+
+        } catch (Exception e) {
+            Log.d("Exception", e.toString());
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+    private int getDistanceFromLatLonInKm(double lat1,double lon1,double lat2,double lon2) {
+        int R = 6371; // Radius of the earth in km
+        double dLat = deg2rad(lat2-lat1);  // deg2rad below
+        double dLon = deg2rad(lon2-lon1);
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return (int) (R * c);
+    }
+
+    private double deg2rad(double deg) {
+        return deg * (Math.PI/180);
     }
 
 
