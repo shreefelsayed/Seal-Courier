@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/addToolbar"
         app:srcCompat="@drawable/ic_back_black"
-        app:tint="@color/colorBack" />
+        app:tint="@color/orange" />
 
     <ScrollView
         android:layout_width="0dp"

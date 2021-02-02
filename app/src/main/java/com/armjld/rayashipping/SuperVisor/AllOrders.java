@@ -111,7 +111,7 @@ public class AllOrders extends Fragment implements TrackingStateObserver.OnTrack
         if(sdkInstance.isRunning()) {
             btnTrack.setColorFilter(Color.GREEN);
         } else {
-            btnTrack.setColorFilter(Color.BLACK);
+            btnTrack.setColorFilter(Color.WHITE);
         }
     }
     private void startTracking() {
@@ -136,7 +136,7 @@ public class AllOrders extends Fragment implements TrackingStateObserver.OnTrack
         FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("trackId").setValue("");
         sdkInstance.stop();
         sdkInstance.removeTrackingListener(this);
-        btnTrack.setColorFilter(Color.BLACK);
+        btnTrack.setColorFilter(Color.WHITE);
         Toast.makeText(mContext, "تم ايقاف البرنامج", Toast.LENGTH_SHORT).show();
 
     }

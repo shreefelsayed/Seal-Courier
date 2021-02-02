@@ -9,7 +9,7 @@
 
     <include
         android:id="@+id/dsToolbar"
-        layout="@layout/toolbar_white"
+        layout="@layout/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/dsToolbar"
         app:layout_constraintStart_toEndOf="@+id/btnMaps"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_power" />
+        app:srcCompat="@drawable/ic_power"
+        app:tint="@color/colorWhite"/>
 
     <ImageView
         android:id="@+id/filters_btn"
@@ -45,7 +46,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/dsToolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_old_filter" />
+        app:srcCompat="@drawable/ic_old_filter"
+        app:tint="@color/orange"/>
 
 
     <ImageView
@@ -56,19 +58,22 @@
         app:layout_constraintBottom_toBottomOf="@+id/dsToolbar"
         app:layout_constraintEnd_toStartOf="@+id/filters_btn"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_qrcode" />
+        app:srcCompat="@drawable/ic_qrcode"
+        app:tint="@color/orange" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:background="@color/background"
+        android:background="@color/ic_profile_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dsToolbar"
-        app:tabIndicatorColor="#00E1FF"
-        app:tabTextAppearance="@style/TextAppearance.AppCompat.Medium" />
+        app:tabIndicatorColor="@color/orange"
+        app:tabSelectedTextColor="@color/orange"
+        app:tabTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:tabTextColor="@color/colorWhite" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"

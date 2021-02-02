@@ -57,7 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar_home"
         app:srcCompat="@drawable/ic_call_24"
-        app:tint="@color/colorBack" />
+        app:tint="@color/orange" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -87,7 +87,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar_home"
         app:srcCompat="@drawable/ic_back_black"
-        app:tint="@color/colorBack" />
+        app:tint="@color/orange" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -187,7 +187,7 @@
             android:layout_weight="0.25"
             android:padding="@dimen/_4sdp"
             app:srcCompat="@drawable/ic_baseline_camera_enhance_24"
-            app:tint="@color/ic_profile_background" />
+            app:tint="@color/orange"/>
 
         <ImageButton
             android:id="@+id/btnSend"
@@ -198,7 +198,8 @@
             android:foregroundGravity="center"
             android:padding="@dimen/_4sdp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_send" />
+            android:src="@drawable/ic_send"
+            app:tint="@color/orange"/>
     </LinearLayout>
 
 

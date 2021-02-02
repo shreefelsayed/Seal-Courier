@@ -4,7 +4,7 @@
     android:viewportWidth="1024"
     android:viewportHeight="1024">
     <path
-        android:fillColor="@color/colorAccent"
+        android:fillColor="@color/ic_profile_background"
         android:pathData="M148.81,0L875.19,0A148.81,148.81 0,0 1,1024 148.81L1024,875.19A148.81,148.81 0,0 1,875.19 1024L148.81,1024A148.81,148.81 0,0 1,0 875.19L0,148.81A148.81,148.81 0,0 1,148.81 0z" />
     <path
         android:fillColor="@color/colorBack"

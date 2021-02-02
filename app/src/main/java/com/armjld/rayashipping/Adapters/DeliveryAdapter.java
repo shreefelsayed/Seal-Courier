@@ -63,7 +63,6 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
     @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        Vibrator vibe = (Vibrator) Objects.requireNonNull(mContext).getSystemService(Context.VIBRATOR_SERVICE);
         Data data = filtersData.get(position);
 
         // Get Post Date
@@ -97,7 +96,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
             int oCount = 0;
 
             for(int i = 0; i < Home.captinAvillable.size(); i ++) {
-                Data oData = SuperAvillable.filterList.get(i);
+                Data oData = Home.captinAvillable.get(i);
                 if(oData.getuId().equals(data.getuId()) && oData.getStatue().equals("recived")) {
                    oCount ++;
                 }
@@ -105,7 +104,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
             BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("تأكيد استلام الشحنه").setCancelable(true).setPositiveButton("استلام " + oCount + " شحنه", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                 for(int i = 0; i < Home.captinAvillable.size(); i ++) {
-                    Data oData = SuperAvillable.filterList.get(i);
+                    Data oData = Home.captinAvillable.get(i);
                     if(oData.getuId().equals(data.getuId()) && oData.getStatue().equals("recived")) {
                         // ------- Update Database ------
                         OrdersClass ordersClass = new OrdersClass(mContext);
@@ -261,6 +260,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
             btnCapRecived = myview.findViewById(R.id.btnCapRecived);
         }
 
+        @SuppressLint("SetTextI18n")
         public void setData(Data data) {
             txtTrackId.setText(data.getTrackid());
             txtPostDate.setText(_cacu.setPostDate(data.getDate()));

@@ -28,18 +28,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_asign"
-        app:tint="@color/colorBack" />
+        app:tint="@color/orange" />
 
     <ImageView
         android:id="@+id/btnBack"
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"
-        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/dsToolbar"
         app:layout_constraintStart_toStartOf="@+id/dsToolbar"
         app:layout_constraintTop_toTopOf="@+id/dsToolbar"
+        app:layout_constraintVertical_bias="0.529"
         app:srcCompat="@drawable/ic_back_black"
-        app:tint="@color/colorBack" />
+        app:tint="@color/orange" />
 
     <LinearLayout
         android:id="@+id/linSearch"
@@ -102,8 +103,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_8sdp"
-                            android:backgroundTint="@color/colorWhite"
+                            android:backgroundTint="@color/orange"
                             android:completionThreshold="1"
+                            android:drawableTint="@color/orange"
                             android:drawableRight="@drawable/ic_add_location"
                             android:drawablePadding="@dimen/_8sdp"
                             android:fontFamily="@font/_markazi"
@@ -134,8 +136,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/_8sdp"
-                            android:backgroundTint="@color/colorWhite"
+                            android:backgroundTint="@color/orange"
                             android:completionThreshold="1"
+                            android:drawableTint="@color/orange"
                             android:drawableRight="@drawable/ic_add_location"
                             android:drawablePadding="@dimen/_8sdp"
                             android:fontFamily="@font/_markazi"

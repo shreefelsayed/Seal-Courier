@@ -78,6 +78,7 @@ public class MyCaptinInfo extends AppCompatActivity {
 
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef("Raya");
+
         mDatabase.orderByChild("uAccepted").equalTo(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -87,32 +88,13 @@ public class MyCaptinInfo extends AppCompatActivity {
                         assert orderData != null;
                         if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             placed.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD")) {
+                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied")) {
                             delv.add(orderData);
                         }
                     }
                 }
 
-                // ------- Sort According to Date
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    placed.sort((o1, o2) -> {
-                        String one = o1.getStatue();
-                        String two = o2.getStatue();
-                        return two.compareTo(one);
-                    });
-                }
-
-                // ------- Sort According to Date
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    delv.sort((o1, o2) -> {
-                        String one = o1.getStatue();
-                        String two = o2.getStatue();
-                        return two.compareTo(one);
-                    });
-                }
-
                 Collections.sort(delv, (lhs, rhs) -> rhs.getDDate().compareTo(lhs.getDDate()));
-
                 Collections.sort(placed, (lhs, rhs) -> rhs.getpDate().compareTo(lhs.getpDate()));
 
                 myCaptinDelv.getOrders();

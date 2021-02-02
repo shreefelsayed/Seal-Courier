@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dsToolbar"
         app:srcCompat="@drawable/ic_back_black"
-        app:tint="@color/colorBack" />
+        app:tint="@color/orange" />
 
     <LinearLayout
         android:id="@+id/linearLayout8"

@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/toolbar_home"
-        layout="@layout/toolbar_white"
+        layout="@layout/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorBack"
@@ -28,7 +28,8 @@
         app:layout_constraintStart_toStartOf="@+id/toolbar_home"
         app:layout_constraintTop_toTopOf="@+id/toolbar_home"
         app:layout_constraintVertical_bias="0.312"
-        app:srcCompat="@drawable/ic_back_black" />
+        app:srcCompat="@drawable/ic_back_black"
+        app:tint="@color/orange"/>
 
     <ImageView
         android:id="@+id/btnClear"
@@ -39,12 +40,14 @@
         app:layout_constraintEnd_toEndOf="@+id/toolbar_home"
         app:layout_constraintTop_toTopOf="@+id/toolbar_home"
         app:layout_constraintVertical_bias="0.312"
-        app:srcCompat="@drawable/ic_delete_white" />
+        app:srcCompat="@drawable/ic_delete_white"
+        app:tint="@color/orange"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:backgroundTint="@color/orange"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

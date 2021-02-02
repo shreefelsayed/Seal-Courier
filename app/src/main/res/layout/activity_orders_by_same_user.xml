@@ -14,7 +14,7 @@
 
         <include
             android:id="@+id/toolbar_home"
-            layout="@layout/toolbar_white"
+            layout="@layout/toolbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_asign"
-            app:tint="@color/ic_profile_background" />
+            app:tint="@color/orange"/>
 
         <ImageView
             android:id="@+id/btnBack"
@@ -41,7 +41,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/toolbar_home"
             app:layout_constraintStart_toStartOf="@+id/toolbar_home"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_back_white" />
+            app:srcCompat="@drawable/ic_arrow_back_white"
+            app:tint="@color/orange"/>
 
         <LinearLayout
             android:id="@+id/EmptyPanel"

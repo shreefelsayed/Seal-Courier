@@ -11,7 +11,7 @@
 
     <include
         android:id="@+id/dsToolbar"
-        layout="@layout/toolbar_white"
+        layout="@layout/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/dsToolbar"
         app:layout_constraintStart_toStartOf="@+id/dsToolbar"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow_back_white" />
+        app:srcCompat="@drawable/ic_arrow_back_white"
+        app:tint="@color/orange" />
 
     <ImageView
         android:id="@+id/btnOrderMap"
@@ -384,7 +385,7 @@
                                 android:layout_marginLeft="@dimen/_5sdp"
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:background="@drawable/round_bg_no_padding"
-                                android:backgroundTint="@color/ic_profile_background"
+                                android:backgroundTint="@color/orange"
                                 android:gravity="center"
                                 android:paddingLeft="@dimen/_5sdp"
                                 android:paddingTop="@dimen/_1sdp"

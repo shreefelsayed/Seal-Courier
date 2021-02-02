@@ -116,7 +116,7 @@ public class EnvioMoney {
 
         // ---- Send noti to Captin
         String message = "تم تسليمك البونص و قيمته " + walletMoney + " بنجاح";
-        notiData Noti = new notiData(UserInFormation.getId(), "", user.getId(), message, datee, "false", "wallet", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+        notiData Noti = new notiData(UserInFormation.getId(), user.getId(), "", message, datee, "false", "wallet", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(user.getId()).push().setValue(Noti);
     }
 }
