@@ -13,7 +13,7 @@ import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 public class MyCaptinEdit extends AppCompatActivity {
 
     ImageView btnBack;
-    TextView txtAddBouns, txtCloseAccount;
+    TextView txtAddBouns, txtCloseAccount, txtMoney;
     public static userData user;
 
     @Override
@@ -26,6 +26,7 @@ public class MyCaptinEdit extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         txtAddBouns = findViewById(R.id.txtAddBouns);
         txtCloseAccount = findViewById(R.id.txtCloseAccount);
+        txtMoney = findViewById(R.id.txtMoney);
 
         btnBack.setOnClickListener(v-> finish());
 
@@ -36,6 +37,11 @@ public class MyCaptinEdit extends AppCompatActivity {
         txtAddBouns.setOnClickListener(v-> {
             MyCaptinAddBouns.user = user;
             startActivity(new Intent(this, MyCaptinAddBouns.class));
+        });
+
+        txtMoney.setOnClickListener(v-> {
+            EditCaptinBouns.user = user;
+            startActivity(new Intent(this, EditCaptinBouns.class));
         });
 
         txtCloseAccount.setOnClickListener(v-> {

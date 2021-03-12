@@ -798,7 +798,8 @@ public class New_SignUp extends AppCompatActivity {
                 "false",
                 0,
                 "true",
-                "Raya");
+                "Raya"
+                , 0, 0, 0);
 
         uDatabase.child(id).setValue(User);
 

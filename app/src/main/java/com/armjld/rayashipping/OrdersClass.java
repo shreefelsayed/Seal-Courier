@@ -32,6 +32,9 @@ public class OrdersClass {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
     String datee = sdf.format(new Date());
 
+    SimpleDateFormat dayFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+    String dayDate = dayFormat.format(new Date());
+
     public OrdersClass(Context mContext) {
         this.mContext = mContext;
     }
@@ -47,6 +50,7 @@ public class OrdersClass {
         // ---- Update Database Value
         mDatabase.child(orderData.getId()).child("statue").setValue("recived2");
         mDatabase.child(orderData.getId()).child("recived2Time").setValue(datee);
+        mDatabase.child(orderData.getId()).child("pDate").setValue(dayDate);
 
         // ---- Send Notification to Supervisor
         String message = "قام " + UserInFormation.getUserName() + " بتأكيد استلام شحنه " + orderData.getOwner();
@@ -69,7 +73,7 @@ public class OrdersClass {
             }
         }
 
-        //if (toPay) wallet.addRecivedMoney(UserInFormation.getId(), orderData);
+        if (toPay) wallet.addRecivedMoney(UserInFormation.getId(), orderData);
 
         // --- Add Log
         String Log = "قام المندوب " + UserInFormation.getId() + " بتأكيد استلام الشحنه من التاجر " + orderData.getuId();
@@ -116,6 +120,7 @@ public class OrdersClass {
 
     // ------ When Captin deliver a denied order back to Supplier
     public void returnOrder(Data orderData) {
+        // ---
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
 
@@ -132,9 +137,6 @@ public class OrdersClass {
         String Log = "قام المندوب " + UserInFormation.getId() + " بتسليم المرتجع الي " + orderData.getOwner();
         logOrder(mDatabase, orderData.getId(), Log);
 
-        // --- Add Money on Deliver Denied
-
-
         // --- Toast
         Toast.makeText(mContext, "تم تأكيد تسليم المرتجع", Toast.LENGTH_SHORT).show();
     }
@@ -147,6 +149,7 @@ public class OrdersClass {
 
         mDatabase.child(orderData.getId()).child("statue").setValue("delivered");
         mDatabase.child(orderData.getId()).child("dilverTime").setValue(datee);
+        mDatabase.child(orderData.getId()).child("ddate").setValue(dayDate);
 
         // -- Add Money to Delivery
         wallet.addDelvMoney(orderData.getuAccepted(), orderData);
@@ -160,6 +163,10 @@ public class OrdersClass {
         message = "تم تسليم شحنه " + orderData.getDName() + " بنجاح";
         Noti = new notiData(orderData.getuAccepted(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
+
+        // --- Add a Try
+        int tries = Integer.parseInt(orderData.getTries()) + 1;
+        mDatabase.child(orderData.getId()).child("tries").setValue(tries + "");
 
         // --- Add Money to Supplier Wallet
         if (!orderData.getProvider().equals("Esh7nly")) wallet.addToSupplier(orderData.getGMoney(), orderData.getuId(), orderData);
@@ -186,6 +193,7 @@ public class OrdersClass {
     public void assignToCaptin(Data orderData, String capID) {
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
+
         // --- Set changes in Order Data
         mDatabase.child(orderData.getId()).child("uAccepted").setValue(capID);
         mDatabase.child(orderData.getId()).child("pSupervisor").setValue(UserInFormation.getSup_code());
@@ -195,7 +203,6 @@ public class OrdersClass {
         // --- Set Changes in User Data
         uDatabase.child(UserInFormation.getId()).child("orders").child(orderData.getId()).child("captin").setValue(capID);
         uDatabase.child(capID).child("orders").child(orderData.getId()).child("statue").setValue("assignToPick");
-
 
         // ----- Send Notification To Captin
         String msg = "قام " + UserInFormation.getUserName() + " بتسليمك شحنه جديده لاستلامها.";
@@ -223,7 +230,7 @@ public class OrdersClass {
         _rquests.addrequest(_reqData, capID, orderData.getProvider());
 
         // --- Notification to Supplier
-        String message = "قامت شركه Envio بطلب لتوصيل شحنه " + orderData.getDName();
+        String message = "قامت شركه Seal بطلب لتوصيل شحنه " + orderData.getDName();
         notiData Noti = new notiData(capID, orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", "Envio", UserInFormation.getUserURL(), "Raya");
         assert notiKey != null;
         nDatabase.child(orderData.getuId()).child(notiKey).setValue(Noti);
@@ -364,8 +371,6 @@ public class OrdersClass {
         // Set Order As Paid
         mDatabase.child(orderData.getId()).child("paid").setValue("true");
         mDatabase.child(orderData.getId()).child("gget").setValue(orderData.getReturnMoney());
-
-
     }
 
     // ------- Add Logs to Order

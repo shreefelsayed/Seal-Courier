@@ -127,9 +127,11 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Data orderData = ds.getValue(Data.class);
                         OrdersClass ordersClass = new OrdersClass(QRScanner.this);
-                        if (orderData.getStatue().equals("supD") && ds.child("dSupervisor").getValue().toString().equals(UserInFormation.getMySup())) {
+                        if (orderData.getStatue().equals("supD") || orderData.getStatue().equals("placed") || orderData.getStatue().equals("accepted")
+                                || orderData.getStatue().equals("recived")  || orderData.getStatue().equals("recived2") || orderData.getStatue().equals("hubD") || orderData.getStatue().equals("hubP")
+                        || orderData.getStatue().equals("denied") || orderData.getStatue().equals("deniedD")) {
                             ordersClass.asignDelv(orderData, UserInFormation.getId());
-                        } else if(orderData.getStatue().equals("supDenied")) {
+                        } else if(orderData.getStatue().equals("supDenied") || orderData.getStatue().equals("hub2Denied") || orderData.getStatue().equals("hub1Denied")) {
                             ordersClass.asignDenied(orderData, UserInFormation.getId());
                         } else {
                             Toast.makeText(QRScanner.this, "لا يمكنك استلام تلك الشحنه من المشرف", Toast.LENGTH_SHORT).show();
@@ -180,7 +182,9 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         Data orderData = ds.getValue(Data.class);
                         assert orderData != null;
-                        if (orderData.getStatue().equals("hubD") || orderData.getStatue().equals("deniedD")) {
+                        if (orderData.getStatue().equals("hubD") || orderData.getStatue().equals("deniedD") || orderData.getStatue().equals("hubP")
+                                || orderData.getStatue().equals("accepted")  || orderData.getStatue().equals("placed") || orderData.getStatue().equals("recived")
+                                || orderData.getStatue().equals("recived2") || orderData.getStatue().equals("denied")) {
                             // --------- Update Values
                             mDatabase.child(orderData.getId()).child("statue").setValue("supD");
                             mDatabase.child(orderData.getId()).child("supDScanTime").setValue(datee);
@@ -191,7 +195,8 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
                             mDatabase.child(orderData.getId()).child("logs").child(logC).setValue(Log);
 
                             Toast.makeText(QRScanner.this, "تم استلام الشحنه بنجاح", Toast.LENGTH_SHORT).show();
-                        } else if(orderData.getStatue().equals("hub2Denied")) {
+
+                        } else if(orderData.getStatue().equals("hub2Denied") || orderData.getStatue().equals("hub1Denied")) {
                             // --------- Update Values
                             mDatabase.child(orderData.getId()).child("statue").setValue("supDenied");
                             mDatabase.child(orderData.getId()).child("supDeniedTime").setValue(datee);

@@ -35,6 +35,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_150sdp"
+                    android:padding="40dp"
                     app:srcCompat="@drawable/ic_logo"
                     app:tint="@color/ic_profile_background" />
 
@@ -126,10 +127,10 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginRight="5dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/btn_defult_square"
+                    android:background="@color/orange"
                     android:text="تسجيل الدخول"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/colorBack"
+                    android:textColor="@color/ic_profile_background"
                     android:textSize="@dimen/_18sdp"
                     tools:ignore="HardcodedText,MissingConstraints" />
 

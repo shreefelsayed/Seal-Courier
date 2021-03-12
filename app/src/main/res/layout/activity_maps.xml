@@ -53,6 +53,25 @@
         app:layout_constraintBottom_toTopOf="@+id/cardLocation"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnGoogleDirc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_defult"
+        android:drawableRight="@drawable/googleg_disabled_color_18"
+        android:drawableTint="@color/colorBack"
+        android:paddingLeft="@dimen/_12sdp"
+        android:paddingRight="@dimen/_6sdp"
+        android:text="الاتجاهات"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="@color/colorBack"
+        android:textSize="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_home" />
+
+
     <include
         android:id="@+id/cardLocation"
         layout="@layout/card_distance"

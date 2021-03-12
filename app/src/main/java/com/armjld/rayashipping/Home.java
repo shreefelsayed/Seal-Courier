@@ -95,6 +95,7 @@ public class Home extends AppCompatActivity {
         if (UserInFormation.getId() == null) {
             finish();
             startActivity(new Intent(this, StartUp.class));
+            return;
         }
 
         bottomNavigationView = findViewById(R.id.bottomNav);
@@ -484,6 +485,4 @@ public class Home extends AppCompatActivity {
         }
         return frag;
     }
-
-
 }

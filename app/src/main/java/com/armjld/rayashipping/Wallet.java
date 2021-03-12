@@ -24,61 +24,64 @@ public class Wallet {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
     String datee = sdf.format(new Date());
 
-    int onDelvMoney = 15;
-    int onRecivMoney = 5;
-    int onDeniedMoney = 5;
-    int onDeniedReturn = 10;
 
     // ----- Add Money to Delv on Recived
     public void addRecivedMoney(String id, Data orderData) {
-        uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child("walletmoney").exists()) {
-                    int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
-                    uDatabase.child(id).child("walletmoney").setValue(currentValue + onRecivMoney);
-                    if (UserInFormation.getId().equals(id))
-                        UserInFormation.setWalletmoney(String.valueOf((currentValue + onRecivMoney)));
-                } else {
-                    uDatabase.child(id).child("walletmoney").setValue(onRecivMoney);
-                    if (UserInFormation.getId().equals(id))
-                        UserInFormation.setWalletmoney(String.valueOf((onRecivMoney)));
+        if(UserInFormation.getReciveMoney() != 0) {
+            int onRecivMoney = UserInFormation.getReciveMoney();
+            uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.child("walletmoney").exists()) {
+                        int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
+                        uDatabase.child(id).child("walletmoney").setValue(currentValue + onRecivMoney);
+                        if (UserInFormation.getId().equals(id))
+                            UserInFormation.setWalletmoney(String.valueOf((currentValue + onRecivMoney)));
+                    } else {
+                        uDatabase.child(id).child("walletmoney").setValue(onRecivMoney);
+                        if (UserInFormation.getId().equals(id))
+                            UserInFormation.setWalletmoney(String.valueOf((onRecivMoney)));
+                    }
+
+                    addToUser(id, onRecivMoney, orderData, "recived");
+                    Timber.i("Added Money to Wallet");
                 }
 
-                addToUser(id, onRecivMoney, orderData, "recived");
-                Timber.i("Added Money to Wallet");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
     }
 
     // ----- Add Money to Delv on Denied
     public void addDeniedMoney(String id, Data orderData) {
-        uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child("walletmoney").exists()) {
-                    int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
-                    uDatabase.child(id).child("walletmoney").setValue(currentValue + onDeniedMoney);
-                    if (UserInFormation.getId().equals(id))
-                        UserInFormation.setWalletmoney(String.valueOf((currentValue + onDeniedMoney)));
-                } else {
-                    uDatabase.child(id).child("walletmoney").setValue(onDeniedMoney);
-                    if (UserInFormation.getId().equals(id))
-                        UserInFormation.setWalletmoney(String.valueOf((onDeniedMoney)));
+        if(UserInFormation.getDeniedMoney() != 0) {
+            int onDeniedMoney = UserInFormation.getDeniedMoney();
+            uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.child("walletmoney").exists()) {
+                        int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
+                        uDatabase.child(id).child("walletmoney").setValue(currentValue + onDeniedMoney);
+                        if (UserInFormation.getId().equals(id))
+                            UserInFormation.setWalletmoney(String.valueOf((currentValue + onDeniedMoney)));
+                    } else {
+                        uDatabase.child(id).child("walletmoney").setValue(onDeniedMoney);
+                        if (UserInFormation.getId().equals(id))
+                            UserInFormation.setWalletmoney(String.valueOf((onDeniedMoney)));
+                    }
+
+                    addToUser(id, onDeniedMoney, orderData, "denied");
+                    Timber.i("Added Money to Wallet");
                 }
 
-                addToUser(id, onDeniedMoney, orderData, "denied");
-                Timber.i("Added Money to Wallet");
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
     }
 
     public void addBouns(String id, int money) {
@@ -118,29 +121,30 @@ public class Wallet {
 
     // ----- Add Money to Delv
     public void addDelvMoney(String id, Data orderData) {
-        if(orderData.getTxtDState().equals("القاهرة")) onDelvMoney = 20;
+        if(UserInFormation.getDelvMoney() != 0) {
+            int onDelvMoney = UserInFormation.getDelvMoney();
+            uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.child("walletmoney").exists()) {
+                        int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
+                        uDatabase.child(id).child("walletmoney").setValue(currentValue + onDelvMoney);
+                        if (UserInFormation.getId().equals(id)) UserInFormation.setWalletmoney(String.valueOf(currentValue + onDelvMoney));
+                    } else {
+                        uDatabase.child(id).child("walletmoney").setValue(onDelvMoney);
+                        if (UserInFormation.getId().equals(id))
+                            UserInFormation.setWalletmoney(String.valueOf((onDelvMoney)));
+                    }
 
-        uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child("walletmoney").exists()) {
-                    int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
-                    uDatabase.child(id).child("walletmoney").setValue(currentValue + onDelvMoney);
-                    if (UserInFormation.getId().equals(id)) UserInFormation.setWalletmoney(String.valueOf(currentValue + onDelvMoney));
-                } else {
-                    uDatabase.child(id).child("walletmoney").setValue(onDelvMoney);
-                    if (UserInFormation.getId().equals(id))
-                        UserInFormation.setWalletmoney(String.valueOf((onDelvMoney)));
+                    Timber.i("Added Money to Wallet");
+
+                    addToUser(id, onDelvMoney, orderData, "delivered");
                 }
 
-                Timber.i("Added Money to Wallet");
-
-                addToUser(id, onDelvMoney, orderData, "delivered");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) { }
+            });
+        }
     }
 
     // ---- Add Money to Esh7nly Account

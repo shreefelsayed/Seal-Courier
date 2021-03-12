@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Envio Couriers</string>
+    <string name="app_name">Seal Couriers</string>
 
     <string-array name="zone1">
         <item>الجيزة, أوسيم</item>
@@ -368,7 +368,8 @@
         <item>الوادي الجديد, الداخله</item>
         <item>الوادي الجديد, باريس</item>
         <item>الوادي الجديد, بحيرات توشكه</item>
-    </string-array>>
+    </string-array>
+    >
 
     <string-array name="arrayCities">
         <item>الجيزة, أوسيم</item>

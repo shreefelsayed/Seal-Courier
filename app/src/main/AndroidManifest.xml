@@ -26,7 +26,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RayaShipping"
         tools:ignore="AllowBackup,LockedOrientationActivity">
-        <activity android:name=".SuperCaptins.MyCaptinAddBouns"></activity>
+        <activity android:name=".Captin.PartDeliver"></activity>
+        <activity android:name=".SuperCaptins.EditCaptinBouns" />
+        <activity android:name=".SuperCaptins.MyCaptinAddBouns" />
         <activity android:name=".SuperCaptins.MyCaptinEdit" />
         <activity android:name=".DeniedReasons" />
         <activity android:name=".SuperVisor.SupperVisorWallet" />

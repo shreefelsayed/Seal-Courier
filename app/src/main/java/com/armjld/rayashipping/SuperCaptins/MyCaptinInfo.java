@@ -88,7 +88,7 @@ public class MyCaptinInfo extends AppCompatActivity {
                         assert orderData != null;
                         if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             placed.add(orderData);
-                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied")) {
+                        } else if (orderData.getStatue().equals("readyD") || orderData.getStatue().equals("denied") || orderData.getStatue().equals("capDenied")) {
                             delv.add(orderData);
                         }
                     }

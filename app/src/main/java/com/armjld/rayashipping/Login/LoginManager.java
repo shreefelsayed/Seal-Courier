@@ -44,40 +44,6 @@ public class LoginManager {
     SimpleDateFormat sdf0 = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     String today = sdf0.format(new Date());
 
-    /**
-     * Returns the consumer friendly device name
-     */
-    public static String getDeviceName() {
-        String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
-        if (model.startsWith(manufacturer)) {
-            return capitalize(model);
-        }
-        return capitalize(manufacturer) + " " + model;
-    }
-
-    private static String capitalize(String str) {
-        if (TextUtils.isEmpty(str)) {
-            return str;
-        }
-        char[] arr = str.toCharArray();
-        boolean capitalizeNext = true;
-
-        StringBuilder phrase = new StringBuilder();
-        for (char c : arr) {
-            if (capitalizeNext && Character.isLetter(c)) {
-                phrase.append(Character.toUpperCase(c));
-                capitalizeNext = false;
-                continue;
-            } else if (Character.isWhitespace(c)) {
-                capitalizeNext = true;
-            }
-            phrase.append(c);
-        }
-
-        return phrase.toString();
-    }
-
     public void setMyInfo(Context mContext) {
         mAuth = FirebaseAuth.getInstance();
         uDatabase.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).keepSynced(true);
@@ -160,6 +126,10 @@ public class LoginManager {
                             uDatabase.child(UserInFormation.getId()).child("isTrans").setValue("true");
                             UserInFormation.setTrans("Trans");
                         }
+
+                        UserInFormation.setDelvMoney(User.getDeliverMoney());
+                        UserInFormation.setDeniedMoney(User.getDeniedMoney());
+                        UserInFormation.setReciveMoney(User.getPickUpMoney());
                     }
 
                     NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -255,12 +225,8 @@ public class LoginManager {
         @Override
         protected String doInBackground(String... strings) {
             String publicIP = "";
-            try {
-                java.util.Scanner s = new java.util.Scanner(
-                        new java.net.URL(
-                                "https://api.ipify.org")
-                                .openStream(), "UTF-8")
-                        .useDelimiter("\\A");
+            try  {
+                java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A");
                 publicIP = s.next();
                 System.out.println("My current IP address is " + publicIP);
             } catch (java.io.IOException e) {
@@ -277,5 +243,36 @@ public class LoginManager {
         }
     }
 
+    /** Returns the consumer friendly device name */
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
+    private static String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+
+        StringBuilder phrase = new StringBuilder();
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase.append(Character.toUpperCase(c));
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+            phrase.append(c);
+        }
+
+        return phrase.toString();
+    }
 
 }

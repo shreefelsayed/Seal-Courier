@@ -68,7 +68,7 @@ public class CaptinOrderInfo extends AppCompatActivity {
     FloatingActionButton btnCall, btnCallSupplier;
     TextView txtNotes;
     caculateTime _cacu = new caculateTime();
-    LinearLayout constClient,linSupplier, linPackage, advice;
+    LinearLayout constClient,linSupplier, linPackage, advice,linSender;
     TextView txtMoreOrders;
     private boolean hasMore = false;
 
@@ -103,6 +103,7 @@ public class CaptinOrderInfo extends AppCompatActivity {
         txtWeight = findViewById(R.id.txtWeight);
         txtCash = findViewById(R.id.txtCash);
         btnClose = findViewById(R.id.btnClose);
+        linSender = findViewById(R.id.linSender);
         supPP = findViewById(R.id.supPP);
         ddUsername = findViewById(R.id.ddUsername);
         btnOrderMap = findViewById(R.id.btnOrderMap);
@@ -173,6 +174,20 @@ public class CaptinOrderInfo extends AppCompatActivity {
             ClipData clip = ClipData.newPlainText("TrackID", orderData.getTrackid());
             clipboard.setPrimaryClip(clip);
             Toast.makeText(this, "تم نسخ رقم التتبع الخاص بالشحنه", Toast.LENGTH_LONG).show();
+        });
+
+        linSender.setOnClickListener(v-> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("SenderPhone", strOwnerPhone);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(this, "تم نسخ رقم هاتف الراسل", Toast.LENGTH_LONG).show();
+        });
+
+        txtCustomerName.setOnClickListener(v-> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("ReciverPhone", orderData.getDPhone());
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(this, "تم نسخ رقم هاتف المرسل له", Toast.LENGTH_LONG).show();
         });
 
         btnCallSupplier.setOnClickListener(v-> {

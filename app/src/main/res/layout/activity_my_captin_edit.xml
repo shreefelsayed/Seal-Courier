@@ -77,6 +77,24 @@
                 android:background="@color/ic_profile_background" />
 
             <TextView
+                android:id="@+id/txtMoney"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_add_money"
+                android:drawablePadding="10dp"
+                android:drawableTint="@color/ic_profile_background"
+                android:text="العموله"
+                android:textSize="@dimen/_22sdp" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@color/ic_profile_background" />
+
+            <TextView
                 android:id="@+id/txtCloseAccount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

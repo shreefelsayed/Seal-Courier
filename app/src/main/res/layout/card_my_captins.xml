@@ -37,7 +37,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/ic_chats"
-                    app:tint="@color/ic_profile_background" />
+                    app:tint="@color/orange" />
 
                 <ImageView
                     android:id="@+id/btnCall"
@@ -46,7 +46,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/ic_call_24"
-                    app:tint="@color/ic_profile_background" />
+                    app:tint="@color/orange" />
 
                 <ImageView
                     android:id="@+id/btnTrack"
@@ -56,7 +56,7 @@
                     android:layout_weight="1"
                     android:visibility="gone"
                     app:srcCompat="@drawable/ic_filter_white"
-                    app:tint="@color/ic_profile_background" />
+                    app:tint="@color/orange" />
 
                 <ImageView
                     android:id="@+id/btnAsign"
@@ -65,7 +65,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/ic_asign"
-                    app:tint="@color/ic_profile_background" />
+                    app:tint="@color/orange"/>
             </LinearLayout>
 
             <LinearLayout

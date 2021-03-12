@@ -7,7 +7,7 @@ public class userData {
     private String email = "";
     private String date = "";
     private String id = "";
-    private String accountType = "RayahCaptin";
+    private String accountType = "Supplier";
     private String ppURL = "";
     private String ssnURL = "";
     private String mpass = "";
@@ -26,46 +26,21 @@ public class userData {
     private String sendOrderNotiCity = "false";
     private int walletmoney = 0;
     private String isConfirmed = "true";
-    private String provider = "Esh7nly";
+    private String provider = "Raya";
     private String mySuper = "";
     private String mySuperId = "";
     private String supervisor_code = "";
     private String packMoney = "0";
-
     private String transType = "Motor";
     private String trackId = "";
+    private String totalMoney = "0";
+    private String compName = "";
+    private int pickUpMoney = 0;
+    private int deliverMoney = 0;
+    private int deniedMoney = 0;
 
 
-    public userData(String name, String phone, String email, String date, String id, String accountType, String ppURL, String ssnURL, String mpass, String canceled, String ssnNum, String device, String app_version, String unique_id, String active, String device_token, String userState, String userCity, String ordersType, String currentDate, String sendOrderNoti, String sendOrderNotiCity, int walletmoney, String isConfirmed, String provider) {
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.date = date;
-        this.id = id;
-        this.accountType = accountType;
-        this.ppURL = ppURL;
-        this.ssnURL = ssnURL;
-        this.mpass = mpass;
-        this.canceled = canceled;
-        this.ssnNum = ssnNum;
-        this.device = device;
-        this.app_version = app_version;
-        this.unique_id = unique_id;
-        this.active = active;
-        this.device_token = device_token;
-        this.userState = userState;
-        this.userCity = userCity;
-        this.ordersType = ordersType;
-        this.currentDate = currentDate;
-        this.sendOrderNoti = sendOrderNoti;
-        this.sendOrderNotiCity = sendOrderNotiCity;
-        this.walletmoney = walletmoney;
-        this.isConfirmed = isConfirmed;
-        this.provider = provider;
-    }
-
-    public userData() {
-    }
+    public userData() {}
 
     public String getName() {
         return name;
@@ -291,14 +266,6 @@ public class userData {
         this.supervisor_code = supervisor_code;
     }
 
-    public String getTrackId() {
-        return trackId;
-    }
-
-    public void setTrackId(String trackId) {
-        this.trackId = trackId;
-    }
-
     public String getPackMoney() {
         return packMoney;
     }
@@ -314,4 +281,86 @@ public class userData {
     public void setTransType(String transType) {
         this.transType = transType;
     }
+
+    public String getTrackId() {
+        return trackId;
+    }
+
+    public void setTrackId(String trackId) {
+        this.trackId = trackId;
+    }
+
+    public String getTotalMoney() {
+        return totalMoney;
+    }
+
+    public void setTotalMoney(String totalMoney) {
+        this.totalMoney = totalMoney;
+    }
+
+    public String getCompName() {
+        return compName;
+    }
+
+    public void setCompName(String compName) {
+        this.compName = compName;
+    }
+
+    public int getPickUpMoney() {
+        return pickUpMoney;
+    }
+
+    public void setPickUpMoney(int pickUpMoney) {
+        this.pickUpMoney = pickUpMoney;
+    }
+
+    public int getDeliverMoney() {
+        return deliverMoney;
+    }
+
+    public void setDeliverMoney(int deliverMoney) {
+        this.deliverMoney = deliverMoney;
+    }
+
+    public int getDeniedMoney() {
+        return deniedMoney;
+    }
+
+    public void setDeniedMoney(int deniedMoney) {
+        this.deniedMoney = deniedMoney;
+    }
+
+    public userData(String name, String phone, String email, String date, String id, String accountType, String ppURL, String ssnURL, String mpass, String canceled, String ssnNum, String device, String app_version, String unique_id, String active, String device_token, String userState, String userCity, String ordersType,
+                    String currentDate, String sendOrderNoti, String sendOrderNotiCity, int walletmoney, String isConfirmed, String provider, int pickUpMoney, int deliverMoney, int deniedMoney) {
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.date = date;
+        this.id = id;
+        this.accountType = accountType;
+        this.ppURL = ppURL;
+        this.ssnURL = ssnURL;
+        this.mpass = mpass;
+        this.canceled = canceled;
+        this.ssnNum = ssnNum;
+        this.device = device;
+        this.app_version = app_version;
+        this.unique_id = unique_id;
+        this.active = active;
+        this.device_token = device_token;
+        this.userState = userState;
+        this.userCity = userCity;
+        this.ordersType = ordersType;
+        this.currentDate = currentDate;
+        this.sendOrderNoti = sendOrderNoti;
+        this.sendOrderNotiCity = sendOrderNotiCity;
+        this.walletmoney = walletmoney;
+        this.isConfirmed = isConfirmed;
+        this.provider = provider;
+        this.pickUpMoney = pickUpMoney;
+        this.deliverMoney = deliverMoney;
+        this.deniedMoney = deniedMoney;
+    }
+
 }
+       

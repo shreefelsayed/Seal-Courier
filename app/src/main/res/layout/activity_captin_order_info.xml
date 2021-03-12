@@ -30,12 +30,13 @@
         app:srcCompat="@drawable/ic_arrow_back_white"
         app:tint="@color/orange" />
 
+
     <ImageView
         android:id="@+id/btnOrderMap"
         android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_30sdp"
         android:layout_marginRight="@dimen/_10sdp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/dsToolbar"
         app:layout_constraintEnd_toEndOf="@+id/dsToolbar"
         app:layout_constraintTop_toTopOf="parent"
@@ -111,6 +112,7 @@
                                 app:srcCompat="@drawable/ic_call_24" />
 
                             <LinearLayout
+                                android:id="@+id/linSender"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="20"

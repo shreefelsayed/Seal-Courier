@@ -12,9 +12,9 @@
         <item name="material_dialog_background">@color/background</item>
         <item name="material_dialog_title_text_color">@color/colorAccent</item>
         <item name="material_dialog_message_text_color">@color/colorPrimary</item>
-        <item name="material_dialog_positive_button_color">@color/ic_profile_background</item>
-        <item name="material_dialog_positive_button_text_color">@color/colorBack</item>
-        <item name="material_dialog_negative_button_text_color">@color/colorAccent</item>
+        <item name="material_dialog_positive_button_color">@color/orange</item>
+        <item name="material_dialog_positive_button_text_color">@color/ic_profile_background</item>
+        <item name="material_dialog_negative_button_text_color">@color/ic_profile_background</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:navigationBarColor">@color/ic_profile_background</item>

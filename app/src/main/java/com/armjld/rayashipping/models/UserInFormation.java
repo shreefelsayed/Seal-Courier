@@ -21,71 +21,15 @@ public class UserInFormation {
     private static String ordersType = "all";
     private static String trans = "Motor";
     private static String provider = "";
-
-
     private static String sup_code = "";
     private static String mySup = "";
     private static String supId = "";
-
+    private static int delvMoney = 0;
+    private static int reciveMoney = 0;
+    private static int deniedMoney = 0;
     private static String packMoney = "";
 
     public UserInFormation() {
-    }
-
-    public static String getPackMoney() {
-        return packMoney;
-    }
-
-    public static void setPackMoney(String packMoney) {
-        UserInFormation.packMoney = packMoney;
-    }
-
-    public static String getUserCity() {
-        return userCity;
-    }
-
-    public static void setUserCity(String userCity) {
-        UserInFormation.userCity = userCity;
-    }
-
-    public static String getUserState() {
-        return userState;
-    }
-
-    public static void setUserState(String userState) {
-        UserInFormation.userState = userState;
-    }
-
-    public static String getWalletmoney() {
-        return walletmoney;
-    }
-
-    public static void setWalletmoney(String walletmoney) {
-        UserInFormation.walletmoney = walletmoney;
-    }
-
-    public static String getSendCityNoti() {
-        return sendCityNoti;
-    }
-
-    public static void setSendCityNoti(String sendCityNoti) {
-        UserInFormation.sendCityNoti = sendCityNoti;
-    }
-
-    public static String getSendGovNoti() {
-        return sendGovNoti;
-    }
-
-    public static void setSendGovNoti(String sendGovNoti) {
-        UserInFormation.sendGovNoti = sendGovNoti;
-    }
-
-    public static String getCurrentdate() {
-        return currentdate;
-    }
-
-    public static void setCurrentdate(String currentdate) {
-        UserInFormation.currentdate = currentdate;
     }
 
     public static String getUserName() {
@@ -128,6 +72,22 @@ public class UserInFormation {
         UserInFormation.id = id;
     }
 
+    public static String getuPhone() {
+        return uPhone;
+    }
+
+    public static void setuPhone(String uPhone) {
+        UserInFormation.uPhone = uPhone;
+    }
+
+    public static String getIsConfirm() {
+        return isConfirm;
+    }
+
+    public static void setIsConfirm(String isConfirm) {
+        UserInFormation.isConfirm = isConfirm;
+    }
+
     public static String getEmail() {
         return email;
     }
@@ -142,6 +102,54 @@ public class UserInFormation {
 
     public static void setPass(String pass) {
         UserInFormation.pass = pass;
+    }
+
+    public static String getSendGovNoti() {
+        return sendGovNoti;
+    }
+
+    public static void setSendGovNoti(String sendGovNoti) {
+        UserInFormation.sendGovNoti = sendGovNoti;
+    }
+
+    public static String getCurrentdate() {
+        return currentdate;
+    }
+
+    public static void setCurrentdate(String currentdate) {
+        UserInFormation.currentdate = currentdate;
+    }
+
+    public static String getUserCity() {
+        return userCity;
+    }
+
+    public static void setUserCity(String userCity) {
+        UserInFormation.userCity = userCity;
+    }
+
+    public static String getUserState() {
+        return userState;
+    }
+
+    public static void setUserState(String userState) {
+        UserInFormation.userState = userState;
+    }
+
+    public static String getWalletmoney() {
+        return walletmoney;
+    }
+
+    public static void setWalletmoney(String walletmoney) {
+        UserInFormation.walletmoney = walletmoney;
+    }
+
+    public static String getSendCityNoti() {
+        return sendCityNoti;
+    }
+
+    public static void setSendCityNoti(String sendCityNoti) {
+        UserInFormation.sendCityNoti = sendCityNoti;
     }
 
     public static int getRating() {
@@ -166,22 +174,6 @@ public class UserInFormation {
 
     public static void setTrans(String trans) {
         UserInFormation.trans = trans;
-    }
-
-    public static String getuPhone() {
-        return uPhone;
-    }
-
-    public static void setuPhone(String uPhone) {
-        UserInFormation.uPhone = uPhone;
-    }
-
-    public static String getIsConfirm() {
-        return isConfirm;
-    }
-
-    public static void setIsConfirm(String isConfirm) {
-        UserInFormation.isConfirm = isConfirm;
     }
 
     public static String getProvider() {
@@ -216,6 +208,38 @@ public class UserInFormation {
         UserInFormation.supId = supId;
     }
 
+    public static int getDelvMoney() {
+        return delvMoney;
+    }
+
+    public static void setDelvMoney(int delvMoney) {
+        UserInFormation.delvMoney = delvMoney;
+    }
+
+    public static int getReciveMoney() {
+        return reciveMoney;
+    }
+
+    public static void setReciveMoney(int reciveMoney) {
+        UserInFormation.reciveMoney = reciveMoney;
+    }
+
+    public static int getDeniedMoney() {
+        return deniedMoney;
+    }
+
+    public static void setDeniedMoney(int deniedMoney) {
+        UserInFormation.deniedMoney = deniedMoney;
+    }
+
+    public static String getPackMoney() {
+        return packMoney;
+    }
+
+    public static void setPackMoney(String packMoney) {
+        UserInFormation.packMoney = packMoney;
+    }
+
     public static void clearUser() {
         setAccountType("");
         setCurrentdate("");
@@ -228,6 +252,8 @@ public class UserInFormation {
         setUserDate("");
         setUserName("");
         setUserURL("");
+        setWalletmoney("0");
+        setPackMoney("0");
         setSendGovNoti("false");
         setSendCityNoti("false");
         setTrans("Trans");
@@ -236,4 +262,5 @@ public class UserInFormation {
         setMySup("");
         setSupId("");
     }
+
 }

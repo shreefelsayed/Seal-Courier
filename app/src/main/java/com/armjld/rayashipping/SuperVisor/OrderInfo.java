@@ -2,6 +2,9 @@ package com.armjld.rayashipping.SuperVisor;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -50,7 +53,7 @@ public class OrderInfo extends AppCompatActivity {
     String orderID;
     DatabaseReference uDatabase, nDatabase;
     String owner;
-    TextView date3, date, orderto, OrderFrom, txtPack, txtWeight, ordercash2, fees2, txtPostDate2,txtOrder;
+    TextView date3, date, orderto, OrderFrom, txtPack, txtWeight, ordercash2, fees2, txtPostDate2,txtOrder,orderid;
     TextView dsUsername;
     TextView ddCount;
     TextView dsPAddress, dsDAddress, txtCustomerName;
@@ -59,7 +62,7 @@ public class OrderInfo extends AppCompatActivity {
     TextView txtMoreOrders;
     ImageView icTrans;
     TextView txtNotes;
-    LinearLayout linSupplier, advice;
+    LinearLayout linSupplier, advice,linSender;
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
     SimpleDateFormat orderformat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
@@ -108,6 +111,7 @@ public class OrderInfo extends AppCompatActivity {
         dsUsername = findViewById(R.id.ddUsername);
         dsPAddress = findViewById(R.id.txtDAddress);
         dsDAddress = findViewById(R.id.dsDAddress);
+        linSender = findViewById(R.id.linSender);
         supPP = findViewById(R.id.supPP);
         ddCount = findViewById(R.id.ddCount);
         btnClose = findViewById(R.id.btnClose);
@@ -130,6 +134,8 @@ public class OrderInfo extends AppCompatActivity {
         advice = findViewById(R.id.advice);
         btnCall = findViewById(R.id.btnCall);
         btnCallSupplier = findViewById(R.id.btnCallSupplier);
+        orderid = findViewById(R.id.orderid);
+
 
         TextView tbTitle = findViewById(R.id.toolbar_title);
         tbTitle.setText("بيانات الشحنة");
@@ -159,6 +165,7 @@ public class OrderInfo extends AppCompatActivity {
         String weight = "الوزن : " + orderData.getPackWeight() + " كيلو";
         DAddress = DAddress + " - " + orderData.getDAddress();
 
+
         if (orderData.getProvider().equals("Esh7nly")) {
             advice.setVisibility(View.VISIBLE);
         } else {
@@ -187,6 +194,7 @@ public class OrderInfo extends AppCompatActivity {
         dsPAddress.setText(PAddress);
         dsDAddress.setText(DAddress);
         txtOrder.setText(orderStatue.shortState(orderData.getStatue()));
+        orderid.setText("رقم التتبع : " + orderData.getTrackid());
 
         // --- Open Map of Order
         btnOrderMap.setOnClickListener(v -> {
@@ -196,6 +204,27 @@ public class OrderInfo extends AppCompatActivity {
             MapsActivity.filterList = order;
             Intent map = new Intent(this, MapsActivity.class);
             startActivity(map);
+        });
+
+        orderid.setOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("TrackID", orderData.getTrackid());
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(this, "تم نسخ رقم التتبع الخاص بالشحنه", Toast.LENGTH_LONG).show();
+        });
+
+        linSender.setOnClickListener(v-> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("SenderPhone", ownerPhone);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(this, "تم نسخ رقم هاتف الراسل", Toast.LENGTH_LONG).show();
+        });
+
+        txtCustomerName.setOnClickListener(v-> {
+            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("ReciverPhone", dPhone);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(this, "تم نسخ رقم هاتف المرسل له", Toast.LENGTH_LONG).show();
         });
 
         // ---- See All Orders By Supplier

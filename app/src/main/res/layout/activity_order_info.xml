@@ -111,6 +111,7 @@
                                 app:srcCompat="@drawable/ic_call_24" />
 
                             <LinearLayout
+                                android:id="@+id/linSender"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="20"

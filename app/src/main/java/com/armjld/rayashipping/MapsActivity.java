@@ -16,12 +16,14 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,6 +101,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ProgressDialog progressDialog;
     TextView txtPickLoc, txtPickDistance;
     ConstraintLayout cardLocation;
+    Button btnGoogleDirc;
 
 
     // Disable the Back Button
@@ -127,7 +130,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         cardLocation = findViewById(R.id.cardLocation);
         txtPickLoc = findViewById(R.id.txtPickLoc);
         txtPickDistance = findViewById(R.id.txtPickDistance);
+        btnGoogleDirc = findViewById(R.id.btnGoogleDirc);
         cardLocation.setVisibility(View.GONE);
+        btnGoogleDirc.setVisibility(View.GONE);
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -314,15 +319,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     txtPickDistance.setText(getDistanceFromLatLonInKm(currentLocation.getLatitude(), currentLocation.getLongitude(), marker.getPosition().latitude, marker.getPosition().longitude) + " كم");
                     cardLocation.setVisibility(View.VISIBLE);
 
-                    progressDialog = new ProgressDialog(MapsActivity.this);
+                    /*progressDialog = new ProgressDialog(MapsActivity.this);
                     progressDialog.setMessage("جاري تحضير خط السير ..");
                     progressDialog.setCancelable(false);
-                    progressDialog.show();
+                    progressDialog.show();*/
 
-                    LatLng current = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                    Uri navigationIntentUri = Uri.parse("google.navigation:q=" + marker.getPosition().latitude +"," + marker.getPosition().longitude);//creating intent with latlng
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, navigationIntentUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    startActivity(mapIntent);
+
+                    /*LatLng current = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                     String url = getDirectionsUrl(current, marker.getPosition());
                     DownloadTask downloadTask = new DownloadTask();
-                    downloadTask.execute(url);
+                    downloadTask.execute(url);*/
                     break;
                 }
             }
