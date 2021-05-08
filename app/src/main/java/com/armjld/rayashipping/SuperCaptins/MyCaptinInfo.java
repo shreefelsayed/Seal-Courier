@@ -1,11 +1,13 @@
 package com.armjld.rayashipping.SuperCaptins;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +17,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.armjld.rayashipping.Chat.Messages;
@@ -22,9 +26,9 @@ import com.armjld.rayashipping.Chat.chatListclass;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.Ratings.Ratings;
 import com.armjld.rayashipping.getRefrence;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.UserData;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,14 +43,18 @@ import java.util.Collections;
 public class MyCaptinInfo extends AppCompatActivity {
 
     public static TabLayout tabs;
-    public static userData user;
-    public static ArrayList<Data> placed = new ArrayList<>();
-    public static ArrayList<Data> delv = new ArrayList<>();
-    ImageView imgPPP, btnBack, btnMessage, btnInfo, btnTrack;
+    public static UserData user;
+
+    public static ArrayList<Order> placed = new ArrayList<>();
+    public static ArrayList<Order> delv = new ArrayList<>();
+    ImageView imgPPP, btnBack, btnMessage, btnInfo, btnTrack,btnQR;
     ConstraintLayout linWallet;
     TextView txtUsername, txtWalletMoney;
     RatingBar rbProfile;
     ImageView imgIndec;
+
+    public static int CAMERA_CODE = 80;
+
 
     private static void turnSwipes(String st) {
         if (st.equals("ON")) {
@@ -84,7 +92,7 @@ public class MyCaptinInfo extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        Data orderData = ds.getValue(Data.class);
+                        Order orderData = ds.getValue(Order.class);
                         assert orderData != null;
                         if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             placed.add(orderData);
@@ -118,6 +126,7 @@ public class MyCaptinInfo extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         rbProfile = findViewById(R.id.rbProfile);
         txtUsername = findViewById(R.id.txtUsername);
+        btnQR = findViewById(R.id.btnQR);
 
         btnInfo = findViewById(R.id.btnInfo);
         btnMessage = findViewById(R.id.btnMessage);
@@ -154,6 +163,17 @@ public class MyCaptinInfo extends AppCompatActivity {
             Messages.cameFrom = "Profile";
         });
 
+        btnQR.setOnClickListener(v-> {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_DENIED) {
+                QRScanOrderForCaptin.user = user;
+                startActivity(new Intent(this, QRScanOrderForCaptin.class));
+            } else {
+                ActivityCompat.requestPermissions((Activity) this, new String[] {Manifest.permission.CAMERA}, CAMERA_CODE);
+            }
+
+
+        });
+
         checkAvillablity();
         setCaptinsData();
         getRaya();
@@ -179,7 +199,7 @@ public class MyCaptinInfo extends AppCompatActivity {
         MapCaptinTrack.user = user;
         MapCaptinTrack.DEVICE_ID = user.getTrackId();
 
-        ArrayList<Data> bothLists = new ArrayList<>();
+        ArrayList<Order> bothLists = new ArrayList<>();
 
         bothLists.addAll(placed);
         bothLists.addAll(delv);

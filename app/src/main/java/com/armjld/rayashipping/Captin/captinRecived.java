@@ -17,13 +17,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.armjld.rayashipping.Adapters.DeliveryAdapter;
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.models.Data;
+import com.armjld.rayashipping.Models.Order;
 
 import java.util.ArrayList;
 
 public class captinRecived extends Fragment {
 
-    public static ArrayList<Data> filterList = new ArrayList<>();
+    public static ArrayList<Order> filterList = new ArrayList<>();
     public static SwipeRefreshLayout mSwipeRefreshLayout;
     public static RecyclerView recyclerView;
     public static DeliveryAdapter orderAdapter;

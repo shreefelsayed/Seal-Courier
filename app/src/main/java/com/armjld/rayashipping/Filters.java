@@ -22,8 +22,8 @@ import com.armjld.rayashipping.Adapters.MyAdapter;
 import com.armjld.rayashipping.Login.LoginManager;
 import com.armjld.rayashipping.Login.StartUp;
 import com.armjld.rayashipping.SuperVisor.AsignOrder;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.google.android.material.textfield.TextInputLayout;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 
@@ -34,9 +34,9 @@ import java.util.stream.Collectors;
 
 public class Filters extends AppCompatActivity {
 
-    public static ArrayList<Data> mainListm = new ArrayList<>();
+    public static ArrayList<Order> mainListm = new ArrayList<>();
     public static String what = "";
-    ArrayList<Data> filterList = new ArrayList<>();
+    ArrayList<Order> filterList = new ArrayList<>();
     RecyclerView recyclerView;
     LinearLayout EmptyPanel;
     ImageView btnBack, btnAsignAll;
@@ -217,10 +217,10 @@ public class Filters extends AppCompatActivity {
 
         if (what.equals("recive")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                filterList = (ArrayList<Data>) mainListm.stream().filter(x -> x.getTxtPState().equals(gov) && x.getmPRegion().equals(city)).collect(Collectors.toList());
+                filterList = (ArrayList<Order>) mainListm.stream().filter(x -> x.getTxtPState().equals(gov) && x.getmPRegion().equals(city)).collect(Collectors.toList());
             } else {
                 for(int i = 0; i < mainListm.size(); i ++) {
-                    Data x = mainListm.get(i);
+                    Order x = mainListm.get(i);
                     if(x.getTxtPState().equals(gov) && x.getmPRegion().equals(city)) {
                         filterList.add(x);
                     }
@@ -228,10 +228,10 @@ public class Filters extends AppCompatActivity {
             }
         } else if (what.equals("drop")) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                filterList = (ArrayList<Data>) mainListm.stream().filter(x -> x.getTxtDState().equals(gov) && x.getmDRegion().equals(city)).collect(Collectors.toList());
+                filterList = (ArrayList<Order>) mainListm.stream().filter(x -> x.getTxtDState().equals(gov) && x.getmDRegion().equals(city)).collect(Collectors.toList());
             } else {
                 for(int i = 0; i < mainListm.size(); i ++) {
-                    Data x = mainListm.get(i);
+                    Order x = mainListm.get(i);
                     if(x.getTxtDState().equals(gov) && x.getmDRegion().equals(city)) {
                         filterList.add(x);
                     }
@@ -260,7 +260,9 @@ public class Filters extends AppCompatActivity {
     private void updateNone(int listSize) {
         if (listSize > 0) {
             EmptyPanel.setVisibility(View.GONE);
-            btnAsignAll.setVisibility(View.VISIBLE);
+            if(UserInFormation.getAccountType().equals("Supervisor")) {
+                btnAsignAll.setVisibility(View.VISIBLE);
+            }
         } else {
             EmptyPanel.setVisibility(View.VISIBLE);
             btnAsignAll.setVisibility(View.GONE);

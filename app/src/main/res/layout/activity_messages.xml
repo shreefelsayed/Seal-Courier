@@ -186,7 +186,7 @@
             android:layout_gravity="center"
             android:layout_weight="0.25"
             android:padding="@dimen/_4sdp"
-            app:srcCompat="@drawable/ic_baseline_camera_enhance_24"
+            app:srcCompat="@drawable/ic_camera"
             app:tint="@color/orange"/>
 
         <ImageButton

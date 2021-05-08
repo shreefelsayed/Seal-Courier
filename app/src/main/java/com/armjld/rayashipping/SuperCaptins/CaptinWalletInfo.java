@@ -18,9 +18,9 @@ import com.armjld.rayashipping.Adapters.WalletAdapter;
 import com.armjld.rayashipping.EnvioMoney;
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.models.CaptinMoney;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.CaptinMoney;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.UserData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,7 +32,7 @@ import java.util.Collections;
 
 public class CaptinWalletInfo extends AppCompatActivity {
 
-    public static userData user;
+    public static UserData user;
     ArrayList<CaptinMoney> capMoneyList = new ArrayList<>();
     ImageView btnBack;
     TextView txtBouns, txtMoney;
@@ -127,7 +127,7 @@ public class CaptinWalletInfo extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                user = snapshot.getValue(userData.class);
+                user = snapshot.getValue(UserData.class);
                 assert user != null;
                 getMoney(user.getId());
                 walletMoney = String.valueOf(user.getWalletmoney());
@@ -150,7 +150,7 @@ public class CaptinWalletInfo extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userData _user = snapshot.getValue(userData.class);
+                UserData _user = snapshot.getValue(UserData.class);
                 assert _user != null;
 
                 walletMoney = String.valueOf(_user.getWalletmoney());

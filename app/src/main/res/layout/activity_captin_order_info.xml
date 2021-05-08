@@ -101,6 +101,13 @@
                             android:orientation="horizontal"
                             >
 
+                            <ImageView
+                                android:id="@+id/btnWhatsSender"
+                                android:layout_width="@dimen/_34sdp"
+                                android:layout_height="@dimen/_34sdp"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/ic_whatsapp" />
+
                             <com.google.android.material.floatingactionbutton.FloatingActionButton
                                 android:id="@+id/btnCallSupplier"
                                 android:layout_width="@dimen/_34sdp"
@@ -156,27 +163,6 @@
                                         app:srcCompat="@color/colorWhite" />
                                 </androidx.cardview.widget.CardView>
 
-                                <TextView
-                                    android:id="@+id/txtMoreOrders"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="@dimen/_12sdp"
-                                    android:layout_gravity="center"
-                                    android:layout_marginBottom="2dp"
-                                    android:background="@drawable/round_shape"
-                                    android:backgroundTint="@color/red_500"
-                                    android:foregroundGravity="top"
-                                    android:gravity="center"
-                                    android:paddingLeft="@dimen/_3sdp"
-                                    android:paddingRight="@dimen/_3sdp"
-                                    android:text="5"
-                                    android:textColor="@color/colorBack"
-                                    android:textSize="@dimen/_8sdp"
-                                    android:textStyle="bold"
-                                    android:translationZ="90dp"
-                                    android:visibility="visible"
-                                    app:layout_constraintBottom_toBottomOf="@+id/cardView"
-                                    app:layout_constraintStart_toStartOf="@+id/cardView" />
-
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -194,12 +180,14 @@
                             android:text="تاريخ استلام الشحنة :"
                             android:textAlignment="viewEnd"
                             android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="gone" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:background="@color/colorPrimary" />
+                            android:background="@color/colorPrimary"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/txtPAddress"
@@ -251,6 +239,13 @@
                             android:layout_height="match_parent"
                             android:orientation="horizontal">
 
+                            <ImageView
+                                android:id="@+id/btnWhatsReciver"
+                                android:layout_width="@dimen/_34sdp"
+                                android:layout_height="@dimen/_34sdp"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/ic_whatsapp" />
+
                             <com.google.android.material.floatingactionbutton.FloatingActionButton
                                 android:id="@+id/btnCall"
                                 android:layout_width="@dimen/_34sdp"
@@ -294,12 +289,14 @@
                             android:text="تاريخ التسليم : "
                             android:textAlignment="viewEnd"
                             android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="gone" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
-                            android:background="@color/colorPrimary" />
+                            android:background="@color/colorPrimary"
+                            android:visibility="gone" />
 
                         <TextView
                             android:id="@+id/txtDAddress"
@@ -569,12 +566,6 @@
 
                     </LinearLayout>
                 </LinearLayout>
-
-                <include
-                    android:id="@+id/advice"
-                    layout="@layout/footer_advice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
             </LinearLayout>
 
         </LinearLayout>

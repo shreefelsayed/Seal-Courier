@@ -9,14 +9,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,30 +26,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.armjld.rayashipping.Captin.CaptinOrderInfo;
 import com.armjld.rayashipping.Captin.PartDeliver;
 import com.armjld.rayashipping.Captin.captinRecived;
+import com.armjld.rayashipping.CopyingData;
 import com.armjld.rayashipping.DeniedReasons;
 import com.armjld.rayashipping.Home;
+import com.armjld.rayashipping.OrderStatue;
 import com.armjld.rayashipping.OrdersClass;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AsignOrder;
 import com.armjld.rayashipping.SuperVisor.OrderInfo;
-import com.armjld.rayashipping.SuperVisor.SuperAvillable;
+import com.armjld.rayashipping.Whatsapp;
 import com.armjld.rayashipping.caculateTime;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyViewHolder> implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyViewHolder> {
 
-    private static final int PHONE_CALL_CODE = 100;
-    public static caculateTime _cacu = new caculateTime();
     Context mContext;
-    ArrayList<Data> filtersData;
+    ArrayList<Order> filtersData;
     String from;
 
-    public DeliveryAdapter(Context mContext, ArrayList<Data> filtersData, String from) {
+    public DeliveryAdapter(Context mContext, ArrayList<Order> filtersData, String from) {
         this.mContext = mContext;
         this.filtersData = filtersData;
         this.from = from;
@@ -67,42 +65,50 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
     @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        Data data = filtersData.get(position);
+        Order orderData = filtersData.get(position);
+        CopyingData copyingData = new CopyingData(mContext);
+        Whatsapp whatsapp = new Whatsapp();
+        OrdersClass ordersClass = new OrdersClass(mContext);
 
         // Get Post Date
-        holder.setData(data);
-        holder.setStatue(data);
-        holder.checkDeleted(data.getRemoved());
-        holder.setViewer(UserInFormation.getAccountType(), data);
-
-        holder.txtOrderTo.setOnClickListener(v-> {
-            ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("Address", holder.txtOrderTo.getText().toString().trim());
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(mContext, "تم نسخ العنوان", Toast.LENGTH_LONG).show();
-        });
-
-        holder.txtTrackId.setOnClickListener(v-> {
-            ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("TrackId", holder.txtTrackId.getText().toString().trim());
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(mContext, "تم نسخ رقم الشحنه", Toast.LENGTH_LONG).show();
-        });
+        holder.setData(orderData);
+        holder.setStatue(orderData);
+        holder.checkDeleted(orderData.getRemoved());
+        holder.setViewer(UserInFormation.getAccountType(), orderData);
 
         // ------------------------------------   Order info
-        holder.btnInfo.setOnClickListener(v -> {
-            Intent intent;
-            if (UserInFormation.getAccountType().equals("Delivery Worker")) {
-                intent = new Intent(mContext, CaptinOrderInfo.class);
-                intent.putExtra("from", from);
-                CaptinOrderInfo.orderData = filtersData.get(position);
-            } else {
-                intent = new Intent(mContext, OrderInfo.class);
-                intent.putExtra("from", from);
-                OrderInfo.orderData = filtersData.get(position);
-            }
+        holder.linBody.setOnClickListener(v -> {
+            moreInfo(position, orderData);
+        });
 
-            ((Activity) mContext).startActivityForResult(intent, 1);
+        holder.btnMore.setOnClickListener(v-> {
+            PopupMenu popup = new PopupMenu(mContext, holder.btnMore);
+            popup.inflate(R.menu.captin_adapter_menu);
+            popup.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.call_sender:
+                        ordersClass.callSender(orderData);
+                        return true;
+                    case R.id.call_reciver:
+                        ordersClass.callConsigne(orderData);
+                        return true;
+                    case R.id.whats_sender:
+                        whatsapp.openWhats(orderData.getpPhone(), copyingData.getOrderData(orderData), mContext);
+                        return true;
+                    case R.id.whats_reciver:
+                        whatsapp.openWhats(orderData.getDPhone(), copyingData.getOrderDataToReciver(orderData), mContext);
+                        return true;
+                    case R.id.copy_track:
+                        copyingData.copyTrack(orderData);
+                        return true;
+                    case R.id.moreinfo:
+                        moreInfo(position, orderData);
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+            popup.show();
         });
 
         // ---------------- Set order to Recived
@@ -110,8 +116,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
             int oCount = 0;
 
             for(int i = 0; i < Home.captinAvillable.size(); i ++) {
-                Data oData = Home.captinAvillable.get(i);
-                if(oData.getuId().equals(data.getuId())) {
+                Order oData = Home.captinAvillable.get(i);
+                if(oData.getuId().equals(orderData.getuId())) {
                     if(oData.getStatue().equals("recived") || oData.getStatue().equals("accepted")) {
                         oCount ++;
                     }
@@ -120,11 +126,10 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
             BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("تأكيد استلام الشحنه").setCancelable(true).setPositiveButton("استلام " + oCount + " شحنه", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                 for(int i = 0; i < Home.captinAvillable.size(); i ++) {
-                    Data oData = Home.captinAvillable.get(i);
-                    if(oData.getuId().equals(data.getuId())) {
+                    Order oData = Home.captinAvillable.get(i);
+                    if(oData.getuId().equals(orderData.getuId())) {
                         if(oData.getStatue().equals("recived") || oData.getStatue().equals("accepted")) {
                             // ------- Update Database ------
-                            OrdersClass ordersClass = new OrdersClass(mContext);
                             ordersClass.orderRecived(oData);
 
                             // -------- Update Adapter
@@ -137,8 +142,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                 dialogInterface.dismiss();
             }).setNegativeButton("استلام هذه الشحنه فقط", R.drawable.ic_close, (dialogInterface, which) -> {
                 // ------- Update Database ------
-                OrdersClass ordersClass = new OrdersClass(mContext);
-                ordersClass.orderRecived(data);
+                ordersClass.orderRecived(orderData);
 
                 // -------- Update Adapter
                 filtersData.get(position).setStatue("recived2");
@@ -152,8 +156,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         holder.btnOrderBack.setOnClickListener(v -> {
             BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل قمت بتسليم الشحنة للتاجر ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                 // ------- Update Database ------
-                OrdersClass ordersClass = new OrdersClass(mContext);
-                ordersClass.returnOrder(data);
+                ordersClass.returnOrder(orderData);
 
                 // -------- Update Adapter
                 captinRecived.filterList.remove(position);
@@ -163,12 +166,11 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                 dialogInterface.dismiss();
             }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
             mBottomSheetDialog.show();
-
         });
 
         // ----------------------- Set Order As Denied
         holder.btnDenied.setOnClickListener(v -> {
-            DeniedReasons.orderData = data;
+            DeniedReasons.orderData = orderData;
             DeniedReasons.pos = position;
             mContext.startActivity(new Intent(mContext, DeniedReasons.class));
         });
@@ -179,8 +181,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                 // --- Full Deliver (Update Order, Add Money)
 
                 // ------- Update Database ------
-                OrdersClass ordersClass = new OrdersClass(mContext);
-                ordersClass.orderDelvered(data);
+                ordersClass.orderDelvered(orderData);
                 // -------- Update Adapter
                 captinRecived.filterList.remove(position);
                 notifyItemRemoved(position);
@@ -189,7 +190,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                 dialogInterface.dismiss();
             }).setNegativeButton("تسليم جزئي", R.drawable.ic_close, (dialogInterface, which) -> {
                 // --- Partial Deliver (Update Money and Send Notification)
-                PartDeliver.orderData = data;
+                PartDeliver.orderData = orderData;
                 mContext.startActivity(new Intent(mContext, PartDeliver.class));
                 dialogInterface.dismiss();
             }).build();
@@ -208,8 +209,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         holder.btnCapRecived.setOnClickListener(v-> {
             BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل قام المندوب باستلام تلك الشحنه من الراسل ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                 // ------- Update Database ------
-                OrdersClass ordersClass = new OrdersClass(mContext);
-                ordersClass.setRecived(data);
+                ordersClass.setRecived(orderData);
 
                 // ---- Update Adatper
                 filtersData.get(position).setStatue("recived");
@@ -223,6 +223,21 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
     }
 
+    private void moreInfo(int position, Order order) {
+        Intent intent;
+        if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+            CaptinOrderInfo.orderData = order;
+            intent = new Intent(mContext, CaptinOrderInfo.class);
+            CaptinOrderInfo.orderData = filtersData.get(position);
+        } else {
+            OrderInfo.orderData = order;
+            intent = new Intent(mContext, OrderInfo.class);
+            OrderInfo.orderData = filtersData.get(position);
+        }
+
+        ((Activity) mContext).startActivityForResult(intent, 1);
+    }
+
     @Override
     public int getItemCount() {
         return filtersData.size();
@@ -233,17 +248,6 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         return position;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        ((Home) mContext).onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PHONE_CALL_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(mContext, "Phone Permission Granted", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(mContext, "Phone Permission Denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -252,10 +256,9 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         public Button btnDelivered, btnRecived, btnOrderBack, btnDenied;
         public Button btnCapRecived, btnAsignOther;
 
-        ImageView btnInfo;
-
         public TextView txtTrackId, txtGetStat, txtgMoney, txtUsername, txtOrderTo, txtOwner;
-        public LinearLayout linerAll, linSuperVisor;
+        public LinearLayout linerAll, linSuperVisor,linBody;
+        public ImageView btnMore;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -263,7 +266,6 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
             myview = itemView;
 
             btnDelivered = myview.findViewById(R.id.btnDelivered);
-            btnInfo = myview.findViewById(R.id.btnInfo);
             txtGetStat = myview.findViewById(R.id.txtStatue);
             linerAll = myview.findViewById(R.id.linerAll);
             btnRecived = myview.findViewById(R.id.btnRecived);
@@ -277,10 +279,12 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
             btnAsignOther = myview.findViewById(R.id.btnAsignOther);
             btnCapRecived = myview.findViewById(R.id.btnCapRecived);
             txtOwner = myview.findViewById(R.id.txtOwner);
+            linBody = myview.findViewById(R.id.linBody);
+            btnMore = myview.findViewById(R.id.btnMore);
         }
 
         @SuppressLint("SetTextI18n")
-        public void setData(Data data) {
+        public void setData(Order data) {
             txtTrackId.setText(data.getTrackid());
             if(data.getStatue().equals("accepted") || data.getStatue().equals("recived") || data.getStatue().equals("recived2") || data.getStatue().equals("capDenied")) {
                 txtOrderTo.setText(data.reStateP() + " - " + data.getmPAddress());
@@ -293,7 +297,9 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         }
 
 
-        public void setStatue(Data orderData) {
+        public void setStatue(Order orderData) {
+            OrderStatue orderStatue = new OrderStatue();
+
             switch (orderData.getStatue()) {
                 case "accepted":
                     btnDelivered.setVisibility(View.GONE);
@@ -301,9 +307,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     btnOrderBack.setVisibility(View.GONE);
                     txtgMoney.setVisibility(View.GONE);
                     btnDenied.setVisibility(View.GONE);
-                    btnInfo.setVisibility(View.VISIBLE);
                     txtGetStat.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
-                    txtGetStat.setText("قيد الاستلام");
                     txtGetStat.setVisibility(View.VISIBLE);
                     if(!orderData.getpHubName().equals("")) txtOrderTo.setText(orderData.getpHubName());
                     break;
@@ -312,9 +316,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     btnOrderBack.setVisibility(View.GONE);
                     txtgMoney.setVisibility(View.GONE);
                     btnDenied.setVisibility(View.GONE);
-                    btnInfo.setVisibility(View.VISIBLE);
                     btnRecived.setVisibility(View.VISIBLE);
-                    txtGetStat.setText("في انتظار تأكيد الاستلام");
                     txtGetStat.setVisibility(View.VISIBLE);
                     txtGetStat.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
                     if(!orderData.getpHubName().equals("")) txtOrderTo.setText(orderData.getpHubName());
@@ -325,49 +327,39 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     btnOrderBack.setVisibility(View.GONE);
                     txtgMoney.setVisibility(View.GONE);
                     btnDenied.setVisibility(View.GONE);
-                    btnInfo.setVisibility(View.VISIBLE);
                     txtGetStat.setVisibility(View.VISIBLE);
                     txtGetStat.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
-                    txtGetStat.setText(" تم استلام الشحنه");
                     if(!orderData.getpHubName().equals("")) txtOrderTo.setText(orderData.getpHubName());
                     break;
                 case "readyD":
                     btnRecived.setVisibility(View.GONE);
                     btnOrderBack.setVisibility(View.GONE);
                     txtgMoney.setVisibility(View.VISIBLE);
-                    btnInfo.setVisibility(View.VISIBLE);
                     btnDenied.setVisibility(View.VISIBLE);
                     btnDelivered.setVisibility(View.VISIBLE);
                     txtGetStat.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
-                    txtGetStat.setText("قيد التسليم");
                     txtGetStat.setVisibility(View.VISIBLE);
                     break;
                 case "denied":
                     btnDelivered.setVisibility(View.VISIBLE);
-                    btnInfo.setVisibility(View.VISIBLE);
                     btnRecived.setVisibility(View.GONE);
                     btnOrderBack.setVisibility(View.GONE);
                     txtgMoney.setVisibility(View.GONE);
                     btnDenied.setVisibility(View.GONE);
                     txtGetStat.setVisibility(View.VISIBLE);
                     txtGetStat.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
-                    txtGetStat.setText("مرتجع يسلم للمخزن");
                     break;
                 case "capDenied":
                     btnDelivered.setVisibility(View.GONE);
                     btnRecived.setVisibility(View.GONE);
                     txtgMoney.setVisibility(View.GONE);
                     btnDenied.setVisibility(View.GONE);
-                    btnInfo.setVisibility(View.VISIBLE);
                     btnOrderBack.setVisibility(View.VISIBLE);
                     txtGetStat.setVisibility(View.VISIBLE);
-                    txtGetStat.setText("تسليم للتاجر");
                     txtGetStat.setBackgroundTintList(ColorStateList.valueOf(Color.MAGENTA));
-                    txtOrderTo.setText(orderData.reStateP());
                     break;
                 default:
                     btnDelivered.setVisibility(View.GONE);
-                    btnInfo.setVisibility(View.GONE);
                     txtGetStat.setVisibility(View.GONE);
                     btnRecived.setVisibility(View.GONE);
                     btnOrderBack.setVisibility(View.GONE);
@@ -375,6 +367,8 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
                     txtGetStat.setVisibility(View.GONE);
                     break;
             }
+
+            txtGetStat.setText(orderStatue.shortState(orderData.getStatue()));
         }
 
         public void checkDeleted(String removed) {
@@ -385,11 +379,10 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
             }
         }
 
-        public void setViewer(String accountType, Data data) {
+        public void setViewer(String accountType, Order data) {
             if (accountType.equals("Supervisor")) {
                 btnRecived.setVisibility(View.GONE);
                 btnDelivered.setVisibility(View.GONE);
-                btnInfo.setVisibility(View.VISIBLE);
                 btnOrderBack.setVisibility(View.GONE);
                 btnDenied.setVisibility(View.GONE);
                 if(data.getStatue().equals("readyD") || data.getStatue().equals("accepted")) {

@@ -1,4 +1,4 @@
-package com.armjld.rayashipping.models;
+package com.armjld.rayashipping.Models;
 
 public class notiData {
 

@@ -10,13 +10,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.UserData;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class EditCaptinBouns extends AppCompatActivity {
 
-    public static userData user;
+    public static UserData user;
     ImageView btnBack;
     Button btnEdit;
     EditText txtDeliver, txtPickUp,txtDenied;

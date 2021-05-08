@@ -20,14 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.armjld.rayashipping.Home;
+import com.armjld.rayashipping.CopyingData;
 import com.armjld.rayashipping.MapsActivity;
 import com.armjld.rayashipping.OrderStatue;
-import com.armjld.rayashipping.OrdersBySameUser;
 import com.armjld.rayashipping.R;
+import com.armjld.rayashipping.Whatsapp;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.getRefrence;
-import com.armjld.rayashipping.models.Data;
+import com.armjld.rayashipping.Models.Order;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,12 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 import static com.google.firebase.database.FirebaseDatabase.getInstance;
@@ -49,7 +44,7 @@ import static com.google.firebase.database.FirebaseDatabase.getInstance;
 public class OrderInfo extends AppCompatActivity {
 
     private static final int PHONE_CALL_CODE = 100;
-    public static Data orderData;
+    public static Order orderData;
     String orderID;
     DatabaseReference uDatabase, nDatabase;
     String owner;
@@ -59,13 +54,10 @@ public class OrderInfo extends AppCompatActivity {
     TextView dsPAddress, dsDAddress, txtCustomerName;
     ImageView supPP, btnOrderMap;
     ImageView btnClose;
-    TextView txtMoreOrders;
     ImageView icTrans;
     TextView txtNotes;
     LinearLayout linSupplier, advice,linSender;
-
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
-    SimpleDateFormat orderformat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+    ImageView btnWhatsSender, btnWhatsReciver,btnUpdates;
 
     String orderState = "placed";
     String acceptedTime = "";
@@ -79,6 +71,7 @@ public class OrderInfo extends AppCompatActivity {
     private boolean toClick = true;
     FloatingActionButton btnCallSupplier, btnCall;
     OrderStatue orderStatue = new OrderStatue();
+    Whatsapp whatsapp = new Whatsapp();
 
     @Override
     public void onBackPressed() {
@@ -116,7 +109,6 @@ public class OrderInfo extends AppCompatActivity {
         ddCount = findViewById(R.id.ddCount);
         btnClose = findViewById(R.id.btnClose);
         txtPostDate2 = findViewById(R.id.txtPostDate2);
-        txtMoreOrders = findViewById(R.id.txtMoreOrders);
         txtOrder = findViewById(R.id.txtOrder);
         txtCustomerName = findViewById(R.id.txtCustomerName);
         btnOrderMap = findViewById(R.id.btnOrderMap);
@@ -135,6 +127,9 @@ public class OrderInfo extends AppCompatActivity {
         btnCall = findViewById(R.id.btnCall);
         btnCallSupplier = findViewById(R.id.btnCallSupplier);
         orderid = findViewById(R.id.orderid);
+        btnWhatsSender = findViewById(R.id.btnWhatsSender);
+        btnWhatsReciver = findViewById(R.id.btnWhatsReciver);
+        btnUpdates = findViewById(R.id.btnUpdates);
 
 
         TextView tbTitle = findViewById(R.id.toolbar_title);
@@ -198,12 +193,24 @@ public class OrderInfo extends AppCompatActivity {
 
         // --- Open Map of Order
         btnOrderMap.setOnClickListener(v -> {
-            ArrayList<Data> order = new ArrayList<>();
+            if(orderData.getLat().equals("") || orderData.get_long().equals("")) return;
+            ArrayList<Order> order = new ArrayList<>();
             order.add(orderData);
 
             MapsActivity.filterList = order;
             Intent map = new Intent(this, MapsActivity.class);
             startActivity(map);
+        });
+
+        btnWhatsReciver.setOnClickListener(v-> {
+            CopyingData copyingData = new CopyingData(this);
+            whatsapp.openWhats(dPhone, copyingData.getOrderDataToReciver(orderData), this);
+
+        });
+
+        btnWhatsSender.setOnClickListener(v-> {
+            CopyingData copyingData = new CopyingData(this);
+            whatsapp.openWhats(ownerPhone, copyingData.getOrderData(orderData), this);
         });
 
         orderid.setOnClickListener(v -> {
@@ -227,25 +234,9 @@ public class OrderInfo extends AppCompatActivity {
             Toast.makeText(this, "تم نسخ رقم هاتف المرسل له", Toast.LENGTH_LONG).show();
         });
 
-        // ---- See All Orders By Supplier
-        supPP.setOnClickListener(v -> {
-            if (hasMore && toClick) {
-                Intent otherOrders = new Intent(this, OrdersBySameUser.class);
-                otherOrders.putExtra("userid", owner);
-                otherOrders.putExtra("name", ownerName);
-
-                OrdersBySameUser.filterList.clear();
-                OrdersBySameUser.filterList.addAll(Home.mm);
-
-                startActivity(otherOrders);
-            } else {
-                Toast.makeText(this, "لا يوجد شحنات متاحة اخري لهذا المستخدم", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         // --- Call Customer
         btnCall.setOnClickListener(v -> {
-            if (dPhone.equals(""))  return;
+            if (orderData.getDPhone().equals(""))  return;
             BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(OrderInfo.this).setMessage("هل تريد الاتصال بالعميل ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
 
                 checkPermission(Manifest.permission.CALL_PHONE, PHONE_CALL_CODE);
@@ -261,13 +252,18 @@ public class OrderInfo extends AppCompatActivity {
             mBottomSheetDialog.show();
         });
 
+        btnUpdates.setOnClickListener(v-> {
+            OrdersHistory.orderData = orderData;
+            startActivity(new Intent(this, OrdersHistory.class));
+        });
+
         // --- Call Supplier
         btnCallSupplier.setOnClickListener(v-> {
-            if (ownerPhone.equals(""))  return;
+            if (orderData.getpPhone().equals(""))  return;
             BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(OrderInfo.this).setMessage("هل تريد الاتصال بالراسل ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
                 checkPermission(Manifest.permission.CALL_PHONE, PHONE_CALL_CODE);
                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                callIntent.setData(Uri.parse("tel:" + ownerPhone));
+                callIntent.setData(Uri.parse("tel:" + orderData.getpPhone()));
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
@@ -279,72 +275,11 @@ public class OrderInfo extends AppCompatActivity {
 
         // ------- Set More Supplier Data ------- //
         getSupData(owner);
-        getSupOrders(owner);
-    }
-
-    private void getSupOrders(String owner) {
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
-
-        // Get posted orders count
-        mDatabase.orderByChild("uId").equalTo(owner).addListenerForSingleValueEvent(new ValueEventListener() {
-            @SuppressLint({"SetTextI18n", "ResourceAsColor"})
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                int oCount = 0;
-                int currentOrders = 0;
-
-                // --- Get Available Orders For Supplier
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
-                        Data orderData = ds.getValue(Data.class);
-                        assert orderData != null;
-                        Date orderDate = null;
-                        Date myDate = null;
-                        try {
-                            orderDate = orderformat.parse(orderData.getDDate());
-                            myDate = orderformat.parse(orderformat.format(Calendar.getInstance().getTime()));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        assert orderDate != null;
-                        assert myDate != null;
-
-                        if (!Objects.requireNonNull(ds.child("statue").getValue()).toString().equals("deleted")) {
-                            oCount++;
-                            if (orderDate.compareTo(myDate) >= 0 && Objects.requireNonNull(ds.child("statue").getValue()).toString().equals("placed")) {
-                                currentOrders++;
-                            }
-                        }
-                    }
-                }
-
-                if (oCount == 0) {
-                    hasMore = false;
-                    ddCount.setText("لم يقم بأضافه اي شحنة");
-                } else {
-                    hasMore = true;
-                    ddCount.setText("اضاف " + oCount + " شحنة");
-                }
-
-                if (currentOrders <= 1) {
-                    txtMoreOrders.setVisibility(View.GONE);
-                } else {
-                    int finalc = currentOrders - 1;
-                    txtMoreOrders.setVisibility(View.VISIBLE);
-                    txtMoreOrders.setText(finalc + "");
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
     }
 
     private void getSupData(String owner) {
+        dsUsername.setText(orderData.getOwner());
+        if(owner.equals("")) return;
         uDatabase.child(owner).addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
             @Override

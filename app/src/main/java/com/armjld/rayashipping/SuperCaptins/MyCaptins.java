@@ -20,7 +20,7 @@ import com.armjld.rayashipping.Adapters.CaptinsAdapter;
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AllOrders;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.UserData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,7 +31,7 @@ public class MyCaptins extends Fragment {
 
     public static RecyclerView recyclerView;
     public static CaptinsAdapter captinsAdapter;
-    public static ArrayList<userData> captinList = new ArrayList<>();
+    public static ArrayList<UserData> captinList = new ArrayList<>();
     public static Context mContext;
     static LinearLayout EmptyPanel;
     ImageView btnBack;

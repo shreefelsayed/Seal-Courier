@@ -18,31 +18,22 @@ import com.armjld.rayashipping.SuperCaptins.MyCaptins;
 import com.armjld.rayashipping.SuperVisor.SuperAvillable;
 import com.armjld.rayashipping.SuperVisor.SuperRecived;
 import com.armjld.rayashipping.getRefrence;
-import com.armjld.rayashipping.models.ChatsData;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.notiData;
-import com.armjld.rayashipping.models.userData;
-import com.armjld.rayashipping.rquests;
+import com.armjld.rayashipping.Models.ChatsData;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.notiData;
+import com.armjld.rayashipping.Models.UserData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 public class LoadingScreen extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
     private static TextView txtLoading;
-    rquests _req = new rquests(this);
 
     @Override
     public void onBackPressed() { }
@@ -85,7 +76,7 @@ public class LoadingScreen extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        Data orderData = ds.getValue(Data.class);
+                        Order orderData = ds.getValue(Order.class);
                         assert orderData != null;
                         if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             // ------ Add to Avillabe
@@ -138,7 +129,7 @@ public class LoadingScreen extends AppCompatActivity {
                 if (snapshot.exists()) {
                     // ------ Get my Captins Data
                     for (DataSnapshot captin : snapshot.getChildren()) {
-                        userData user = captin.getValue(userData.class);
+                        UserData user = captin.getValue(UserData.class);
                         assert user != null;
                         Home.mCaptinsIDS.add(user.getId()); // Add the id to id List
                         Home.mCaptins.add(user); // Add the Captin data
@@ -148,7 +139,6 @@ public class LoadingScreen extends AppCompatActivity {
                 // ------ Send data to captins fragment
                 MyCaptins.getCaptins();
                 getRayaOrders();
-                _req.ImportCuurentRequests();
             }
 
             @Override
@@ -169,7 +159,7 @@ public class LoadingScreen extends AppCompatActivity {
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         if (ds.getChildrenCount() < 5) return;
-                        Data orderData = ds.getValue(Data.class);
+                        Order orderData = ds.getValue(Order.class);
                         assert orderData != null;
 
                         Home.mm.add(orderData);
@@ -211,7 +201,7 @@ public class LoadingScreen extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot allOrders) {
                 if (allOrders.exists()) {
                     for (DataSnapshot notDelv : allOrders.getChildren()) {
-                        Data orderData = notDelv.getValue(Data.class);
+                        Order orderData = notDelv.getValue(Order.class);
                         assert orderData != null;
                         if (orderData.getStatue().equals("supD") || orderData.getStatue().equals("supDenied")) {
                             Home.delvOrders.add(orderData);

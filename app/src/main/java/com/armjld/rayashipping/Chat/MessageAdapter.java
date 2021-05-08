@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.models.Chat;
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.Chat;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

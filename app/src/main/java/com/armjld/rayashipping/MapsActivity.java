@@ -18,11 +18,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,13 +32,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.armjld.rayashipping.Adapters.DeliveryAdapter;
-import com.armjld.rayashipping.Adapters.MyAdapter;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -91,7 +85,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final int REQUEST_CHECK_SETTINGS = 102;
     private static final String TAG = "Maps";
-    public static ArrayList<Data> filterList = new ArrayList<>();
+    public static ArrayList<Order> filterList = new ArrayList<>();
     Location currentLocation;
     GoogleApiClient mGoogleApiClient;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -103,12 +97,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ConstraintLayout cardLocation;
     Button btnGoogleDirc;
 
-
-    // Disable the Back Button
-    @Override
-    public void onBackPressed() {
-        finish();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -226,7 +214,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         for (int i = 0; i < filterList.size(); i++) {
-            Data thisOrder = filterList.get(i);
+            Order thisOrder = filterList.get(i);
 
             String state = thisOrder.getStatue();
             String provider = thisOrder.getProvider();

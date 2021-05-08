@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,16 +41,6 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
     String datee = sdf.format(new Date());
     private ZXingScannerView mScannerView;
 
-    @Override
-    public void onBackPressed() {
-        if (UserInFormation.getAccountType().equals("Supervisor")) {
-            Home.getRayaDelv();
-        } else {
-            Home.getDeliveryOrders();
-        }
-        
-        finish();
-    }
 
     @Override
     public void onCreate(Bundle state) {
@@ -60,15 +50,6 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
         txtCounter = findViewById(R.id.txtCounter);
         btnBack = findViewById(R.id.btnBack);
         loading = findViewById(R.id.loading);
-
-        btnBack.setOnClickListener(v -> {
-            if (UserInFormation.getAccountType().equals("Supervisor")) {
-                Home.getRayaDelv();
-            } else {
-                Home.getDeliveryOrders();
-            }
-            finish();
-        });
 
         mScannerView = new ZXingScannerView(this);
         mScannerView.setFormats(Collections.singletonList(BarcodeFormat.QR_CODE));
@@ -108,16 +89,11 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
     // ---------- Scan For Captin ------------ \\
     private void checkForCaptin(String trackID) {
         loading.setVisibility(View.VISIBLE);
-        String strF = String.valueOf(trackID.charAt(0));
         DatabaseReference mDatabase;
 
         // ------------ Check for order Refrence
         getRefrence ref = new getRefrence();
-        if (!strF.equals("R")) {
-            mDatabase = ref.getRef("Esh7nly");
-        } else {
-            mDatabase = ref.getRef("Raya");
-        }
+        mDatabase = ref.getRef("Raya");
 
         mDatabase.orderByChild("trackid").equalTo(trackID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -125,7 +101,7 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
                 // ------------ Make Action on Order -----------
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        Data orderData = ds.getValue(Data.class);
+                        Order orderData = ds.getValue(Order.class);
                         OrdersClass ordersClass = new OrdersClass(QRScanner.this);
                         if (orderData.getStatue().equals("supD") || orderData.getStatue().equals("placed") || orderData.getStatue().equals("accepted")
                                 || orderData.getStatue().equals("recived")  || orderData.getStatue().equals("recived2") || orderData.getStatue().equals("hubD") || orderData.getStatue().equals("hubP")
@@ -180,7 +156,7 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
                 if (snapshot.exists()) {
                     Timber.i("Track Id Exists");
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        Data orderData = ds.getValue(Data.class);
+                        Order orderData = ds.getValue(Order.class);
                         assert orderData != null;
                         if (orderData.getStatue().equals("hubD") || orderData.getStatue().equals("deniedD") || orderData.getStatue().equals("hubP")
                                 || orderData.getStatue().equals("accepted")  || orderData.getStatue().equals("placed") || orderData.getStatue().equals("recived")

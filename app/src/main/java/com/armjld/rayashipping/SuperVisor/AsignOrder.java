@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.armjld.rayashipping.Adapters.CaptinsAdapter;
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.models.Data;
+import com.armjld.rayashipping.Models.Order;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ public class AsignOrder extends AppCompatActivity {
 
     public static String type;
     public static int position;
-    public static ArrayList<Data> assignToCaptin = new ArrayList<>();
+    public static ArrayList<Order> assignToCaptin = new ArrayList<>();
     private LinearLayout EmptyPanel;
 
     @Override

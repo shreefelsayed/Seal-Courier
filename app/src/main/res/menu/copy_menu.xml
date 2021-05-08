@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/Sender"
+        android:icon="@drawable/ic_profile"
+        android:title="بيانات الراسل" />
+    <item android:id="@+id/reciver"
+        android:icon="@drawable/ic_car"
+        android:title="بيانات المستلم" />
+    <item android:id="@+id/order"
+        android:icon="@drawable/ic_package"
+        android:title="بيانات الشحنه" />
+</menu>

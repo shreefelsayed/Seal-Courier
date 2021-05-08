@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.armjld.rayashipping.Login.Login_Options;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;

@@ -19,14 +19,13 @@ import android.widget.Toast;
 import com.armjld.rayashipping.Captin.captinRecived;
 import com.armjld.rayashipping.Login.LoginManager;
 import com.armjld.rayashipping.Login.StartUp;
-import com.armjld.rayashipping.models.Data;
+import com.armjld.rayashipping.Models.Order;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import static com.google.firebase.database.FirebaseDatabase.getInstance;
@@ -39,7 +38,7 @@ public class DeniedReasons extends AppCompatActivity {
     private EditText txtContact;
     FirebaseAuth mAuth;
     Button btnSend;
-    public static Data orderData;
+    public static Order orderData;
     CheckBox chkRecive;
     EditText txtDDate;
 

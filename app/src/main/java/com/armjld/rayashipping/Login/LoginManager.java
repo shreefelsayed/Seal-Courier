@@ -18,8 +18,8 @@ import androidx.annotation.NonNull;
 import com.armjld.rayashipping.Locations.LocationManager;
 import com.armjld.rayashipping.Ratings.Ratings;
 import com.armjld.rayashipping.UserDatabase;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.UserData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -52,7 +52,7 @@ public class LoginManager {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    userData User = snapshot.getValue(userData.class);
+                    UserData User = snapshot.getValue(UserData.class);
                     assert User != null;
 
                     if (User.getActive().equals("false")) {
@@ -152,7 +152,7 @@ public class LoginManager {
         });
     }
 
-    private void setUserInformation(userData user) {
+    private void setUserInformation(UserData user) {
         UserInFormation.setAccountType(user.getAccountType());
         UserInFormation.setUserName(user.getName());
         UserInFormation.setUserDate(user.getDate());

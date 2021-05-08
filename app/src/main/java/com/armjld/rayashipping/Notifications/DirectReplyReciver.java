@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;

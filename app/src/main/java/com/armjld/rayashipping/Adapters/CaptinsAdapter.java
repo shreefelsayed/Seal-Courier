@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +30,9 @@ import com.armjld.rayashipping.SuperCaptins.MyCaptinInfo;
 import com.armjld.rayashipping.SuperVisor.AsignOrder;
 import com.armjld.rayashipping.SuperVisor.SuperAvillable;
 import com.armjld.rayashipping.SuperVisor.SuperRecived;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.UserData;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 import com.squareup.picasso.Picasso;
 
@@ -43,10 +42,10 @@ public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHo
     private static final int PHONE_CALL_CODE = 100;
     @SuppressLint("StaticFieldLeak")
     public static Context mContext;
-    ArrayList<userData> captinList;
+    ArrayList<UserData> captinList;
     String from;
 
-    public CaptinsAdapter(Context mContext, ArrayList<userData> captinList, String from) {
+    public CaptinsAdapter(Context mContext, ArrayList<UserData> captinList, String from) {
         CaptinsAdapter.mContext = mContext;
         this.captinList = captinList;
         this.from = from;
@@ -63,7 +62,7 @@ public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull CaptinsAdapter.MyViewHolder holder, int position) {
-        userData captin = captinList.get(position);
+        UserData captin = captinList.get(position);
         holder.txtName.setText(captin.getName());
         holder.txtAddress.setText(captin.getUserCity());
 
@@ -130,15 +129,11 @@ public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHo
     private void AssignToCaptin(String capId) {
         OrdersClass ordersClass = new OrdersClass(mContext);
         for (int i = 0; i < AsignOrder.assignToCaptin.size(); i++) {
-            Data orderData = AsignOrder.assignToCaptin.get(i);
+            Order orderData = AsignOrder.assignToCaptin.get(i);
             switch (orderData.getStatue()) {
                 case "accepted":
                 case "placed":
-                    if (!orderData.getProvider().equals("Esh7nly")) {
-                        ordersClass.assignToCaptin(orderData, capId);
-                    } else {
-                        ordersClass.bidOnOrder(orderData, capId);
-                    }
+                    ordersClass.assignToCaptin(orderData, capId);
                     SuperAvillable.orderAdapter.notifyItemChanged(AsignOrder.position);
                     break;
                 case "supD":
@@ -206,7 +201,7 @@ public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHo
             viewSep = myview.findViewById(R.id.viewSep);
         }
 
-        public void setData(userData user) {
+        public void setData(UserData user) {
             Picasso.get().load(Uri.parse(user.getPpURL())).into(imgCaptin);
             txtName.setText(user.getName());
 
@@ -218,7 +213,7 @@ public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHo
         }
 
         @SuppressLint("UseCompatLoadingForDrawables")
-        public void setIcon(userData captin) {
+        public void setIcon(UserData captin) {
             switch (captin.getTransType()) {
                 case "Motor":
                     icTrans.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_vespa));

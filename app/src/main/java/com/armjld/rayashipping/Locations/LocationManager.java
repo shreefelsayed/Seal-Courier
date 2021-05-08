@@ -6,8 +6,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.armjld.rayashipping.models.LocationDataType;
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.LocationDataType;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;

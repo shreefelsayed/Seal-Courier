@@ -1,6 +1,8 @@
-package com.armjld.rayashipping.models;
+package com.armjld.rayashipping.Models;
 
-public class userData {
+import java.util.ArrayList;
+
+public class UserData {
 
     private String name = "";
     private String phone = "";
@@ -35,12 +37,51 @@ public class userData {
     private String trackId = "";
     private String totalMoney = "0";
     private String compName = "";
+    private int ordersCount = 0;
+    private String refer = "";
     private int pickUpMoney = 0;
     private int deliverMoney = 0;
     private int deniedMoney = 0;
+    private String paymentType = "dynamic";
+    private String code = "";
+    private String zone = "";
+    private int finalRating = 0;
+    private int points = 0;
+    ArrayList<Order> listOrder = new ArrayList<>();
 
+    public UserData() {}
 
-    public userData() {}
+    public int getFinalRating() {
+        return finalRating;
+    }
+
+    public void setFinalRating(int finalRating) {
+        this.finalRating = finalRating;
+    }
+
+    public int getOrdersCount() {
+        return ordersCount;
+    }
+
+    public void setOrdersCount(int ordersCount) {
+        this.ordersCount = ordersCount;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getZone() {
+        return zone;
+    }
+
+    public void setZone(String zone) {
+        this.zone = zone;
+    }
 
     public String getName() {
         return name;
@@ -330,8 +371,40 @@ public class userData {
         this.deniedMoney = deniedMoney;
     }
 
-    public userData(String name, String phone, String email, String date, String id, String accountType, String ppURL, String ssnURL, String mpass, String canceled, String ssnNum, String device, String app_version, String unique_id, String active, String device_token, String userState, String userCity, String ordersType,
-                    String currentDate, String sendOrderNoti, String sendOrderNotiCity, int walletmoney, String isConfirmed, String provider, int pickUpMoney, int deliverMoney, int deniedMoney) {
+    public String getPaymentType() {
+        return paymentType;
+    }
+
+    public String getRefer() {
+        return refer;
+    }
+
+    public void setRefer(String refer) {
+        this.refer = refer;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public ArrayList<Order> getListOrder() {
+        return listOrder;
+    }
+
+    public void setListOrder(ArrayList<Order> listOrder) {
+        this.listOrder = listOrder;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public UserData(String name, String phone, String email, String date, String id, String accountType, String ppURL, String ssnURL, String mpass, String canceled, String ssnNum, String device, String app_version, String unique_id, String active, String device_token, String userState, String userCity, String ordersType,
+                    String currentDate, String sendOrderNoti, String sendOrderNotiCity, int walletmoney, String isConfirmed, String provider, int pickUpMoney, int deliverMoney, int deniedMoney, String code) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -360,7 +433,6 @@ public class userData {
         this.pickUpMoney = pickUpMoney;
         this.deliverMoney = deliverMoney;
         this.deniedMoney = deniedMoney;
+        this.code = code;
     }
-
 }
-       

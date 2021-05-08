@@ -8,9 +8,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.notiData;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.notiData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,7 +30,7 @@ public class Brodcast extends BroadcastReceiver {
         FirebaseDatabase.getInstance().getReference().child("Pickly").child("orders").child(orderID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Data data = snapshot.getValue(Data.class);
+                Order data = snapshot.getValue(Order.class);
                 assert data != null;
                 if (data == null) {
                     Toast.makeText(context, "Data is Null", Toast.LENGTH_SHORT).show();

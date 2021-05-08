@@ -16,8 +16,8 @@ import com.armjld.rayashipping.Filters;
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.caculateTime;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.notiData;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.notiData;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

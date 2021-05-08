@@ -21,14 +21,14 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.armjld.rayashipping.Adapters.SuperVisorAdapter;
+import com.armjld.rayashipping.Adapters.SuperVisorPageAdapter;
 import com.armjld.rayashipping.Filters;
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.MapsActivity;
 import com.armjld.rayashipping.QRScanner;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.FirebaseDatabase;
 import com.hypertrack.sdk.HyperTrack;
@@ -71,7 +71,7 @@ public class AllOrders extends Fragment implements TrackingStateObserver.OnTrack
         fitlerTitle.setText("الشحنات");
 
         ViewPager viewPager = view.findViewById(R.id.view_pager);
-        viewPager.setAdapter(new SuperVisorAdapter(mContext, getChildFragmentManager()));
+        viewPager.setAdapter(new SuperVisorPageAdapter(mContext, getChildFragmentManager()));
         tabs = view.findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
@@ -168,7 +168,7 @@ public class AllOrders extends Fragment implements TrackingStateObserver.OnTrack
 
     private void openMaps() {
         Intent i = new Intent(getActivity(), MapsActivity.class);
-        ArrayList<Data> bothLists = new ArrayList<>();
+        ArrayList<Order> bothLists = new ArrayList<>();
         if (UserInFormation.getAccountType().equals("Supervisor")) {
             // -------- Compine Lists
             bothLists.addAll(Home.mm);

@@ -14,15 +14,15 @@ import com.armjld.rayashipping.Captin.captinRecived;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.SuperAvillable;
 import com.armjld.rayashipping.SuperVisor.SuperRecived;
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.UserInFormation;
 
-public class SuperVisorAdapter extends FragmentPagerAdapter {
+public class SuperVisorPageAdapter extends FragmentPagerAdapter {
 
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.txtAvillable, R.string.txtRecived};
     private final Context mContext;
 
-    public SuperVisorAdapter(Context context, FragmentManager fm) {
+    public SuperVisorPageAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
     }

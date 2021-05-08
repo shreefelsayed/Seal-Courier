@@ -1,21 +1,29 @@
 package com.armjld.rayashipping;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import com.armjld.rayashipping.Chat.chatListclass;
-import com.armjld.rayashipping.models.CaptinMoney;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.notiData;
-import com.armjld.rayashipping.models.requestsData;
+import com.armjld.rayashipping.Captin.CaptinOrderInfo;
+import com.armjld.rayashipping.Models.CaptinMoney;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.Update;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.notiData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,7 +31,7 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
-public class OrdersClass {
+public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCallback {
 
     Context mContext;
     DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users");
@@ -34,6 +42,8 @@ public class OrdersClass {
 
     SimpleDateFormat dayFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
     String dayDate = dayFormat.format(new Date());
+    private static final int PHONE_CALL_CODE = 100;
+
 
     public OrdersClass(Context mContext) {
         this.mContext = mContext;
@@ -42,7 +52,7 @@ public class OrdersClass {
     // ----------------------------- Captins Actions ------------------------- \\
 
     // ------- When Captin Recived an Order from a Supplier
-    public void orderRecived(Data orderData) {
+    public void orderRecived(Order orderData) {
         getRefrence ref = new getRefrence();
         Wallet wallet = new Wallet();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
@@ -57,34 +67,18 @@ public class OrdersClass {
         notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
         nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
 
-        // ---- in Case of Esh7nly Add money to Esh7nly Wallet
-        if (orderData.getProvider().equals("Esh7nly")) {
-            wallet.addMoneyToShreef(orderData.getId(), orderData.getTrackid());
-        }
-
-
-        // --- Add Money to Captin 
-        boolean toPay = true;
-        for (int i = 0; i < Home.captinAvillable.size(); i++) {
-            Data oData = Home.captinAvillable.get(i);
-            if (oData.getStatue().equals("recived2") && oData.getuId().equals(orderData.getuId())) {
-                toPay = false;
-                break;
-            }
-        }
-
-        if (toPay) wallet.addRecivedMoney(UserInFormation.getId(), orderData);
 
         // --- Add Log
         String Log = "قام المندوب " + UserInFormation.getId() + " بتأكيد استلام الشحنه من التاجر " + orderData.getuId();
         logOrder(mDatabase, orderData.getId(), Log);
+        setUpdate(orderData, "قام المندوب باستلام البيك اب", false);
 
         // -- Toast
         Toast.makeText(mContext, "تم تأكيد استلام الشحنة", Toast.LENGTH_SHORT).show();
     }
 
     // ----- When Captin say the client didn't deliver the order
-    public void orderDenied(Data orderData, String Msg) {
+    public void orderDenied(Order orderData, String Msg) {
         getRefrence ref = new getRefrence();
         Wallet wallet = new Wallet();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
@@ -103,23 +97,27 @@ public class OrdersClass {
         nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
 
         // --- Send notification to Supplier
-        message = "لم يتم تسليم الشحنه " + orderData.getDName() + " بسبب " + Msg;
-        Noti = new notiData(UserInFormation.getId(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
-        nDatabase.child(orderData.getuId()).push().setValue(Noti);
+        if(!orderData.getuId().equals("")) {
+            message = "لم يتم تسليم الشحنه " + orderData.getDName() + " بسبب " + Msg;
+            Noti = new notiData(UserInFormation.getId(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+            nDatabase.child(orderData.getuId()).push().setValue(Noti);
+        }
 
         // ---- Add Money To Wallet
         wallet.addDeniedMoney(UserInFormation.getId(), orderData);
 
         // ---- Add Log
-        String Log = "قام المندوب " + UserInFormation.getUserName() + " بفشل تسليم الشحنه " + orderData.getuId();
+        String Log = "قام المندوب " + UserInFormation.getUserName() + " بفشل تسليم الشحنه بسبب : " + Msg;
         logOrder(mDatabase, orderData.getId(), Log);
+        setUpdate(orderData, "فشل في تسليم الشحنه بسبب : " + Msg + ".", true);
+
 
         // --- Toast
         Toast.makeText(mContext, "تم تسجيل الشحنه كمرتجع الرجاء تسليمها للمخزن", Toast.LENGTH_SHORT).show();
     }
 
     // ------ When Captin deliver a denied order back to Supplier
-    public void returnOrder(Data orderData) {
+    public void returnOrder(Order orderData) {
         // ---
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
@@ -137,12 +135,15 @@ public class OrdersClass {
         String Log = "قام المندوب " + UserInFormation.getId() + " بتسليم المرتجع الي " + orderData.getOwner();
         logOrder(mDatabase, orderData.getId(), Log);
 
+        setUpdate(orderData, "تم ارسال المرتجع للراسل", false);
+
         // --- Toast
         Toast.makeText(mContext, "تم تأكيد تسليم المرتجع", Toast.LENGTH_SHORT).show();
     }
 
     // ----- When a Captin Deliver an Order
-    public void orderDelvered(Data orderData) {
+    public void orderDelvered(Order orderData) {
+        if(orderData.getStatue().equals("delivered")) return;
         getRefrence ref = new getRefrence();
         Wallet wallet = new Wallet();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
@@ -150,26 +151,31 @@ public class OrdersClass {
         mDatabase.child(orderData.getId()).child("statue").setValue("delivered");
         mDatabase.child(orderData.getId()).child("dilverTime").setValue(datee);
         mDatabase.child(orderData.getId()).child("ddate").setValue(dayDate);
+        mDatabase.child(orderData.getId()).child("moneyStatue").setValue("courier");
+
+        orderData.setMoneyStatue("courier");
 
         // -- Add Money to Delivery
         wallet.addDelvMoney(orderData.getuAccepted(), orderData);
 
-        // ---- Send Notifications to Supplier
-        String message = "تم تسليم شحنه " + orderData.getDName() + " بنجاح";
-        notiData Noti = new notiData(orderData.getuAccepted(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
-        nDatabase.child(orderData.getuId()).push().setValue(Noti);
-
         // ---- Send Notifications to Supervisor
-        message = "تم تسليم شحنه " + orderData.getDName() + " بنجاح";
-        Noti = new notiData(orderData.getuAccepted(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
-        nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
+        String messageS = "تم تسليم شحنه " + orderData.getDName() + " بنجاح";
+        notiData NotiS = new notiData(orderData.getuAccepted(), UserInFormation.getSupId(), orderData.getId(), messageS, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+        nDatabase.child(UserInFormation.getSupId()).push().setValue(NotiS);
 
         // --- Add a Try
         int tries = Integer.parseInt(orderData.getTries()) + 1;
         mDatabase.child(orderData.getId()).child("tries").setValue(tries + "");
 
-        // --- Add Money to Supplier Wallet
-        if (!orderData.getProvider().equals("Esh7nly")) wallet.addToSupplier(orderData.getGMoney(), orderData.getuId(), orderData);
+        if(!orderData.getuId().equals("")) {
+            // ---- Send Notifications to Supplier
+            String message = "تم تسليم شحنه " + orderData.getDName() + " بنجاح";
+            notiData Noti = new notiData(orderData.getuAccepted(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+            nDatabase.child(orderData.getuId()).push().setValue(Noti);
+
+            // --- Add Money to Supplier Wallet
+            wallet.addToSupplier(orderData.getGMoney(), orderData.getuId(), orderData);
+        }
 
         // --- Add Money to Captins PackMoney
         int CurrentPackMoney = Integer.parseInt(UserInFormation.getPackMoney());
@@ -183,6 +189,8 @@ public class OrdersClass {
         String Log = "قام المندوب " + orderData.getuAccepted() + " بتسليم الشحنه للعميل " + orderData.getDName() + " و تم اضافه ١٥ جنيه في حسابه" + " و تم تحويل ٥ جنيه في حساب شركه إشحنلي";
         logOrder(mDatabase, orderData.getId(), Log);
 
+        setUpdate(orderData, "تم تسليم الشحنه", false);
+
         // -- Toast
         Toast.makeText(mContext, "تم توصيل الشحنة", Toast.LENGTH_SHORT).show();
     }
@@ -190,7 +198,7 @@ public class OrdersClass {
     // ----------------------------- SuperVisors Actions ------------------------- \\
 
     // ---- When a Supervisor asign Captin to Pick ORder
-    public void assignToCaptin(Data orderData, String capID) {
+    public void assignToCaptin(Order orderData, String capID) {
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
 
@@ -210,37 +218,24 @@ public class OrdersClass {
         nDatabase.child(capID).push().setValue(Noti);
 
         // -- Send Notification To Supplier
-        msg = "تمت مراجعه شحنتك و سيتم استلامها في اقرب وقت";
-        Noti = new notiData(UserInFormation.getId(), orderData.getuId(), orderData.getId(), msg, datee, "false", "orderinfo", "Envio", UserInFormation.getUserURL(), "Raya");
-        nDatabase.child(orderData.getuId()).push().setValue(Noti);
+        if(!orderData.getuId().equals("")) {
+            msg = "تمت مراجعه شحنتك و سيتم استلامها في اقرب وقت";
+            Noti = new notiData(UserInFormation.getId(), orderData.getuId(), orderData.getId(), msg, datee, "false", "orderinfo", "Envio", UserInFormation.getUserURL(), "Raya");
+            nDatabase.child(orderData.getuId()).push().setValue(Noti);
+        }
 
         // ----- Add Log
         String Log = "تم تسليم الشحنه من المشرف " + UserInFormation.getSup_code() + " الي المندوب" + capID;
         logOrder(mDatabase, orderData.getId(), Log);
+        setUpdate(orderData, "الشحنه قيد الاستلام من مندوب الشحن", false);
 
-        Toast.makeText(mContext, "تم تسليم الاوردر للمندوب", Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(mContext, "تم تسليم البيك اب للمندوب", Toast.LENGTH_SHORT).show();
     }
 
-    // ----- When a Supervsior Asign Captin on Esh7nly Order to Pick
-    public void bidOnOrder(Data orderData, String capID) {
-        // ----Send Request
-        String notiKey = nDatabase.child(orderData.getuId()).push().getKey();
-        requestsData _reqData = new requestsData(capID, datee, "N/A", "", orderData.getuId(), notiKey, orderData.getId(), UserInFormation.getId());
-        rquests _rquests = new rquests(mContext);
-        _rquests.addrequest(_reqData, capID, orderData.getProvider());
-
-        // --- Notification to Supplier
-        String message = "قامت شركه Seal بطلب لتوصيل شحنه " + orderData.getDName();
-        notiData Noti = new notiData(capID, orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", "Envio", UserInFormation.getUserURL(), "Raya");
-        assert notiKey != null;
-        nDatabase.child(orderData.getuId()).child(notiKey).setValue(Noti);
-
-        // --- Toast
-        Toast.makeText(mContext, "تم تقديم طلب التوصيل", Toast.LENGTH_SHORT).show();
-    }
 
     // ----- When Supervisor Asign a returned order to a Captin to Deliver to Supplier
-    public void asignDenied(Data orderData, String captinId) {
+    public void asignDenied(Order orderData, String captinId) {
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
 
@@ -263,17 +258,22 @@ public class OrdersClass {
         // ---- Add Log
         String Log = "قام المشرف " + UserInFormation.getUserName() + " بتسليم المرتجع الي " + captinId;
         logOrder(mDatabase, orderData.getId(), Log);
+        setUpdate(orderData, "تم تسليم المرتجع للمندوب", false);
 
         // ---- Toast
         Toast.makeText(mContext, "تم اختيار المندوب لتسليم المرتجع", Toast.LENGTH_SHORT).show();
     }
 
     // ----- When SuperVisor Asign an order to Captin to Deliver
-    public void asignDelv(Data orderData, String capID) {
+    public void asignDelv(Order orderData, String capID) {
+
+        if(orderData.getStatue().equals("deleted") || orderData.getStatue().equals("delivered") || orderData.getStatue().equals("deniedback")) return;
+
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
 
         String supId;
+
         if(UserInFormation.getAccountType().equals("Supervisor")) {
             supId = UserInFormation.getId();
         } else {
@@ -297,6 +297,7 @@ public class OrdersClass {
         // --- Add Log
         String Log = "قام المشرف بتسليم الشحنه للكابتن " + capID + " لتسليمها للعميل";
         logOrder(mDatabase, orderData.getId(), Log);
+        setUpdate(orderData, "قيد التسليم - تم تسليم الاوردر للمندوب", false);
 
         // ---- Toast
         Toast.makeText(mContext, "تم تسليم الشحنه للمندوب", Toast.LENGTH_SHORT).show();
@@ -304,32 +305,25 @@ public class OrdersClass {
     }
 
     // ----------- Assign As Recived By SuperVisor
-    public void setRecived(Data orderData) {
+    public void setRecived(Order orderData) {
         // --- Update Databse
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
-        mDatabase.child(orderData.getId()).child("statue").setValue("recived");
-        mDatabase.child(orderData.getId()).child("recivedTime").setValue(datee);
-
-        // ---- Send noti to Delivery Worker
-        String message = "قام " + UserInFormation.getUserName() + " بتسليمك الشحنةاضغط هنا لتأكيد استلام الشحنه.";
-        notiData Noti = new notiData(UserInFormation.getId() ,orderData.getuAccepted() , orderData.getId(),message,datee,"false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
-        nDatabase.child(orderData.getuAccepted()).push().setValue(Noti);
+        mDatabase.child(orderData.getId()).child("statue").setValue("recived2");
+        mDatabase.child(orderData.getId()).child("recived2Time").setValue(datee);
 
         // --- Toast
-        Toast.makeText(mContext, "تم تسليم الشحنه للمندوب، في انظار تأكيد الاستلام", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "تم تسليم الشحنه للمندوب", Toast.LENGTH_SHORT).show();
 
         // --- Logs
         String Log = "قام المشرف " + UserInFormation.getUserName() + " بتسليم الشحنه رقم : " + orderData.getTrackid() + " للمندوب " + orderData.getuAccepted() + " بدلا من التاجر " + orderData.getOwner();
         logOrder(mDatabase, orderData.getId(), Log);
+
+        setUpdate(orderData, "تم تسليم البيك اب للمندوب", false);
     }
 
-    // ------- Captin Took Money (1 - Add the money to captins wallet)
-    // 2- set Order as Paid if it's not already
-    // 3- if order is Paid, Remove the payment from User (if it's not paid)
-    // 4- if it's already paid we add money to the supplier
 
-    public void orderPaid(Data orderData) {
+    public void orderPaid(Order orderData) {
         // Refrence
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
@@ -344,7 +338,7 @@ public class OrdersClass {
         UserInFormation.setPackMoney(finalMoney + "");
 
         // Check if order is Paid Already --
-        if(orderData.getPaid().equals("true")) {
+        if(orderData.getPaid().equals("true") && !orderData.getuId().equals("")) {
             uDatabase.child(orderData.getuId()).child("payments").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -356,8 +350,8 @@ public class OrdersClass {
                                 uDatabase.child(orderData.getuId()).child("payments").child(ds.getKey()).removeValue();
                             } else {
                                 // -- If The Supplier Already Paid The Money
-                                CaptinMoney newWallet = new CaptinMoney(orderData.getId(), "ourmoney", datee, "false", orderData.getTrackid(), orderData.getReturnMoney());
-                                uDatabase.child(orderData.getuId()).child("payments").push().setValue(newWallet);
+                                    CaptinMoney newWallet = new CaptinMoney(orderData.getId(), "ourmoney", datee, "false", orderData.getTrackid(), orderData.getReturnMoney());
+                                    uDatabase.child(orderData.getuId()).child("payments").push().setValue(newWallet);
                             }
                         }
                     }
@@ -378,5 +372,76 @@ public class OrdersClass {
         long tsLong = System.currentTimeMillis() / 1000;
         String logC = Long.toString(tsLong);
         mDatabase.child(id).child("logs").child(logC).setValue(message);
+    }
+
+    public void setUpdate(Order orderData, String msg, boolean isNoti) {
+        getRefrence ref = new getRefrence();
+        DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
+
+        // -- Set Data
+        Update update = new Update(msg, "", datee, orderData.getId(), UserInFormation.getId());
+
+        // -- Update Data
+        mDatabase.child(orderData.getId()).child("updates").push().setValue(update);
+
+        if(isNoti && !orderData.getuId().equals("")) {
+            // -- Send Notification
+            String message = "شحنه " + orderData.getDName() + " : " + msg;
+            notiData Noti = new notiData("", orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+            nDatabase.child(orderData.getuId()).push().setValue(Noti);
+        }
+
+        Toast.makeText(mContext, "Update Added", Toast.LENGTH_SHORT).show();
+    }
+
+    public void callSender(Order orderData) {
+        if(orderData.getpPhone().equals("")) return;
+
+        BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل تريد الاتصال بالتاجر ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
+            checkPermission(Manifest.permission.CALL_PHONE, PHONE_CALL_CODE);
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + orderData.getpPhone()));
+            if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+
+            mContext.startActivity(callIntent);
+            dialogInterface.dismiss();
+        }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
+        mBottomSheetDialog.show();
+    }
+
+    public void callConsigne(Order orderData) {
+        if (orderData.getDPhone().equals("")) return;
+        BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل تريد الاتصال بالعميل ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_add_phone, (dialogInterface, which) -> {
+            checkPermission(Manifest.permission.CALL_PHONE, PHONE_CALL_CODE);
+            Intent callIntent = new Intent(Intent.ACTION_CALL);
+            callIntent.setData(Uri.parse("tel:" + orderData.getDPhone()));
+            if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+
+            mContext.startActivity(callIntent);
+
+            dialogInterface.dismiss();
+        }).setNegativeButton("لا", R.drawable.ic_close, (dialogInterface, which) -> dialogInterface.dismiss()).build();
+        mBottomSheetDialog.show();
+    }
+
+    public void checkPermission(String permission, int requestCode) {
+        if (ContextCompat.checkSelfPermission(mContext, permission) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions((Activity) mContext, new String[]{permission}, requestCode);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PHONE_CALL_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(mContext, "Phone Permission Granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(mContext, "Phone Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

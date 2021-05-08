@@ -35,11 +35,10 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.armjld.rayashipping.Chat.Messages;
 import com.armjld.rayashipping.Chat.chatListclass;
-import com.armjld.rayashipping.MapsActivity;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.UserData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -93,7 +92,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
     private static final int REQUEST_CHECK_SETTINGS = 102;
     private static final int PHONE_CALL_CODE = 100;
     private static final String PUBLISHABLE_KEY = "00F4wm01NAr4ZHVE4gjrtQiQw8BxYC9dJNjeoM0LE4eEpm928geMz-2Tt8bZgOzJnTlE64SKDs_ZUEYyBJE4wQ"; // declare your key here
-    public static userData user;
+    public static UserData user;
     public static String DEVICE_ID;
     android.location.Location currentLocation;
     GoogleApiClient mGoogleApiClient;
@@ -104,7 +103,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
     LatLng userLoc;
     private GoogleMap mMap;
     private HyperTrackViews mHyperTrackView;
-    public static ArrayList<Data> filterList = new ArrayList<>();
+    public static ArrayList<Order> filterList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,7 +263,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
 
     private void setOrders() {
         for (int i = 0; i < filterList.size(); i++) {
-            Data thisOrder = filterList.get(i);
+            Order thisOrder = filterList.get(i);
 
             String state = thisOrder.getStatue();
             String provider = thisOrder.getProvider();

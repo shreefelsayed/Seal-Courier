@@ -9,10 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.armjld.rayashipping.EnvioMoney;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.Wallet;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.UserData;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.regex.Pattern;
@@ -23,7 +22,7 @@ public class MyCaptinAddBouns extends AppCompatActivity {
     Button btnAddBouns;
     TextInputLayout tlAddMoney;
     ImageView btnBack;
-    public static userData user;
+    public static UserData user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

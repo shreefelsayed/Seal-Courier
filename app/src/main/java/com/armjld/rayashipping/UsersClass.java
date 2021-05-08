@@ -6,8 +6,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +31,7 @@ public class UsersClass {
         this.mContext = mContext;
     }
 
-    public void unActiveCaptin(userData user) {
+    public void unActiveCaptin(UserData user) {
         if(!user.getAccountType().equals("Delivery Worker")) {
             Toast.makeText(mContext, "لا يوجد لديك صلاحيه لاغلاق هذا الحساب", Toast.LENGTH_SHORT).show();
             return;
@@ -68,7 +68,7 @@ public class UsersClass {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        Data orderData = ds.getValue(Data.class);
+                        Order orderData = ds.getValue(Order.class);
                         assert orderData != null;
                         switch (orderData.getStatue()) {
                             case "accepted": // if order set to pick up by a captin, reutrn it to supervisor

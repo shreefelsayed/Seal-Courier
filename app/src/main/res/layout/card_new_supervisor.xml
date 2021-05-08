@@ -29,6 +29,17 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp">
 
+                <ImageView
+                    android:id="@+id/btnCopyData"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_copy"
+                    app:tint="@color/ic_profile_background"/>
+
                 <TextView
                     android:id="@+id/txtStatue"
                     android:layout_width="wrap_content"
@@ -50,28 +61,21 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/txtPostDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:text="text"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="UseCompoundDrawables">
+                    app:layout_constraintStart_toEndOf="@+id/btnCopyData"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/txtPostDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:gravity="center"
-                        android:text="text"
-                        android:textAlignment="center"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/_14sdp" />
-
-                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -119,7 +123,7 @@
                         android:layout_gravity="right"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginRight="@dimen/_5sdp"
-                        android:drawableRight="@drawable/ic_location_pin"
+                        android:drawableRight="@drawable/ic_add_location"
                         android:drawablePadding="5dp"
                         android:gravity="right"
                         android:paddingRight="5dp"
@@ -131,7 +135,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/_12sdp"
                         android:layout_marginRight="11dp"
-                        app:srcCompat="@drawable/ic_show_more_button_with_three_dots"
+                        app:srcCompat="@drawable/ic_more"
                         app:tint="@color/orange" />
 
                     <TextView
@@ -141,7 +145,7 @@
                         android:layout_gravity="right"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginRight="@dimen/_5sdp"
-                        android:drawableRight="@drawable/ic_location_pin"
+                        android:drawableRight="@drawable/ic_add_location"
                         android:drawablePadding="5dp"
                         android:gravity="right"
                         android:paddingRight="5dp"

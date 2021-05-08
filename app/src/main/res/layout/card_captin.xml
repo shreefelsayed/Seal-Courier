@@ -188,7 +188,7 @@
                 android:background="@null"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:src="@drawable/ic_baseline_outlined_flag_24"
+                android:src="@drawable/ic_flag"
                 android:visibility="gone" />
 
         </LinearLayout>

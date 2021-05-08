@@ -1,35 +1,35 @@
-package com.armjld.rayashipping.models;
+package com.armjld.rayashipping.Models;
 
-public class Data {
-
+public class Order {
     // Pick up Data
-    private String mPAddress;
-    private String mPShop;
-    private String txtPState;
-    private String mPRegion;
-    private String date;
-    private String id;
-    private String uId;
+    private String mPAddress = "";
+    private String mPShop = "";
+    private String txtPState = "";
+    private String mPRegion = "";
+    private String date = "";
+    private String id = "";
+    private String uId = "";
+    private String pPhone = "";
     // Drop Data
-    private String txtDState;
-    private String DAddress;
-    private String DDate;
-    private String DPhone;
-    private String DName;
-    private String mDRegion;
+    private String txtDState = "";
+    private String DAddress = "";
+    private String DDate = "";
+    private String DPhone = "";
+    private String DName = "";
+    private String mDRegion = "";
     // Money Data
-    private String GMoney;
+    private String GMoney = "";
     private String owner = "";
-    private String GGet;
+    private String GGet = "";
     // Transportation
-    private String isTrans;
-    private String isMetro;
-    private String isMotor;
-    private String isCar;
-    private String statue;
-    private String uAccepted;
-    private String srated;
-    private String srateid;
+    private String isTrans = "";
+    private String isMetro = "";
+    private String isMotor = "";
+    private String isCar = "";
+    private String statue = "";
+    private String uAccepted = "";
+    private String srated = "";
+    private String srateid = "";
     private String pDate = "";
     private String type = "Normal";
     public static String removed = "false";
@@ -37,12 +37,12 @@ public class Data {
     private String packWeight = "";
     private String lat = "";
     private String _long = "";
-    private String drated;
-    private String drateid;
-    private String dilverTime;
-    private String acceptedTime;
-    private String lastedit;
-    private String notes;
+    private String drated = "";
+    private String drateid = "";
+    private String dilverTime = "";
+    private String acceptedTime = "";
+    private String lastedit = "";
+    private String notes = "";
     private String priority = "1";
     private String trackid = "";
     private String provider = "Raya";
@@ -59,13 +59,19 @@ public class Data {
     private String paid = "false";
     private String returnMoney = "0";
 
+    private String moneyReturned = "false";
+    private String invoiceId = "";
+    private String refrence = "";
+    private String agent = "";
 
-    public Data(){ }
+    private String moneyStatue = "none";
 
-    public Data(String txtPState, String mPRegion, String mPAddress, String mPShop, String txtDState, String mDRegion, String DAddress, String DDate, String DPhone, String DName,
-                String GMoney, String GGet, String date, String id, String uId, String isTrans, String isMetro, String isMotor, String isCar, String statue, String uAccepted, String srated,
-                String srateid, String drated, String drateid, String acceptedTime, String dilverTime, String notes, String type , String owner, String pDate, String packWeight, String packType, String lat, String _long, String trackid,
-                String dHub, String pHub, String dHubName, String pHubName, String returnMoney) {
+    public Order(){ }
+
+    public Order(String txtPState, String mPRegion, String mPAddress, String mPShop, String txtDState, String mDRegion, String DAddress, String DDate, String DPhone, String DName,
+                 String GMoney, String GGet, String date, String id, String uId, String isTrans, String isMetro, String isMotor, String isCar, String statue, String uAccepted, String srated,
+                 String srateid, String drated, String drateid, String acceptedTime, String dilverTime, String notes, String type , String owner, String pDate, String packWeight, String packType, String lat, String _long, String trackid,
+                 String dHub, String pHub, String dHubName, String pHubName, String returnMoney) {
 
         //PICK
         this.txtPState = txtPState;
@@ -144,7 +150,7 @@ public class Data {
         return removed;
     }
     public void setRemoved(String removed) {
-        Data.removed = removed;
+        Order.removed = removed;
     }
     public String getOwner() {
         return owner;
@@ -285,6 +291,14 @@ public class Data {
     public void setIsMetro(String isMetro) { this.isMetro = isMetro;
     }
 
+    public String getMoneyReturned() {
+        return moneyReturned;
+    }
+
+    public void setMoneyReturned(String moneyReturned) {
+        this.moneyReturned = moneyReturned;
+    }
+
     public String getReturnMoney() {
         return returnMoney;
     }
@@ -341,6 +355,14 @@ public class Data {
         this.mDRegion = mDRegion;
     }
     public String getuAccepted() { return uAccepted;
+    }
+
+    public String getMoneyStatue() {
+        return moneyStatue;
+    }
+
+    public void setMoneyStatue(String moneyStatue) {
+        this.moneyStatue = moneyStatue;
     }
 
     public String getSrated() {
@@ -427,4 +449,35 @@ public class Data {
         this.pHubName = pHubName;
     }
 
+    public String getInvoiceId() {
+        return invoiceId;
+    }
+
+    public void setInvoiceId(String invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+
+    public String getRefrence() {
+        return refrence;
+    }
+
+    public void setRefrence(String refrence) {
+        this.refrence = refrence;
+    }
+
+    public String getAgent() {
+        return agent;
+    }
+
+    public void setAgent(String agent) {
+        this.agent = agent;
+    }
+
+    public String getpPhone() {
+        return pPhone;
+    }
+
+    public void setpPhone(String pPhone) {
+        this.pPhone = pPhone;
+    }
 }

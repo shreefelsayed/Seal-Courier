@@ -173,7 +173,7 @@
         android:background="@drawable/btndesign"
         android:backgroundTint="@color/ic_profile_background"
         android:cropToPadding="false"
-        android:src="@drawable/ic_baseline_navigate_next_24"
+        android:src="@drawable/ic_next"
         app:backgroundTint="@color/colorBack"
         app:ensureMinTouchTargetSize="false"
         app:fabCustomSize="50dp"

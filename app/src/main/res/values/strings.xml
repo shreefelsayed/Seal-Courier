@@ -467,7 +467,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="default_notification_channel_id">defult</string>
-    <string name="txtAvillable">استلام</string>
+    <string name="txtAvillable">بيك اب</string>
     <string name="txtRecived">تسليم</string>
     <!--
     This string is used for square devices and overridden by hello_world in

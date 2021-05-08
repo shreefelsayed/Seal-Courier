@@ -18,17 +18,17 @@ import com.armjld.rayashipping.Captin.captinRecived;
 import com.armjld.rayashipping.Chat.ChatFragmet;
 import com.armjld.rayashipping.Login.LoginManager;
 import com.armjld.rayashipping.Login.StartUp;
+import com.armjld.rayashipping.Models.ChatsData;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.notiData;
 import com.armjld.rayashipping.Notifications.NotificationFragment;
 import com.armjld.rayashipping.Settings.SettingFragment;
 import com.armjld.rayashipping.SuperCaptins.MyCaptins;
 import com.armjld.rayashipping.SuperVisor.AllOrders;
 import com.armjld.rayashipping.SuperVisor.SuperAvillable;
 import com.armjld.rayashipping.SuperVisor.SuperRecived;
-import com.armjld.rayashipping.models.ChatsData;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.notiData;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.UserData;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -44,15 +44,15 @@ import timber.log.Timber;
 public class Home extends AppCompatActivity {
 
     // ---------- Super Visor Data ----------- \\
-    public static ArrayList<Data> mm = new ArrayList<>(); // Avillable Orders Data
+    public static ArrayList<Order> mm = new ArrayList<>(); // Avillable Orders Data
     public static ArrayList<String> avillableIDS = new ArrayList<>(); // Avillable Orders IDS
-    public static ArrayList<userData> mCaptins = new ArrayList<>(); // My Captins Data
+    public static ArrayList<UserData> mCaptins = new ArrayList<>(); // My Captins Data
     public static ArrayList<String> mCaptinsIDS = new ArrayList<>(); // My Captins IDS
-    public static ArrayList<Data> delvOrders = new ArrayList<>(); // To Deliver Orders Data
+    public static ArrayList<Order> delvOrders = new ArrayList<>(); // To Deliver Orders Data
 
     // ---------- Captins Data -------------- \\
-    public static ArrayList<Data> captinAvillable = new ArrayList<>();
-    public static ArrayList<Data> captinDelv = new ArrayList<>();
+    public static ArrayList<Order> captinAvillable = new ArrayList<>();
+    public static ArrayList<Order> captinDelv = new ArrayList<>();
 
     // ---------- Common Data ----------- \\
     public static ArrayList<notiData> notiList = new ArrayList<>(); // Notifications Data
@@ -222,7 +222,7 @@ public class Home extends AppCompatActivity {
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
                         if (ds.getChildrenCount() < 5) return;
-                        Data orderData = ds.getValue(Data.class);
+                        Order orderData = ds.getValue(Order.class);
                         assert orderData != null;
 
                         Home.mm.add(orderData);
@@ -260,7 +260,7 @@ public class Home extends AppCompatActivity {
                 if (snapshot.exists()) {
                     // ------ Get my Captins Data
                     for (DataSnapshot captin : snapshot.getChildren()) {
-                        userData user = captin.getValue(userData.class);
+                        UserData user = captin.getValue(UserData.class);
                         assert user != null;
                         Home.mCaptinsIDS.add(user.getId()); // Add the id to id List
                         Home.mCaptins.add(user); // Add the Captin data
@@ -288,7 +288,7 @@ public class Home extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot allOrders) {
                 if (allOrders.exists()) {
                     for (DataSnapshot notDelv : allOrders.getChildren()) {
-                        Data orderData = notDelv.getValue(Data.class);
+                        Order orderData = notDelv.getValue(Order.class);
                         assert orderData != null;
                         if (orderData.getStatue().equals("supD") || orderData.getStatue().equals("supDenied")) {
                             delvOrders.add(orderData);
@@ -406,7 +406,7 @@ public class Home extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot ds : snapshot.getChildren()) {
-                        Data orderData = ds.getValue(Data.class);
+                        Order orderData = ds.getValue(Order.class);
                         assert orderData != null;
                         if (orderData.getStatue().equals("accepted") || orderData.getStatue().equals("recived") || orderData.getStatue().equals("recived2")) {
                             captinAvillable.add(orderData);

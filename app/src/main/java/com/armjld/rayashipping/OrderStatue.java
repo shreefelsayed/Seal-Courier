@@ -21,8 +21,10 @@ public class OrderStatue {
                 strState = "جاري استلام الشحنه من الراسل";
                 break;
             case "hubP":
+                strState = "مخزن الاستلام";
+                break;
             case "hubD":
-                strState = "في المخزن";
+                strState = "مخزن التسليم";
                 break;
             case "hub1Denied" :
             case "hub2Denied":
@@ -30,10 +32,10 @@ public class OrderStatue {
                 break;
             case "deniedD" :
             case "denied":
-                strState = "تم عمل محاوله تسليم";
+                strState = "فشل في التسليم";
                 break;
             case "delivered" :
-                strState = "تم تسليم الشحنه للعميل";
+                strState = "تم تسليم";
                 break;
             case "supDenied":
             case "capDenied" :
@@ -55,10 +57,9 @@ public class OrderStatue {
 
     public String shortState(String state) {
         String strState = "";
-        
         switch (state) {
             case "placed":
-                strState = "يتم مراجعه الشحنه";
+                strState = "قيد المراجعه";
                 break;
             case "accepted":
                 strState = "قيد الاستلام";
@@ -70,27 +71,29 @@ public class OrderStatue {
                 strState = "جاري تسليم الشحنه للمخزن";
                 break;
             case "hubP" :
+                strState = "مخزن الاستلام";
+                break;
             case "hubD" :
-                strState = "في المخزن";
+                strState = "مخزن التسليم";
                 break;
             case "supD" :
             case "readyD" :
                 strState = "قيد التسليم";
                 break;
             case "delivered" :
-                strState = "تم التسليم و التحصيل";
+                strState = "تم التسليم";
                 break;
             case "denied" :
-                strState = "مرتجع";
+                strState = "فشل";
                 break;
             case "deniedD" :
-                strState = "في مخزن المرتجعات";
+                strState = "فشل في التسليم";
                 break;
             case "hub1Denied" :
             case "supDenied" :
             case "capDenied" :
             case "hub2Denied" :
-                strState = "جاري استرجاع الشحنه";
+                strState = "مرتجع في المخزن";
                 break;
             case "deniedback" :
                 strState = "تم استلام المرتجع";

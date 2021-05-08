@@ -15,13 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.armjld.rayashipping.Adapters.WalletAdapter;
-import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.SuperCaptins.CaptinWalletInfo;
-import com.armjld.rayashipping.models.CaptinMoney;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.userData;
-import com.google.firebase.auth.UserInfo;
+import com.armjld.rayashipping.Models.CaptinMoney;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.UserData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -88,7 +85,7 @@ public class SupperVisorWallet extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userData user = snapshot.getValue(userData.class);
+                UserData user = snapshot.getValue(UserData.class);
                 assert user != null;
 
                 walletMoney = String.valueOf(user.getWalletmoney());
@@ -127,15 +124,7 @@ public class SupperVisorWallet extends AppCompatActivity {
                 }
 
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    capMoneyList.sort((o1, o2) -> {
-                        String one = o1.getDate();
-                        String two = o2.getDate();
-                        return one.compareTo(two);
-                    });
-                } else {
-                    Collections.sort(capMoneyList, (lhs, rhs) -> lhs.getDate().compareTo(rhs.getDate()));
-                }
+                Collections.sort(capMoneyList, (lhs, rhs) -> lhs.getDate().compareTo(rhs.getDate()));
 
                 walletAdapter = new WalletAdapter(capMoneyList, SupperVisorWallet.this);
                 recyclerWallet.setAdapter(walletAdapter);

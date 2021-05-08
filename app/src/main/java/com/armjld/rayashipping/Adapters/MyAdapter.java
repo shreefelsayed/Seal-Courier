@@ -8,35 +8,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.armjld.rayashipping.Home;
+import com.armjld.rayashipping.CopyingData;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AsignOrder;
 import com.armjld.rayashipping.SuperVisor.OrderInfo;
-import com.armjld.rayashipping.SuperVisor.SuperAvillable;
 import com.armjld.rayashipping.caculateTime;
 import com.armjld.rayashipping.getRefrence;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.rquests;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 
 import java.util.ArrayList;
 
@@ -44,10 +39,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public static caculateTime _cacu = new caculateTime();
     Context mContext;
-    ArrayList<Data> filtersData;
+    ArrayList<Order> filtersData;
     String from;
 
-    public MyAdapter(Context mContext, ArrayList<Data> filtersData, String from) {
+    public MyAdapter(Context mContext, ArrayList<Order> filtersData, String from) {
         this.mContext = mContext;
         this.filtersData = filtersData;
         this.from = from;
@@ -61,10 +56,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         return new MyViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        Data orderData = filtersData.get(position);
+        Order orderData = filtersData.get(position);
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef(filtersData.get(position).getProvider());
 
@@ -82,7 +77,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         mDatabase.child(orderID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Data orderData = snapshot.getValue(Data.class);
+                Order orderData = snapshot.getValue(Order.class);
 
                 // ------- if some other supervisor accepted the order
                 assert orderData != null;
@@ -134,36 +129,34 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             ((Activity) mContext).startActivityForResult(intent, 1);
         });
 
+        holder.btnCopyData.setOnClickListener(v-> {
+            PopupMenu popup = new PopupMenu(mContext, holder.btnCopyData);
+            CopyingData copyingData = new CopyingData(mContext);
+            popup.inflate(R.menu.copy_menu);
+            popup.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.reciver:
+                        copyingData.getReciverData(orderData);
+                        return true;
+                    case R.id.Sender:
+                        copyingData.getPickUp(orderData);
+                        return true;
+                    case R.id.order:
+                        copyingData.getOrderData(orderData);
+                        return true;
+                    default:
+                        return false;
+                }
+            });
+            popup.show();
+        });
+
 
         holder.btnAccept.setOnClickListener(v -> {
-            if(orderData.getStatue().equals("placed")) { // Check if it's Placed
-                BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder((Activity) mContext).setMessage("هل تريد تسليم تلك الشحنه فقط للمندوب ام جميع شحنات التاجر المتاحه ؟").setCancelable(true).setPositiveButton("جميع الشحنات", R.drawable.ic_tick_green, (dialogInterface, which) -> {
-                    Intent intent = new Intent(mContext, AsignOrder.class);
-                    AsignOrder.assignToCaptin.clear();
-
-                    for(int i = 0; i < SuperAvillable.filterList.size(); i ++) {
-                        Data oData = SuperAvillable.filterList.get(i);
-                        if(oData.getuId().equals(orderData.getuId())) {
-                            AsignOrder.assignToCaptin.add(SuperAvillable.filterList.get(i));
-                        }
-                    }
-
-                    ((Activity) mContext).startActivityForResult(intent, 1);
-                    dialogInterface.dismiss();
-                }).setNegativeButton("هذه الشحنه فقط", R.drawable.ic_tick_green, (dialogInterface, which) -> {
-                    Intent intent = new Intent(mContext, AsignOrder.class);
-                    AsignOrder.assignToCaptin.clear();
-                    AsignOrder.assignToCaptin.add(filtersData.get(position));
-                    ((Activity) mContext).startActivityForResult(intent, 1);
-                    dialogInterface.dismiss();
-                }).build();
-                mBottomSheetDialog.show();
-            } else {
-                Intent intent = new Intent(mContext, AsignOrder.class);
-                AsignOrder.assignToCaptin.clear();
-                AsignOrder.assignToCaptin.add(filtersData.get(position));
-                ((Activity) mContext).startActivityForResult(intent, 1);
-            }
+            Intent intent = new Intent(mContext, AsignOrder.class);
+            AsignOrder.assignToCaptin.clear();
+            AsignOrder.assignToCaptin.add(filtersData.get(position));
+            ((Activity) mContext).startActivityForResult(intent, 1);
         });
     }
 
@@ -184,6 +177,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         public Button btnMore, btnAccept;
         public TextView txtgMoney, txtOrderFrom, txtOrderTo, txtPostDate, txtUsername, txtTrackId;
         public TextView txtStatue;
+        public ImageView btnCopyData;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -197,13 +191,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             txtUsername = myview.findViewById(R.id.txtUsername);
             txtTrackId = myview.findViewById(R.id.txtTrackId);
             txtStatue = myview.findViewById(R.id.txtStatue);
+            btnCopyData = myview.findViewById(R.id.btnCopyData);
         }
 
-        public void setOrderFrom(Data oData) {
+        public void setOrderFrom(Order oData) {
             txtOrderFrom.setText(oData.getTxtPState() + " - " + oData.getmPRegion() + " - " + oData.getmPAddress());
         }
 
-        public void setOrderto(Data oData) {
+        public void setOrderto(Order oData) {
             txtOrderTo.setText(oData.getTxtDState() + " - " + oData.getmDRegion() + " - " + oData.getDAddress());
         }
 
@@ -217,7 +212,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         }
 
 
-        public void setState(Data orderData) {
+        public void setState(Order orderData) {
             switch (orderData.getStatue()) {
                 case "placed":
                     btnAccept.setVisibility(View.VISIBLE);
@@ -257,7 +252,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
         }
 
-        public void setData(Data orderData) {
+        public void setData(Order orderData) {
             txtTrackId.setText(orderData.getTrackid());
             txtUsername.setText(orderData.getOwner());
         }

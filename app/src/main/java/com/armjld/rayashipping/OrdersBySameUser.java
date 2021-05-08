@@ -19,8 +19,8 @@ import com.armjld.rayashipping.Login.LoginManager;
 import com.armjld.rayashipping.Login.Login_Options;
 import com.armjld.rayashipping.Login.StartUp;
 import com.armjld.rayashipping.SuperVisor.AsignOrder;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 
@@ -30,8 +30,8 @@ import timber.log.Timber;
 
 public class OrdersBySameUser extends AppCompatActivity {
 
-    public static ArrayList<Data> filterList = new ArrayList<>();
-    ArrayList<Data> mm = new ArrayList<>();
+    public static ArrayList<Order> filterList = new ArrayList<>();
+    ArrayList<Order> mm = new ArrayList<>();
     String userID;
     String dName = "";
     ImageView btnAsignAll;

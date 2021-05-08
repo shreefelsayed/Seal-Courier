@@ -37,7 +37,7 @@ import com.armjld.rayashipping.Login.LoginManager;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.SuperVisor.AllOrders;
 import com.armjld.rayashipping.SuperVisor.SupperVisorWallet;
-import com.armjld.rayashipping.models.UserInFormation;
+import com.armjld.rayashipping.Models.UserInFormation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -49,14 +49,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class SettingFragment extends Fragment {
 
     private static final int READ_EXTERNAL_STORAGE_CODE = 101;
-    static String TAG = "Settings";
-    TextView txtName, txtType, txtPhone;
+    TextView txtName, txtType;
     TextView txtPassSettings, txtSignOut, txtAbout, txtShare, txtPrivacy, txtWalletMoney, txtRate, txtChangePhone;
-    ImageView imgPPP, btnBack;
+    ImageView btnBack;
+    CircleImageView imgPPP;
     LinearLayout linNoti, linWallet;
     DatabaseReference uDatabase;
     FirebaseAuth mAuth;
@@ -68,109 +70,6 @@ public class SettingFragment extends Fragment {
     private ProgressDialog mdialog;
 
     public SettingFragment() {
-    }
-
-    @SuppressLint({"NewApi", "Recycle"})
-    public static String getFilePath(Context context, Uri uri) throws URISyntaxException {
-        String selection = null;
-        String[] selectionArgs = null;
-        // Uri is different in versions after KITKAT (Android 4.4), we need to
-        if (DocumentsContract.isDocumentUri(context.getApplicationContext(), uri)) {
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                return Environment.getExternalStorageDirectory() + "/" + split[1];
-            } else if (isDownloadsDocument(uri)) {
-                final String id = DocumentsContract.getDocumentId(uri);
-                uri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.parseLong(id));
-            } else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-                if ("image".equals(type)) {
-                    uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-                selection = "_id=?";
-                selectionArgs = new String[]{
-                        split[1]
-                };
-            }
-        }
-        if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = {
-                    MediaStore.Images.Media.DATA
-            };
-            Cursor cursor;
-            try {
-                cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                if (cursor.moveToFirst()) {
-                    return cursor.getString(column_index);
-                }
-            } catch (Exception ignored) {
-            }
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
-        return null;
-    }
-
-    public static boolean isExternalStorageDocument(Uri uri) {
-        return "com.android.externalstorage.documents".equals(uri.getAuthority());
-    }
-
-    public static boolean isDownloadsDocument(Uri uri) {
-        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
-    }
-
-    /*private void getStaticsDelv() {
-        int totalMoney = 0;
-        int delvOrders = 0;
-        int appFee = 0;
-        for(int i = 0; i < HomeActivity.delvList.size(); i++) {
-            if(HomeActivity.delvList.get(i).getStatue().equals("delivered") || HomeActivity.delvList.get(i).getStatue().equals("denied") || HomeActivity.delvList.get(i).getStatue().equals("deniedback")) {
-                totalMoney = totalMoney + Integer.parseInt(HomeActivity.delvList.get(i).getGGet());
-                delvOrders ++;
-                appFee = appFee + 5;
-            }
-        }
-        txtCount.setText(delvOrders + " شحنه");
-
-    }*/
-
-    public static boolean isMediaDocument(Uri uri) {
-        return "com.android.providers.media.documents".equals(uri.getAuthority());
-    }
-
-    public static Bitmap resizeBitmap(Bitmap source, int maxLength) {
-        try {
-            if (source.getHeight() >= source.getWidth()) {
-                if (source.getHeight() <= maxLength) { // if image already smaller than the required height
-                    return source;
-                }
-
-                double aspectRatio = (double) source.getWidth() / (double) source.getHeight();
-                int targetWidth = (int) (maxLength * aspectRatio);
-
-                return Bitmap.createScaledBitmap(source, targetWidth, maxLength, false);
-            } else {
-                if (source.getWidth() <= maxLength) { // if image already smaller than the required height
-                    return source;
-                }
-
-                double aspectRatio = ((double) source.getHeight()) / ((double) source.getWidth());
-                int targetHeight = (int) (maxLength * aspectRatio);
-
-                return Bitmap.createScaledBitmap(source, maxLength, targetHeight, false);
-            }
-        } catch (Exception e) {
-            return source;
-        }
     }
 
     @Override
@@ -191,7 +90,6 @@ public class SettingFragment extends Fragment {
 
         txtName = view.findViewById(R.id.txtName);
         txtType = view.findViewById(R.id.txtType);
-        txtPhone = view.findViewById(R.id.txtPhone);
         txtChangePhone = view.findViewById(R.id.txtChangePhone);
 
         imgPPP = view.findViewById(R.id.imgPPP);
@@ -234,7 +132,6 @@ public class SettingFragment extends Fragment {
         txtChangePhone.setOnClickListener(v -> startActivity(new Intent(getActivity(), ChangePhone.class)));
         txtAbout.setOnClickListener(v -> startActivity(new Intent(getActivity(), About.class)));
 
-        /*txtContact.setOnClickListener(v->startActivity(new Intent(getActivity(), Tickets.class)));*/
         linWallet.setOnClickListener(v -> {
             if(UserInFormation.getAccountType().equals("Delivery Worker")) {
                 startActivity(new Intent(getActivity(), CaptinWalletInfo.class));
@@ -244,7 +141,7 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        txtWalletMoney.setText(UserInFormation.getWalletmoney());
+        txtWalletMoney.setText(UserInFormation.getPackMoney());
 
         txtShare.setOnClickListener(v -> {
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
@@ -310,11 +207,8 @@ public class SettingFragment extends Fragment {
 
         if (UserInFormation.getAccountType().equals("Supervisor")) {
             txtType.setText("مشرف");
-            txtPhone.setText(UserInFormation.getSup_code());
         } else {
             txtType.setText("مندوب شحن");
-            txtPhone.setText("+2" + UserInFormation.getuPhone());
-
         }
 
     }
@@ -424,6 +318,109 @@ public class SettingFragment extends Fragment {
     public void openWebURL(String inURL) {
         Intent browse = new Intent(Intent.ACTION_VIEW, Uri.parse(inURL));
         startActivity(browse);
+    }
+
+    @SuppressLint({"NewApi", "Recycle"})
+    public static String getFilePath(Context context, Uri uri) throws URISyntaxException {
+        String selection = null;
+        String[] selectionArgs = null;
+        // Uri is different in versions after KITKAT (Android 4.4), we need to
+        if (DocumentsContract.isDocumentUri(context.getApplicationContext(), uri)) {
+            if (isExternalStorageDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                return Environment.getExternalStorageDirectory() + "/" + split[1];
+            } else if (isDownloadsDocument(uri)) {
+                final String id = DocumentsContract.getDocumentId(uri);
+                uri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"), Long.parseLong(id));
+            } else if (isMediaDocument(uri)) {
+                final String docId = DocumentsContract.getDocumentId(uri);
+                final String[] split = docId.split(":");
+                final String type = split[0];
+                if ("image".equals(type)) {
+                    uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if ("video".equals(type)) {
+                    uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if ("audio".equals(type)) {
+                    uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+                selection = "_id=?";
+                selectionArgs = new String[]{
+                        split[1]
+                };
+            }
+        }
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = {
+                    MediaStore.Images.Media.DATA
+            };
+            Cursor cursor;
+            try {
+                cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(column_index);
+                }
+            } catch (Exception ignored) {
+            }
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+        return null;
+    }
+
+    public static boolean isExternalStorageDocument(Uri uri) {
+        return "com.android.externalstorage.documents".equals(uri.getAuthority());
+    }
+
+    public static boolean isDownloadsDocument(Uri uri) {
+        return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+    }
+
+    /*private void getStaticsDelv() {
+        int totalMoney = 0;
+        int delvOrders = 0;
+        int appFee = 0;
+        for(int i = 0; i < HomeActivity.delvList.size(); i++) {
+            if(HomeActivity.delvList.get(i).getStatue().equals("delivered") || HomeActivity.delvList.get(i).getStatue().equals("denied") || HomeActivity.delvList.get(i).getStatue().equals("deniedback")) {
+                totalMoney = totalMoney + Integer.parseInt(HomeActivity.delvList.get(i).getGGet());
+                delvOrders ++;
+                appFee = appFee + 5;
+            }
+        }
+        txtCount.setText(delvOrders + " شحنه");
+
+    }*/
+
+    public static boolean isMediaDocument(Uri uri) {
+        return "com.android.providers.media.documents".equals(uri.getAuthority());
+    }
+
+    public static Bitmap resizeBitmap(Bitmap source, int maxLength) {
+        try {
+            if (source.getHeight() >= source.getWidth()) {
+                if (source.getHeight() <= maxLength) { // if image already smaller than the required height
+                    return source;
+                }
+
+                double aspectRatio = (double) source.getWidth() / (double) source.getHeight();
+                int targetWidth = (int) (maxLength * aspectRatio);
+
+                return Bitmap.createScaledBitmap(source, targetWidth, maxLength, false);
+            } else {
+                if (source.getWidth() <= maxLength) { // if image already smaller than the required height
+                    return source;
+                }
+
+                double aspectRatio = ((double) source.getHeight()) / ((double) source.getWidth());
+                int targetHeight = (int) (maxLength * aspectRatio);
+
+                return Bitmap.createScaledBitmap(source, maxLength, targetHeight, false);
+            }
+        } catch (Exception e) {
+            return source;
+        }
     }
 
 }

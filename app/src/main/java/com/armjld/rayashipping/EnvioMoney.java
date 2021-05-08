@@ -3,10 +3,10 @@ package com.armjld.rayashipping;
 import android.content.Context;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import com.armjld.rayashipping.models.CaptinMoney;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.notiData;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.CaptinMoney;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.notiData;
+import com.armjld.rayashipping.Models.UserData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +32,7 @@ public class EnvioMoney {
     }
 
     // --------- Pay Pack Money For Captin by Super Visor --
-    public void payPackMoney(userData user, String walletMoney) {
+    public void payPackMoney(UserData user, String walletMoney) {
         uDatabase.child(user.getId()).child("packMoney").setValue("0");
         user.setPackMoney("0");
 
@@ -77,7 +77,7 @@ public class EnvioMoney {
     }
 
     // --------- Pay Bouns For Captin by Super visor --
-    public void payBouns(userData user, String walletMoney) {
+    public void payBouns(UserData user, String walletMoney) {
         uDatabase.child(user.getId()).child("walletmoney").setValue(0);
         user.setWalletmoney(0);
 

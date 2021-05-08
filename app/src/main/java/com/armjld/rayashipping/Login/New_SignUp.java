@@ -40,9 +40,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.models.Captins;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.Captins;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.UserData;
 import com.chivorn.smartmaterialspinner.SmartMaterialSpinner;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -774,7 +774,7 @@ public class New_SignUp extends AppCompatActivity {
         String mPhone = "0" + phoneNumb;
         String supCode = txtSuperVisor.getText().toString().trim();
 
-        userData User = new userData(muser,
+        UserData User = new UserData(muser,
                 mPhone,
                 memail,
                 acDate,
@@ -799,7 +799,7 @@ public class New_SignUp extends AppCompatActivity {
                 0,
                 "true",
                 "Raya"
-                , 0, 0, 0);
+                , 0, 0, 0, generatePIN());
 
         uDatabase.child(id).setValue(User);
 
@@ -1034,5 +1034,12 @@ public class New_SignUp extends AppCompatActivity {
         txtPass1.setText("");
         txtPass2.setText("");
         txtSuperVisor.setText("");
+    }
+
+    public String generatePIN() {
+        Long uniqueId = System.currentTimeMillis();
+        int randomPIN = (int)(Math.random()*9000)+1000;
+        String full = uniqueId + "" + randomPIN;
+        return full.substring(Math.max(full.length() - 9, 0));
     }
 }

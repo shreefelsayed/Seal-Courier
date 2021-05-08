@@ -1,4 +1,4 @@
-package com.armjld.rayashipping.models;
+package com.armjld.rayashipping.Models;
 
 public class UserInFormation {
 
@@ -29,8 +29,7 @@ public class UserInFormation {
     private static int deniedMoney = 0;
     private static String packMoney = "";
 
-    public UserInFormation() {
-    }
+    public UserInFormation() { }
 
     public static String getUserName() {
         return userName;

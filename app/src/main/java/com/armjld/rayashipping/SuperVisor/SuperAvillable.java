@@ -16,7 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.armjld.rayashipping.Adapters.MyAdapter;
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.models.Data;
+import com.armjld.rayashipping.Models.Order;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ import timber.log.Timber;
 
 public class SuperAvillable extends Fragment {
 
-    public static ArrayList<Data> filterList = new ArrayList<>();
+    public static ArrayList<Order> filterList = new ArrayList<>();
     public static RecyclerView recyclerView;
     public static MyAdapter orderAdapter;
     public static Context mContext;

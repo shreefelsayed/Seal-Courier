@@ -9,9 +9,9 @@ import android.widget.Toast;
 import com.armjld.rayashipping.OrdersClass;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.getRefrence;
-import com.armjld.rayashipping.models.Data;
-import com.armjld.rayashipping.models.UserInFormation;
-import com.armjld.rayashipping.models.notiData;
+import com.armjld.rayashipping.Models.Order;
+import com.armjld.rayashipping.Models.UserInFormation;
+import com.armjld.rayashipping.Models.notiData;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.text.SimpleDateFormat;
@@ -24,7 +24,7 @@ public class PartDeliver extends AppCompatActivity {
     Button btnReturnOrders;
     EditText txtOldMoney, txtNewMoney,txtReturns;
     ImageView btnBack;
-    public static Data orderData;
+    public static Order orderData;
 
     DatabaseReference nDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("notificationRequests");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss", Locale.ENGLISH);
@@ -70,11 +70,6 @@ public class PartDeliver extends AppCompatActivity {
 
         int newMoney = Integer.parseInt(strMoney);
 
-        if(newMoney <= 0) {
-            Toast.makeText(this, "Can't be Zero", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         if(strNotes.length() == 0) {
             Toast.makeText(this, "Must Type Notes", Toast.LENGTH_SHORT).show();
             return;
@@ -84,21 +79,22 @@ public class PartDeliver extends AppCompatActivity {
     }
 
     private void setNewUpdates(String strMoney, String strNotes) {
+        getRefrence ref = new getRefrence();
+        DatabaseReference mDatabase = ref.getRef("Raya");
+
         // -- Message
         String message = "تم تسليم شحنه " + orderData.getDName() + " كتسليم جزئي و تم استلام مبلغ " + strMoney + " جنيه من " + orderData.getGMoney() + " جنيه";
         message = message + " و المرتجعات هي : " + strNotes;
 
         // --- Update Money
-        orderData.setGMoney(strMoney);
-        getRefrence ref = new getRefrence();
-        DatabaseReference mDatabase = ref.getRef("Raya");
         mDatabase.child(orderData.getId()).child("gmoney").setValue(strMoney);
+        mDatabase.child(orderData.getId()).child("orignalMoney").setValue(orderData.getGMoney());
+        orderData.setGMoney(strMoney);
 
         // ------- Update Database ------
         OrdersClass ordersClass = new OrdersClass(this);
         ordersClass.orderDelvered(orderData);
 
-        // ---- Add 15 LE to Fees
         captinRecived.getOrders();
 
         // ---- Send Notifications to Supplier

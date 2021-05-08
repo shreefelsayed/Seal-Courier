@@ -18,7 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.armjld.rayashipping.Adapters.DeliveryAdapter;
 import com.armjld.rayashipping.Home;
 import com.armjld.rayashipping.R;
-import com.armjld.rayashipping.models.Data;
+import com.armjld.rayashipping.Models.Order;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ import timber.log.Timber;
 
 public class capAvillable extends Fragment {
 
-    public static ArrayList<Data> filterList = new ArrayList<>();
+    public static ArrayList<Order> filterList = new ArrayList<>();
     public static RecyclerView recyclerView;
     public static DeliveryAdapter orderAdapter;
     public static Context mContext;

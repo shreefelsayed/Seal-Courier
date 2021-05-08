@@ -281,8 +281,8 @@
                             android:layout_width="@dimen/_15sdp"
                             android:layout_height="@dimen/_15sdp"
                             android:layout_gravity="center"
-                            app:srcCompat="@drawable/ic_baseline_camera_enhance_24"
-                            tools:srcCompat="@drawable/ic_baseline_camera_enhance_24" />
+                            app:srcCompat="@drawable/ic_camera"
+                            tools:srcCompat="@drawable/ic_camera" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -613,7 +613,7 @@
         android:background="@color/orange"
         android:backgroundTint="@color/orange"
         android:cropToPadding="false"
-        android:src="@drawable/ic_baseline_navigate_next_24"
+        android:src="@drawable/ic_next"
         app:ensureMinTouchTargetSize="false"
         app:fabCustomSize="50dp"
         app:fabSize="auto"

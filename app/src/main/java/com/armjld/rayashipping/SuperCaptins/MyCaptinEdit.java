@@ -7,14 +7,14 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.UsersClass;
-import com.armjld.rayashipping.models.userData;
+import com.armjld.rayashipping.Models.UserData;
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog;
 
 public class MyCaptinEdit extends AppCompatActivity {
 
     ImageView btnBack;
-    TextView txtAddBouns, txtCloseAccount, txtMoney;
-    public static userData user;
+    TextView txtAddBouns, txtCloseAccount, txtMoney,txtComments;
+    public static UserData user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,7 @@ public class MyCaptinEdit extends AppCompatActivity {
         txtAddBouns = findViewById(R.id.txtAddBouns);
         txtCloseAccount = findViewById(R.id.txtCloseAccount);
         txtMoney = findViewById(R.id.txtMoney);
+        txtComments = findViewById(R.id.txtComments);
 
         btnBack.setOnClickListener(v-> finish());
 
@@ -37,6 +38,11 @@ public class MyCaptinEdit extends AppCompatActivity {
         txtAddBouns.setOnClickListener(v-> {
             MyCaptinAddBouns.user = user;
             startActivity(new Intent(this, MyCaptinAddBouns.class));
+        });
+
+        txtComments.setOnClickListener(v-> {
+            CaptinsReviews.user = user;
+            startActivity(new Intent(this, CaptinsReviews.class));
         });
 
         txtMoney.setOnClickListener(v-> {

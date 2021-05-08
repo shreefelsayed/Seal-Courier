@@ -26,7 +26,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RayaShipping"
         tools:ignore="AllowBackup,LockedOrientationActivity">
-        <activity android:name=".Captin.PartDeliver"></activity>
+        <activity android:name=".SuperVisor.OrderUpdates"></activity>
+        <activity android:name=".SuperVisor.OrdersHistory" />
+        <activity android:name=".SuperCaptins.CaptinsReviews" />
+        <activity android:name=".SuperCaptins.QRScanOrderForCaptin" />
+        <activity android:name=".Captin.PartDeliver" />
         <activity android:name=".SuperCaptins.EditCaptinBouns" />
         <activity android:name=".SuperCaptins.MyCaptinAddBouns" />
         <activity android:name=".SuperCaptins.MyCaptinEdit" />

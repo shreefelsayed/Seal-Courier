@@ -2,6 +2,7 @@ package com.armjld.rayashipping.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,27 +12,28 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.armjld.rayashipping.Captin.CaptinOrderInfo;
 import com.armjld.rayashipping.R;
 import com.armjld.rayashipping.caculateTime;
-import com.armjld.rayashipping.models.CaptinMoney;
+import com.armjld.rayashipping.Models.CaptinMoney;
 
 import java.util.ArrayList;
 
 public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder> {
 
     public static caculateTime _cacu = new caculateTime();
-    Context context;
+    Context mContext;
     ArrayList<CaptinMoney> orderData;
 
-    public WalletAdapter(ArrayList<CaptinMoney> orderData, Context context) {
-        this.context = context;
+    public WalletAdapter(ArrayList<CaptinMoney> orderData, Context mContext) {
+        this.mContext = mContext;
         this.orderData = orderData;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.card_wallet, parent, false);
         return new ViewHolder(view);
     }
@@ -45,6 +47,13 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.ViewHolder
         holder.txtMoney.setText(captinMoney.getMoney() + " ج");
         holder.setState(captinMoney.getTransType());
         holder.txtDate.setText(_cacu.setPostDate(captinMoney.getDate()));
+        
+        holder.myview.setOnClickListener(v-> {
+            CaptinOrderInfo.orderData = null;
+            Intent intent = new Intent(mContext, CaptinOrderInfo.class);
+            intent.putExtra("orderid", captinMoney.getOrderid());
+            mContext.startActivity(intent);
+        });
 
     }
 
