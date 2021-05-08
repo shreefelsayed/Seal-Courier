@@ -74,62 +74,59 @@ public class LoginManager {
                     }
 
                     setSignInValues(mContext);
-                    setUserInformation(User);
+                    UserInFormation.setUser(User);
 
                     Ratings _ratings = new Ratings();
                     _ratings.setMyRating();
-                    if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+                    
+                    if (UserInFormation.getUser().getAccountType().equals("Delivery Worker")) {
                         if (!snapshot.child("locations").exists() && snapshot.child("userCity").exists() && snapshot.child("userState").exists()) {
-                            String locid = uDatabase.child(UserInFormation.getId()).child("locations").push().getKey();
+                            String locid = uDatabase.child(UserInFormation.getUser().getId()).child("locations").push().getKey();
 
                             HashMap<String, Object> newLocation = new HashMap<>();
                             newLocation.put("state", snapshot.child("userState").getValue().toString());
                             newLocation.put("region", snapshot.child("userCity").getValue().toString());
                             newLocation.put("title", "عنوان 1");
                             newLocation.put("id", locid);
-                            uDatabase.child(UserInFormation.getId()).child("locations").child(locid).setValue(newLocation);
+                            uDatabase.child(UserInFormation.getUser().getId()).child("locations").child(locid).setValue(newLocation);
                         }
 
                         if (!snapshot.child("locations").exists() && !snapshot.child("userCity").exists()) {
-                            String locid = uDatabase.child(UserInFormation.getId()).child("locations").push().getKey();
+                            String locid = uDatabase.child(UserInFormation.getUser().getId()).child("locations").push().getKey();
                             HashMap<String, Object> newLocation = new HashMap<>();
                             newLocation.put("state", "القاهرة");
                             newLocation.put("region", "الزمالك");
                             newLocation.put("title", "عنوان 1");
                             newLocation.put("id", locid);
-                            uDatabase.child(UserInFormation.getId()).child("locations").child(locid).setValue(newLocation);
-                            uDatabase.child(UserInFormation.getId()).child("userCity").setValue("الزمالك");
-                            uDatabase.child(UserInFormation.getId()).child("userState").setValue("القاهرة");
+                            uDatabase.child(UserInFormation.getUser().getId()).child("locations").child(locid).setValue(newLocation);
+                            uDatabase.child(UserInFormation.getUser().getId()).child("userCity").setValue("الزمالك");
+                            uDatabase.child(UserInFormation.getUser().getId()).child("userState").setValue("القاهرة");
 
                         }
 
                         if (snapshot.child("isCar").exists() && snapshot.child("isMotor").exists() && snapshot.child("isTrans").exists() && snapshot.child("isBike").exists()) {
                             if (snapshot.child("isTrans").getValue().toString().equals("true")) {
-                                UserInFormation.setTrans("Trans");
+                                UserInFormation.getUser().setTransType("Trans");
                             }
 
                             if (snapshot.child("isCar").getValue().toString().equals("true")) {
-                                UserInFormation.setTrans("Car");
+                                UserInFormation.getUser().setTransType("Car");
                             }
 
                             if (snapshot.child("isBike").getValue().toString().equals("true")) {
-                                UserInFormation.setTrans("Bike");
+                                UserInFormation.getUser().setTransType("Bike");
                             }
 
                             if (snapshot.child("isMotor").getValue().toString().equals("true")) {
-                                UserInFormation.setTrans("Motor");
+                                UserInFormation.getUser().setTransType("Motor");
                             }
                         } else {
-                            uDatabase.child(UserInFormation.getId()).child("isCar").setValue("false");
-                            uDatabase.child(UserInFormation.getId()).child("isBike").setValue("false");
-                            uDatabase.child(UserInFormation.getId()).child("isMotor").setValue("false");
-                            uDatabase.child(UserInFormation.getId()).child("isTrans").setValue("true");
-                            UserInFormation.setTrans("Trans");
+                            uDatabase.child(UserInFormation.getUser().getId()).child("isCar").setValue("false");
+                            uDatabase.child(UserInFormation.getUser().getId()).child("isBike").setValue("false");
+                            uDatabase.child(UserInFormation.getUser().getId()).child("isMotor").setValue("false");
+                            uDatabase.child(UserInFormation.getUser().getId()).child("isTrans").setValue("true");
+                            UserInFormation.getUser().setTransType("Trans");
                         }
-
-                        UserInFormation.setDelvMoney(User.getDeliverMoney());
-                        UserInFormation.setDeniedMoney(User.getDeniedMoney());
-                        UserInFormation.setReciveMoney(User.getPickUpMoney());
                     }
 
                     NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -150,33 +147,6 @@ public class LoginManager {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-    }
-
-    private void setUserInformation(UserData user) {
-        UserInFormation.setAccountType(user.getAccountType());
-        UserInFormation.setUserName(user.getName());
-        UserInFormation.setUserDate(user.getDate());
-        UserInFormation.setUserURL(user.getPpURL());
-        UserInFormation.setId(user.getId());
-        UserInFormation.setEmail(user.getEmail());
-        UserInFormation.setPass(user.getMpass());
-        UserInFormation.setuPhone(user.getPhone());
-        UserInFormation.setUserState(user.getUserState());
-        UserInFormation.setUserCity(user.getUserCity());
-        UserInFormation.setOrdersType(user.getOrdersType());
-        UserInFormation.setCurrentdate(user.getCurrentDate());
-        UserInFormation.setSendGovNoti(user.getSendOrderNoti());
-        UserInFormation.setSendCityNoti(user.getSendOrderNotiCity());
-        UserInFormation.setIsConfirm(user.getIsConfirmed());
-        UserInFormation.setProvider(user.getProvider());
-
-        UserInFormation.setWalletmoney(String.valueOf(user.getWalletmoney()));
-        UserInFormation.setPackMoney(user.getPackMoney());
-
-        // ------- Set My Supervisor Codes -------- \\
-        UserInFormation.setSupId(user.getMySuperId());
-        UserInFormation.setMySup(user.getMySuper());
-        UserInFormation.setSup_code(user.getSupervisor_code());
     }
 
     private void setSignInValues(Context mContext) {

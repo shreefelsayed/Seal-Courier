@@ -128,13 +128,9 @@ public class CaptinOrderInfo extends AppCompatActivity {
             startActivity(new Intent(this, MapsActivity.class));
         });
 
-        btnWhatsReciver.setOnClickListener(v-> {
-            whatsapp.openWhats(orderData.getDPhone(), copyingData.getOrderDataToReciver(orderData), this);
-        });
+        btnWhatsReciver.setOnClickListener(v-> whatsapp.openWhats(orderData.getDPhone(), copyingData.getOrderDataToReciver(orderData), this));
 
-        btnWhatsSender.setOnClickListener(v-> {
-            whatsapp.openWhats(orderData.getpPhone(), copyingData.getOrderData(orderData), this);
-        });
+        btnWhatsSender.setOnClickListener(v-> whatsapp.openWhats(orderData.getpPhone(), copyingData.getOrderData(orderData), this));
 
         orderid.setOnClickListener(v -> copyingData.copyTrack(orderData));
         linSender.setOnClickListener(v-> copyingData.copyPickUpPhone(orderData));

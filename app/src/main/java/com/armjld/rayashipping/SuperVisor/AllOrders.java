@@ -77,7 +77,7 @@ public class AllOrders extends Fragment implements TrackingStateObserver.OnTrack
 
         sdkInstance = HyperTrack.getInstance(htID);
 
-        if(UserInFormation.getAccountType().equals("Supervisor")) btnTrack.setVisibility(View.GONE);
+        if(UserInFormation.getUser().getAccountType().equals("Supervisor")) btnTrack.setVisibility(View.GONE);
 
         btnTrack.setOnClickListener(v-> {
             if(sdkInstance.isRunning()) {
@@ -118,12 +118,12 @@ public class AllOrders extends Fragment implements TrackingStateObserver.OnTrack
         HyperTrack.enableDebugLogging();
         sdkInstance.addTrackingListener(this);
 
-        sdkInstance.setDeviceName(UserInFormation.getUserName());
+        sdkInstance.setDeviceName(UserInFormation.getUser().getName());
         Map<String, Object> myMetadata = new HashMap<>();
-        myMetadata.put("vehicle_type", UserInFormation.getTrans());
-        myMetadata.put("group_id", UserInFormation.getAccountType());
+        myMetadata.put("vehicle_type", UserInFormation.getUser().getTransType());
+        myMetadata.put("group_id", UserInFormation.getUser().getAccountType());
 
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("trackId").setValue(sdkInstance.getDeviceID());
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).child("trackId").setValue(sdkInstance.getDeviceID());
 
         sdkInstance.setDeviceMetadata(myMetadata);
         sdkInstance.start();
@@ -133,7 +133,7 @@ public class AllOrders extends Fragment implements TrackingStateObserver.OnTrack
     }
 
     private void stopTracking() {
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("trackId").setValue("");
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).child("trackId").setValue("");
         sdkInstance.stop();
         sdkInstance.removeTrackingListener(this);
         btnTrack.setColorFilter(Color.WHITE);
@@ -143,7 +143,7 @@ public class AllOrders extends Fragment implements TrackingStateObserver.OnTrack
 
     private void OpenFilters() {
         Intent i = new Intent(getActivity(), Filters.class);
-        if (UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getUser().getAccountType().equals("Supervisor")) {
             if (tabs.getSelectedTabPosition() == 0) {
                 Filters.mainListm = Home.mm;
                 Filters.what = "recive";
@@ -169,7 +169,7 @@ public class AllOrders extends Fragment implements TrackingStateObserver.OnTrack
     private void openMaps() {
         Intent i = new Intent(getActivity(), MapsActivity.class);
         ArrayList<Order> bothLists = new ArrayList<>();
-        if (UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getUser().getAccountType().equals("Supervisor")) {
             // -------- Compine Lists
             bothLists.addAll(Home.mm);
             bothLists.addAll(Home.delvOrders);

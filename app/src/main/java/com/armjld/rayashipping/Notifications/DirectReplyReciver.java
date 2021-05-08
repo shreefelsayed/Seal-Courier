@@ -38,7 +38,7 @@ public class DirectReplyReciver extends AppCompatActivity {
             String msgid = FirebaseDatabase.getInstance().getReference().child("Pickly").child("chatRooms").child(roomid).push().getKey();
             HashMap<String, Object> newMsg = new HashMap<>();
             newMsg.put("reciverid", to);
-            newMsg.put("senderid", UserInFormation.getId());
+            newMsg.put("senderid", UserInFormation.getUser().getId());
             newMsg.put("msg", msg);
             newMsg.put("timestamp", datee);
             newMsg.put("newMsg", "true");
@@ -48,8 +48,8 @@ public class DirectReplyReciver extends AppCompatActivity {
             FirebaseDatabase.getInstance().getReference().child("Pickly").child("chatRooms").child(roomid).child(msgid).setValue(newMsg);
 
             assert to != null;
-            FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("chats").child(to).child("timestamp").setValue(datee);
-            FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(to).child("chats").child(UserInFormation.getId()).child("timestamp").setValue(datee);
+            FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).child("chats").child(to).child("timestamp").setValue(datee);
+            FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(to).child("chats").child(UserInFormation.getUser().getId()).child("timestamp").setValue(datee);
 
 
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

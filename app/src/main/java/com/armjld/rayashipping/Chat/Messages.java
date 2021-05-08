@@ -64,7 +64,7 @@ public class Messages extends AppCompatActivity {
     public static String cameFrom = "Chats";
     private final DatabaseReference messageDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("chatRooms");
     private final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users");
-    private final String uId = UserInFormation.getId();
+    private final String uId = UserInFormation.getUser().getId();
     ImageView btnSend;
     ImageView btnBack, imgPPP, btnCall;
     TextView txtName, txtType;
@@ -312,7 +312,7 @@ public class Messages extends AppCompatActivity {
                         mChat.add(chat);
                         messageAdapter = new MessageAdapter(Messages.this, mChat);
                         recyclerMsg.setAdapter(messageAdapter);
-                        if (chat.getReciverid().equals(UserInFormation.getId())) {
+                        if (chat.getReciverid().equals(UserInFormation.getUser().getId())) {
                             messageDatabase.child(roomId).child(chat.getMsgid()).child("newMsg").setValue("false");
                         }
                     }
@@ -413,7 +413,7 @@ public class Messages extends AppCompatActivity {
     private void getDownUrl(String msgid, StorageReference reference) {
         reference.getDownloadUrl().addOnSuccessListener(uri -> {
             // ---- Send The MSG
-            Chat chat = new Chat(UserInFormation.getId(), rId, "صوره", getDate(), "pic", uri.toString(), "true", msgid);
+            Chat chat = new Chat(UserInFormation.getUser().getId(), rId, "صوره", getDate(), "pic", uri.toString(), "true", msgid);
             FirebaseDatabase.getInstance().getReference().child("Pickly").child("chatRooms").child(roomId).child(msgid).setValue(chat);
             FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(uId).child("chats").child(rId).child("timestamp").setValue(getDate());
             FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(rId).child("chats").child(uId).child("timestamp").setValue(getDate());

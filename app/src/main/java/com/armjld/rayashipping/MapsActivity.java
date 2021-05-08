@@ -169,7 +169,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 currentLocation = location;
                 LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-                FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("latLang").setValue(location.getLatitude() + "," + location.getLongitude());
+                FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).child("latLang").setValue(location.getLatitude() + "," + location.getLongitude());
             }
         });
     }
@@ -295,7 +295,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if(!UserInFormation.getAccountType().equals("Supervisor") && currentLocation != null) {
+        if(!UserInFormation.getUser().getAccountType().equals("Supervisor") && currentLocation != null) {
             for(int i = 0; i < filterList.size(); i++) {
                 if(filterList.get(i).getId().equals(marker.getTag())) {
                     if(filterList.get(i).getStatue().equals("placed") || filterList.get(i).getStatue().equals("accepted") || filterList.get(i).getStatue().equals("capDenied") || filterList.get(i).getStatue().equals("supDenied")) {

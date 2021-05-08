@@ -82,7 +82,7 @@ public class OrdersBySameUser extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-        if (UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getUser().getAccountType().equals("Supervisor")) {
             btnAsignAll.setVisibility(View.VISIBLE);
         } else {
             btnAsignAll.setVisibility(View.GONE);
@@ -117,7 +117,7 @@ public class OrdersBySameUser extends AppCompatActivity {
             }
         }
 
-        if (UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getUser().getAccountType().equals("Supervisor")) {
             MyAdapter orderAdapter = new MyAdapter(OrdersBySameUser.this, mm, "SameUser");
             recyclerView.setAdapter(orderAdapter);
         } else {

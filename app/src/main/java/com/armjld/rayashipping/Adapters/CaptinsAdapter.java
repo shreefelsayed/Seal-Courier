@@ -88,7 +88,7 @@ public class CaptinsAdapter extends RecyclerView.Adapter<CaptinsAdapter.MyViewHo
         // ------- Chat with Captin
         holder.btnMessage.setOnClickListener(v -> {
             chatListclass _chatList = new chatListclass();
-            _chatList.startChating(UserInFormation.getId(), captin.getId(), mContext);
+            _chatList.startChating(UserInFormation.getUser().getId(), captin.getId(), mContext);
             Messages.cameFrom = "Profile";
         });
 

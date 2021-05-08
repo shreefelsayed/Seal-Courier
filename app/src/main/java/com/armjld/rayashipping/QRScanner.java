@@ -78,7 +78,7 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
     @Override
     public void handleResult(Result rawResult) {
         mScannerView.stopCameraPreview();
-        if (UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getUser().getAccountType().equals("Supervisor")) {
             checkForOrder(rawResult.getText());
         } else {
             checkForCaptin(rawResult.getText());
@@ -106,9 +106,9 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
                         if (orderData.getStatue().equals("supD") || orderData.getStatue().equals("placed") || orderData.getStatue().equals("accepted")
                                 || orderData.getStatue().equals("recived")  || orderData.getStatue().equals("recived2") || orderData.getStatue().equals("hubD") || orderData.getStatue().equals("hubP")
                         || orderData.getStatue().equals("denied") || orderData.getStatue().equals("deniedD")) {
-                            ordersClass.asignDelv(orderData, UserInFormation.getId());
+                            ordersClass.asignDelv(orderData, UserInFormation.getUser().getId());
                         } else if(orderData.getStatue().equals("supDenied") || orderData.getStatue().equals("hub2Denied") || orderData.getStatue().equals("hub1Denied")) {
-                            ordersClass.asignDenied(orderData, UserInFormation.getId());
+                            ordersClass.asignDenied(orderData, UserInFormation.getUser().getId());
                         } else {
                             Toast.makeText(QRScanner.this, "لا يمكنك استلام تلك الشحنه من المشرف", Toast.LENGTH_SHORT).show();
                         }
@@ -164,10 +164,10 @@ public class QRScanner extends BaseScannerActivity implements ZXingScannerView.R
                             // --------- Update Values
                             mDatabase.child(orderData.getId()).child("statue").setValue("supD");
                             mDatabase.child(orderData.getId()).child("supDScanTime").setValue(datee);
-                            mDatabase.child(orderData.getId()).child("dSupervisor").setValue(UserInFormation.getSup_code());
+                            mDatabase.child(orderData.getId()).child("dSupervisor").setValue(UserInFormation.getUser().getSupervisor_code());
 
                             // ---------------- Add Log
-                            String Log = "تم تسليم الشحنه لمشرف التسليم " + UserInFormation.getSup_code();
+                            String Log = "تم تسليم الشحنه لمشرف التسليم " + UserInFormation.getUser().getSupervisor_code();
                             mDatabase.child(orderData.getId()).child("logs").child(logC).setValue(Log);
 
                             Toast.makeText(QRScanner.this, "تم استلام الشحنه بنجاح", Toast.LENGTH_SHORT).show();

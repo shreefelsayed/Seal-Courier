@@ -72,9 +72,9 @@ public class ChangePhone extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         viewFlipper = findViewById(R.id.viewFlipper);
         tlPhone = findViewById(R.id.tlPhone);
-        txtPhone.setText(UserInFormation.getuPhone());
+        txtPhone.setText(UserInFormation.getUser().getPhone());
 
-        oldPhone = UserInFormation.getuPhone();
+        oldPhone = UserInFormation.getUser().getPhone();
 
         txtOTP.setOtpCompletionListener(otp -> verifyPhoneNumberWithCode(mVerificationId, Objects.requireNonNull(txtOTP.getText()).toString()));
         viewFlipper.setDisplayedChild(0);
@@ -219,12 +219,12 @@ public class ChangePhone extends AppCompatActivity {
     }
 
     private void changeDatabase() {
-        DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId());
+        DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId());
         DatabaseReference pDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("fawrypayments");
 
         uDatabase.child("phone").setValue(strPhone);
 
-        pDatabase.orderByChild("phone").equalTo(UserInFormation.getuPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
+        pDatabase.orderByChild("phone").equalTo(UserInFormation.getUser().getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -234,7 +234,7 @@ public class ChangePhone extends AppCompatActivity {
                     }
                 }
 
-                UserInFormation.setuPhone(strPhone);
+                UserInFormation.getUser().setPhone(strPhone);
                 Toast.makeText(ChangePhone.this, "تم تغيير رقم الهاتف بنجاح", Toast.LENGTH_SHORT).show();
                 finish();
             }

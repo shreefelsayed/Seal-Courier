@@ -17,7 +17,7 @@ public class Ratings {
     private final DatabaseReference uDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users");
 
     public void setMyRating() {
-        uDatabase.child(UserInFormation.getId()).child("rating").addListenerForSingleValueEvent(new ValueEventListener() {
+        uDatabase.child(UserInFormation.getUser().getId()).child("rating").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String one = "0";
@@ -41,7 +41,7 @@ public class Ratings {
                     five = snapshot.child("five").getValue().toString();
                 }
 
-                UserInFormation.setRating(calculateRating(one, two, three, four, five));
+                UserInFormation.getUser().setFinalRating(calculateRating(one, two, three, four, five));
             }
 
             @Override

@@ -1002,7 +1002,7 @@ public class New_SignUp extends AppCompatActivity {
     private void getDownUrl(final String uIDd, StorageReference reference) {
         reference.getDownloadUrl().addOnSuccessListener(uri -> {
             uDatabase.child(uIDd).child("ppURL").setValue(uri.toString());
-            UserInFormation.setUserURL(uri.toString());
+            UserInFormation.getUser().setPpURL(uri.toString());
             mdialog.dismiss();
         });
     }

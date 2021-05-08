@@ -86,7 +86,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                     holder.btnMore.setVisibility(View.GONE);
 
                     if (snapshot.child("dSupervisor").exists() && orderData.getStatue().equals("supD")) {
-                        if (orderData.getdSupervisor().equals(UserInFormation.getId())) {
+                        if (orderData.getdSupervisor().equals(UserInFormation.getUser().getId())) {
                             holder.btnAccept.setVisibility(View.VISIBLE);
                             holder.btnMore.setVisibility(View.VISIBLE);
                         }

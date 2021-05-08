@@ -44,7 +44,7 @@ public class LoadingScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_screen);
 
-        if (UserInFormation.getId() == null) {
+        if (UserInFormation.getUser().getId() == null) {
             finish();
             startActivity(new Intent(this, StartUp.class));
             return;
@@ -53,9 +53,9 @@ public class LoadingScreen extends AppCompatActivity {
         txtLoading = findViewById(R.id.txtLoading);
 
         txtLoading.setText("Getting Account Type ..");
-        if (UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getUser().getAccountType().equals("Supervisor")) {
             getCaptins();
-        } else if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+        } else if (UserInFormation.getUser().getAccountType().equals("Delivery Worker")) {
             getForRaya();
         }
     }
@@ -71,7 +71,7 @@ public class LoadingScreen extends AppCompatActivity {
         Home.captinDelv.clear();
         Home.captinDelv.trimToSize();
 
-        mDatabase.orderByChild("uAccepted").equalTo(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.orderByChild("uAccepted").equalTo(UserInFormation.getUser().getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -121,7 +121,7 @@ public class LoadingScreen extends AppCompatActivity {
     // --------------- Get My Captins ------------- \\
     private void getCaptins() {
         txtLoading.setText("مراجعه المندوبين ..");
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").orderByChild("mySuper").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").orderByChild("mySuper").equalTo(UserInFormation.getUser().getSupervisor_code()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Home.mCaptins.clear();
@@ -196,7 +196,7 @@ public class LoadingScreen extends AppCompatActivity {
         Home.delvOrders.clear();
         Home.delvOrders.trimToSize();
 
-        mDatabase.orderByChild("dSupervisor").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.orderByChild("dSupervisor").equalTo(UserInFormation.getUser().getSupervisor_code()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot allOrders) {
                 if (allOrders.exists()) {
@@ -227,7 +227,7 @@ public class LoadingScreen extends AppCompatActivity {
         txtLoading.setText("جاري تجهيز الإشعارات ..");
         Home.notiList.clear();
         Home.notiList.trimToSize();
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("notificationRequests").child(UserInFormation.getId()).limitToLast(30).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("notificationRequests").child(UserInFormation.getUser().getId()).limitToLast(30).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int unRead = 0; // Unread Noti Count
@@ -266,7 +266,7 @@ public class LoadingScreen extends AppCompatActivity {
     // --------------- Get Messages ------------ \\
     public void getMessageCount() {
         txtLoading.setText("تجهيز الدردشات ..");
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("chats").orderByChild("timestamp").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).child("chats").orderByChild("timestamp").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int newCount = 0; // New Messages Count

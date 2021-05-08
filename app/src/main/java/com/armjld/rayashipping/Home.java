@@ -92,7 +92,7 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supervisor_home);
 
-        if (UserInFormation.getId() == null) {
+        if (UserInFormation.getUser().getId() == null) {
             finish();
             startActivity(new Intent(this, StartUp.class));
             return;
@@ -120,7 +120,7 @@ public class Home extends AppCompatActivity {
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.container, whichFrag(), whichFrag).addToBackStack("Home").commit();
 
-        if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+        if (UserInFormation.getUser().getAccountType().equals("Delivery Worker")) {
             bottomNavigationView.getMenu().removeItem(R.id.profile);
         }
     }
@@ -178,7 +178,7 @@ public class Home extends AppCompatActivity {
         if (chatsBadge == null || bottomNavigationView == null) {
             return;
         }
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("chats").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).child("chats").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -252,7 +252,7 @@ public class Home extends AppCompatActivity {
     }
 
     public static void getCaptins() {
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").orderByChild("mySuper").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").orderByChild("mySuper").equalTo(UserInFormation.getUser().getSupervisor_code()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Home.mCaptins.clear();
@@ -283,7 +283,7 @@ public class Home extends AppCompatActivity {
         delvOrders.clear();
         delvOrders.trimToSize();
 
-        mDatabase.orderByChild("dSupervisor").equalTo(UserInFormation.getSup_code()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.orderByChild("dSupervisor").equalTo(UserInFormation.getUser().getSupervisor_code()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot allOrders) {
                 if (allOrders.exists()) {
@@ -323,7 +323,7 @@ public class Home extends AppCompatActivity {
             return;
         }
 
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("notificationRequests").child(UserInFormation.getId()).limitToLast(30).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("notificationRequests").child(UserInFormation.getUser().getId()).limitToLast(30).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 notiList.clear();
@@ -366,7 +366,7 @@ public class Home extends AppCompatActivity {
     public static void getMessage() {
         mChat.clear();
         mChat.trimToSize();
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("chats").orderByChild("timestamp").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).child("chats").orderByChild("timestamp").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
@@ -401,7 +401,7 @@ public class Home extends AppCompatActivity {
         getRefrence ref = new getRefrence();
         DatabaseReference mDatabase = ref.getRef("Raya");
 
-        mDatabase.orderByChild("uAccepted").equalTo(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.orderByChild("uAccepted").equalTo(UserInFormation.getUser().getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {

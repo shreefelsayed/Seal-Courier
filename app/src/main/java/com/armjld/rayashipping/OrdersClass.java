@@ -63,13 +63,13 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
         mDatabase.child(orderData.getId()).child("pDate").setValue(dayDate);
 
         // ---- Send Notification to Supervisor
-        String message = "قام " + UserInFormation.getUserName() + " بتأكيد استلام شحنه " + orderData.getOwner();
-        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
-        nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
+        String message = "قام " + UserInFormation.getUser().getName() + " بتأكيد استلام شحنه " + orderData.getOwner();
+        notiData Noti = new notiData(UserInFormation.getUser().getId(), UserInFormation.getUser().getMySuperId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
+        nDatabase.child(UserInFormation.getUser().getMySuperId()).push().setValue(Noti);
 
 
         // --- Add Log
-        String Log = "قام المندوب " + UserInFormation.getId() + " بتأكيد استلام الشحنه من التاجر " + orderData.getuId();
+        String Log = "قام المندوب " + UserInFormation.getUser().getId() + " بتأكيد استلام الشحنه من التاجر " + orderData.getuId();
         logOrder(mDatabase, orderData.getId(), Log);
         setUpdate(orderData, "قام المندوب باستلام البيك اب", false);
 
@@ -92,22 +92,22 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
         mDatabase.child(orderData.getId()).child("denied_reason").setValue(Msg);
 
         // --- Send notification to Supervisor
-        String message = "قام " + UserInFormation.getUserName() + " بفشل في تسليم شحنه " + orderData.getDName() + " بسبب " + Msg;
-        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "nothing", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
-        nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
+        String message = "قام " + UserInFormation.getUser().getName() + " بفشل في تسليم شحنه " + orderData.getDName() + " بسبب " + Msg;
+        notiData Noti = new notiData(UserInFormation.getUser().getId(), UserInFormation.getUser().getMySuperId(), orderData.getId(), message, datee, "false", "nothing", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
+        nDatabase.child(UserInFormation.getUser().getMySuperId()).push().setValue(Noti);
 
         // --- Send notification to Supplier
         if(!orderData.getuId().equals("")) {
             message = "لم يتم تسليم الشحنه " + orderData.getDName() + " بسبب " + Msg;
-            Noti = new notiData(UserInFormation.getId(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+            Noti = new notiData(UserInFormation.getUser().getId(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
             nDatabase.child(orderData.getuId()).push().setValue(Noti);
         }
 
         // ---- Add Money To Wallet
-        wallet.addDeniedMoney(UserInFormation.getId(), orderData);
+        wallet.addDeniedMoney(UserInFormation.getUser().getId(), orderData);
 
         // ---- Add Log
-        String Log = "قام المندوب " + UserInFormation.getUserName() + " بفشل تسليم الشحنه بسبب : " + Msg;
+        String Log = "قام المندوب " + UserInFormation.getUser().getName() + " بفشل تسليم الشحنه بسبب : " + Msg;
         logOrder(mDatabase, orderData.getId(), Log);
         setUpdate(orderData, "فشل في تسليم الشحنه بسبب : " + Msg + ".", true);
 
@@ -127,12 +127,12 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
         mDatabase.child(orderData.getId()).child("deniedbackTime").setValue(datee);
 
         // --- Send notification to Supervisor
-        String message = "قام " + UserInFormation.getUserName() + " بتسليم المرتجع الي " + orderData.getOwner();
-        notiData Noti = new notiData(UserInFormation.getId(), UserInFormation.getSupId(), orderData.getId(), message, datee, "false", "nothing", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
-        nDatabase.child(UserInFormation.getSupId()).push().setValue(Noti);
+        String message = "قام " + UserInFormation.getUser().getName() + " بتسليم المرتجع الي " + orderData.getOwner();
+        notiData Noti = new notiData(UserInFormation.getUser().getId(), UserInFormation.getUser().getMySuperId(), orderData.getId(), message, datee, "false", "nothing", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
+        nDatabase.child(UserInFormation.getUser().getMySuperId()).push().setValue(Noti);
 
         // ---- Add Log
-        String Log = "قام المندوب " + UserInFormation.getId() + " بتسليم المرتجع الي " + orderData.getOwner();
+        String Log = "قام المندوب " + UserInFormation.getUser().getId() + " بتسليم المرتجع الي " + orderData.getOwner();
         logOrder(mDatabase, orderData.getId(), Log);
 
         setUpdate(orderData, "تم ارسال المرتجع للراسل", false);
@@ -160,8 +160,8 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
 
         // ---- Send Notifications to Supervisor
         String messageS = "تم تسليم شحنه " + orderData.getDName() + " بنجاح";
-        notiData NotiS = new notiData(orderData.getuAccepted(), UserInFormation.getSupId(), orderData.getId(), messageS, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
-        nDatabase.child(UserInFormation.getSupId()).push().setValue(NotiS);
+        notiData NotiS = new notiData(orderData.getuAccepted(), UserInFormation.getUser().getMySuperId(), orderData.getId(), messageS, datee, "false", "orderinfo", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
+        nDatabase.child(UserInFormation.getUser().getMySuperId()).push().setValue(NotiS);
 
         // --- Add a Try
         int tries = Integer.parseInt(orderData.getTries()) + 1;
@@ -170,7 +170,7 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
         if(!orderData.getuId().equals("")) {
             // ---- Send Notifications to Supplier
             String message = "تم تسليم شحنه " + orderData.getDName() + " بنجاح";
-            notiData Noti = new notiData(orderData.getuAccepted(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+            notiData Noti = new notiData(orderData.getuAccepted(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
             nDatabase.child(orderData.getuId()).push().setValue(Noti);
 
             // --- Add Money to Supplier Wallet
@@ -178,12 +178,12 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
         }
 
         // --- Add Money to Captins PackMoney
-        int CurrentPackMoney = Integer.parseInt(UserInFormation.getPackMoney());
+        int CurrentPackMoney = Integer.parseInt(UserInFormation.getUser().getPackMoney());
         int finalMoney = CurrentPackMoney + Integer.parseInt(orderData.getGMoney());
-        wallet.addToUser(UserInFormation.getId(), Integer.parseInt(orderData.getGMoney()),orderData, "ourmoney");
+        wallet.addToUser(UserInFormation.getUser().getId(), Integer.parseInt(orderData.getGMoney()),orderData, "ourmoney");
 
-        uDatabase.child(UserInFormation.getId()).child("packMoney").setValue(finalMoney + "");
-        UserInFormation.setPackMoney(finalMoney + "");
+        uDatabase.child(UserInFormation.getUser().getId()).child("packMoney").setValue(finalMoney + "");
+        UserInFormation.getUser().setPackMoney(finalMoney + "");
 
         // -- Add Log
         String Log = "قام المندوب " + orderData.getuAccepted() + " بتسليم الشحنه للعميل " + orderData.getDName() + " و تم اضافه ١٥ جنيه في حسابه" + " و تم تحويل ٥ جنيه في حساب شركه إشحنلي";
@@ -204,28 +204,28 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
 
         // --- Set changes in Order Data
         mDatabase.child(orderData.getId()).child("uAccepted").setValue(capID);
-        mDatabase.child(orderData.getId()).child("pSupervisor").setValue(UserInFormation.getSup_code());
+        mDatabase.child(orderData.getId()).child("pSupervisor").setValue(UserInFormation.getUser().getSupervisor_code());
         mDatabase.child(orderData.getId()).child("statue").setValue("accepted");
         mDatabase.child(orderData.getId()).child("acceptedTime").setValue(datee);
 
         // --- Set Changes in User Data
-        uDatabase.child(UserInFormation.getId()).child("orders").child(orderData.getId()).child("captin").setValue(capID);
+        uDatabase.child(UserInFormation.getUser().getId()).child("orders").child(orderData.getId()).child("captin").setValue(capID);
         uDatabase.child(capID).child("orders").child(orderData.getId()).child("statue").setValue("assignToPick");
 
         // ----- Send Notification To Captin
-        String msg = "قام " + UserInFormation.getUserName() + " بتسليمك شحنه جديده لاستلامها.";
-        notiData Noti = new notiData(UserInFormation.getId(), capID, orderData.getId(), msg, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+        String msg = "قام " + UserInFormation.getUser().getName() + " بتسليمك شحنه جديده لاستلامها.";
+        notiData Noti = new notiData(UserInFormation.getUser().getId(), capID, orderData.getId(), msg, datee, "false", "orderinfo", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
         nDatabase.child(capID).push().setValue(Noti);
 
         // -- Send Notification To Supplier
         if(!orderData.getuId().equals("")) {
             msg = "تمت مراجعه شحنتك و سيتم استلامها في اقرب وقت";
-            Noti = new notiData(UserInFormation.getId(), orderData.getuId(), orderData.getId(), msg, datee, "false", "orderinfo", "Envio", UserInFormation.getUserURL(), "Raya");
+            Noti = new notiData(UserInFormation.getUser().getId(), orderData.getuId(), orderData.getId(), msg, datee, "false", "orderinfo", "Envio", UserInFormation.getUser().getPpURL(), "Raya");
             nDatabase.child(orderData.getuId()).push().setValue(Noti);
         }
 
         // ----- Add Log
-        String Log = "تم تسليم الشحنه من المشرف " + UserInFormation.getSup_code() + " الي المندوب" + capID;
+        String Log = "تم تسليم الشحنه من المشرف " + UserInFormation.getUser().getSupervisor_code() + " الي المندوب" + capID;
         logOrder(mDatabase, orderData.getId(), Log);
         setUpdate(orderData, "الشحنه قيد الاستلام من مندوب الشحن", false);
 
@@ -240,10 +240,10 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
 
         String supId;
-        if(UserInFormation.getAccountType().equals("Supervisor")) {
-            supId = UserInFormation.getId();
+        if(UserInFormation.getUser().getAccountType().equals("Supervisor")) {
+            supId = UserInFormation.getUser().getId();
         } else {
-            supId = UserInFormation.getSupId();
+            supId = UserInFormation.getUser().getMySuperId();
         }
 
         // ----- Set Action
@@ -252,11 +252,11 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
 
         // ---- Send Notification To Captin
         String message = "قام المشرف بتسليمك شحنه مرتجعه";
-        notiData Noti = new notiData(supId ,captinId , orderData.getId(),message,datee,"false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+        notiData Noti = new notiData(supId ,captinId , orderData.getId(),message,datee,"false", "orderinfo", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
         nDatabase.child(captinId).push().setValue(Noti);
 
         // ---- Add Log
-        String Log = "قام المشرف " + UserInFormation.getUserName() + " بتسليم المرتجع الي " + captinId;
+        String Log = "قام المشرف " + UserInFormation.getUser().getName() + " بتسليم المرتجع الي " + captinId;
         logOrder(mDatabase, orderData.getId(), Log);
         setUpdate(orderData, "تم تسليم المرتجع للمندوب", false);
 
@@ -274,10 +274,10 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
 
         String supId;
 
-        if(UserInFormation.getAccountType().equals("Supervisor")) {
-            supId = UserInFormation.getId();
+        if(UserInFormation.getUser().getAccountType().equals("Supervisor")) {
+            supId = UserInFormation.getUser().getId();
         } else {
-            supId = UserInFormation.getSupId();
+            supId = UserInFormation.getUser().getMySuperId();
         }
 
         // --- Set changes in Order Data
@@ -290,8 +290,8 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
         uDatabase.child(capID).child("orders").child(orderData.getId()).child("statue").setValue("readyD");
 
         // --- Send Notification To Captin
-        String msg = "قام " + UserInFormation.getUserName() + " بتسليمك شحنه جديده لتسليمها.";
-        notiData Noti = new notiData(supId, capID, orderData.getId(), msg, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+        String msg = "قام " + UserInFormation.getUser().getName() + " بتسليمك شحنه جديده لتسليمها.";
+        notiData Noti = new notiData(supId, capID, orderData.getId(), msg, datee, "false", "orderinfo", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
         nDatabase.child(capID).push().setValue(Noti);
 
         // --- Add Log
@@ -316,7 +316,7 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
         Toast.makeText(mContext, "تم تسليم الشحنه للمندوب", Toast.LENGTH_SHORT).show();
 
         // --- Logs
-        String Log = "قام المشرف " + UserInFormation.getUserName() + " بتسليم الشحنه رقم : " + orderData.getTrackid() + " للمندوب " + orderData.getuAccepted() + " بدلا من التاجر " + orderData.getOwner();
+        String Log = "قام المشرف " + UserInFormation.getUser().getName() + " بتسليم الشحنه رقم : " + orderData.getTrackid() + " للمندوب " + orderData.getuAccepted() + " بدلا من التاجر " + orderData.getOwner();
         logOrder(mDatabase, orderData.getId(), Log);
 
         setUpdate(orderData, "تم تسليم البيك اب للمندوب", false);
@@ -330,12 +330,12 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
 
         // --- Add Money to Captin Wallet
         Wallet wallet = new Wallet();
-        int CurrentPackMoney = Integer.parseInt(UserInFormation.getPackMoney());
+        int CurrentPackMoney = Integer.parseInt(UserInFormation.getUser().getPackMoney());
         int finalMoney = CurrentPackMoney + Integer.parseInt(orderData.getReturnMoney());
-        wallet.addToUser(UserInFormation.getId(), Integer.parseInt(orderData.getReturnMoney()),orderData, "shippingFees");
+        wallet.addToUser(UserInFormation.getUser().getId(), Integer.parseInt(orderData.getReturnMoney()),orderData, "shippingFees");
 
-        uDatabase.child(UserInFormation.getId()).child("packMoney").setValue(finalMoney + "");
-        UserInFormation.setPackMoney(finalMoney + "");
+        uDatabase.child(UserInFormation.getUser().getId()).child("packMoney").setValue(finalMoney + "");
+        UserInFormation.getUser().setPackMoney(finalMoney + "");
 
         // Check if order is Paid Already --
         if(orderData.getPaid().equals("true") && !orderData.getuId().equals("")) {
@@ -379,7 +379,7 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
         DatabaseReference mDatabase = ref.getRef(orderData.getProvider());
 
         // -- Set Data
-        Update update = new Update(msg, "", datee, orderData.getId(), UserInFormation.getId());
+        Update update = new Update(msg, "", datee, orderData.getId(), UserInFormation.getUser().getId());
 
         // -- Update Data
         mDatabase.child(orderData.getId()).child("updates").push().setValue(update);
@@ -387,7 +387,7 @@ public class OrdersClass implements  ActivityCompat.OnRequestPermissionsResultCa
         if(isNoti && !orderData.getuId().equals("")) {
             // -- Send Notification
             String message = "شحنه " + orderData.getDName() + " : " + msg;
-            notiData Noti = new notiData("", orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+            notiData Noti = new notiData("", orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
             nDatabase.child(orderData.getuId()).push().setValue(Noti);
         }
 

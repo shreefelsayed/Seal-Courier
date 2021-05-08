@@ -74,7 +74,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
         holder.setData(orderData);
         holder.setStatue(orderData);
         holder.checkDeleted(orderData.getRemoved());
-        holder.setViewer(UserInFormation.getAccountType(), orderData);
+        holder.setViewer(UserInFormation.getUser().getAccountType(), orderData);
 
         // ------------------------------------   Order info
         holder.linBody.setOnClickListener(v -> {
@@ -225,7 +225,7 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.MyView
 
     private void moreInfo(int position, Order order) {
         Intent intent;
-        if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+        if (UserInFormation.getUser().getAccountType().equals("Delivery Worker")) {
             CaptinOrderInfo.orderData = order;
             intent = new Intent(mContext, CaptinOrderInfo.class);
             CaptinOrderInfo.orderData = filtersData.get(position);

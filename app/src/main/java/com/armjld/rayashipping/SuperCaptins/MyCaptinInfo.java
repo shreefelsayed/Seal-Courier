@@ -159,7 +159,7 @@ public class MyCaptinInfo extends AppCompatActivity {
 
         btnMessage.setOnClickListener(v -> {
             chatListclass _chatList = new chatListclass();
-            _chatList.startChating(UserInFormation.getId(), user.getId(), this);
+            _chatList.startChating(UserInFormation.getUser().getId(), user.getId(), this);
             Messages.cameFrom = "Profile";
         });
 

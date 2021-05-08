@@ -379,6 +379,54 @@ public class UserData {
         return refer;
     }
 
+    public ArrayList<Order> getPending() {
+        ArrayList<Order> pendingList = new ArrayList<>();
+        for(int i = 0; i < getListOrder().size(); i ++) {
+            Order order = getListOrder().get(i);
+            if(order.getStatue().equals("placed") || order.getStatue().equals("recived") || order.getStatue().equals("recived2")) {
+                pendingList.add(order);
+            }
+        }
+
+        return pendingList;
+    }
+
+    public ArrayList<Order> getDelv() {
+        ArrayList<Order> delvList = new ArrayList<>();
+        for(int i = 0; i < getListOrder().size(); i ++) {
+            Order order = getListOrder().get(i);
+            if(order.getStatue().equals("delivered")) {
+                delvList.add(order);
+            }
+        }
+
+        return delvList;
+    }
+
+    public ArrayList<Order> getProgess() {
+        ArrayList<Order> progList = new ArrayList<>();
+        for(int i = 0; i < getListOrder().size(); i ++) {
+            Order order = getListOrder().get(i);
+            if(!order.getStatue().equals("delivered") && !order.getStatue().equals("placed") && !order.getStatue().equals("accepted") && !order.getStatue().equals("recived") && !order.getStatue().equals("recived2") && !order.getStatue().equals("deleted") && !order.getStatue().equals("hub1dDenied") && !order.getStatue().equals("hub2Denied") && !order.getStatue().equals("deniedback")) {
+                progList.add(order);
+            }
+        }
+
+        return progList;
+    }
+
+    public ArrayList<Order> getHoldToReturn() {
+        ArrayList<Order> deniedList = new ArrayList<>();
+        for(int i = 0; i < getListOrder().size(); i ++) {
+            Order order = getListOrder().get(i);
+            if(order.getStatue().equals("hub2Denied")) {
+                deniedList.add(order);
+            }
+        }
+
+        return deniedList;
+    }
+
     public void setRefer(String refer) {
         this.refer = refer;
     }

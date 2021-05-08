@@ -27,7 +27,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
 
     Context context;
     List<Chat> chatData;
-    String uId = UserInFormation.getId();
+    String uId = UserInFormation.getUser().getId();
 
 
     public MessageAdapter(Context context, List<Chat> chatData) {

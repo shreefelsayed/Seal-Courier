@@ -47,13 +47,13 @@ public class EnvioMoney {
                         assert captinMoney != null;
 
                         if (captinMoney.getTransType().equals("ourmoney")) {
-                            int finalPack = Integer.parseInt(UserInFormation.getPackMoney()) + Integer.parseInt(captinMoney.getMoney());
-                            UserInFormation.setPackMoney(finalPack + "");
+                            int finalPack = Integer.parseInt(UserInFormation.getUser().getPackMoney()) + Integer.parseInt(captinMoney.getMoney());
+                            UserInFormation.getUser().setPackMoney(finalPack + "");
                             // --- Add Money To Supplier Wallet
                             captinMoney.setTransType("pack");
                             captinMoney.setDate(datee);
-                            uDatabase.child(UserInFormation.getId()).child("payments").push().setValue(captinMoney);
-                            uDatabase.child(UserInFormation.getId()).child("packMoney").setValue(finalPack + "");
+                            uDatabase.child(UserInFormation.getUser().getId()).child("payments").push().setValue(captinMoney);
+                            uDatabase.child(UserInFormation.getUser().getId()).child("packMoney").setValue(finalPack + "");
 
                             // ---- Set as Paid in Captins Wallet
                             assert key != null;
@@ -70,7 +70,7 @@ public class EnvioMoney {
 
         // ---- Send noti to Captin
         String message = "تم استلام المستحقات و قيمتها " + walletMoney + " بنجاح";
-        notiData Noti = new notiData(UserInFormation.getId(), "", user.getId(), message, datee, "false", "wallet", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+        notiData Noti = new notiData(UserInFormation.getUser().getId(), "", user.getId(), message, datee, "false", "wallet", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
         nDatabase.child(user.getId()).push().setValue(Noti);
 
         Toast.makeText(mContext, "تم دفع المستحقات بنجاح", Toast.LENGTH_SHORT).show();
@@ -94,13 +94,13 @@ public class EnvioMoney {
                             assert key != null;
 
                             // --- Add Money To Supplier Wallet
-                            int finalWallet = Integer.parseInt(UserInFormation.getWalletmoney()) + Integer.parseInt(captinMoney.getMoney());
-                            UserInFormation.setWalletmoney(finalWallet + "");
+                            int finalWallet = UserInFormation.getUser().getWalletmoney() + Integer.parseInt(captinMoney.getMoney());
+                            UserInFormation.getUser().setWalletmoney(finalWallet);
 
                             captinMoney.setTransType("captin");
                             captinMoney.setDate(datee);
-                            uDatabase.child(UserInFormation.getId()).child("payments").child(key).setValue(captinMoney);
-                            uDatabase.child(UserInFormation.getId()).child("walletmoney").setValue(finalWallet);
+                            uDatabase.child(UserInFormation.getUser().getId()).child("payments").child(key).setValue(captinMoney);
+                            uDatabase.child(UserInFormation.getUser().getId()).child("walletmoney").setValue(finalWallet);
 
                             // --- Mark as Paid in Captins Wallet
                             uDatabase.child(user.getId()).child("payments").child(key).child("isPaid").setValue("true");
@@ -116,7 +116,7 @@ public class EnvioMoney {
 
         // ---- Send noti to Captin
         String message = "تم تسليمك البونص و قيمته " + walletMoney + " بنجاح";
-        notiData Noti = new notiData(UserInFormation.getId(), user.getId(), "", message, datee, "false", "wallet", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+        notiData Noti = new notiData(UserInFormation.getUser().getId(), user.getId(), "", message, datee, "false", "wallet", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
         nDatabase.child(user.getId()).push().setValue(Noti);
     }
 }

@@ -37,7 +37,7 @@ public class NotificationFragment extends Fragment {
     private static SwipeRefreshLayout refresh;
     private static LinearLayout EmptyPanel;
     private static RecyclerView recyclerView;
-    String uId = UserInFormation.getId();
+    String uId = UserInFormation.getUser().getId();
 
     public NotificationFragment() {
         // Required empty public constructor
@@ -58,7 +58,7 @@ public class NotificationFragment extends Fragment {
             updateNone(filterList.size());
             for (int i = 0; i < Home.notiList.size(); i++) {
                 if (filterList.get(i).getIsRead().equals("false") && !filterList.get(i).getNotiID().equals("")) {
-                    nDatabase.child(UserInFormation.getId()).child(Home.notiList.get(i).getNotiID()).child("isRead").setValue("true");
+                    nDatabase.child(UserInFormation.getUser().getId()).child(Home.notiList.get(i).getNotiID()).child("isRead").setValue("true");
                 }
             }
         }

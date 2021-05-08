@@ -98,7 +98,7 @@ public class PartDeliver extends AppCompatActivity {
         captinRecived.getOrders();
 
         // ---- Send Notifications to Supplier
-        notiData Noti = new notiData(orderData.getuAccepted(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUserName(), UserInFormation.getUserURL(), "Raya");
+        notiData Noti = new notiData(orderData.getuAccepted(), orderData.getuId(), orderData.getId(), message, datee, "false", "orderinfo", UserInFormation.getUser().getName(), UserInFormation.getUser().getPpURL(), "Raya");
         nDatabase.child(orderData.getuId()).push().setValue(Noti);
 
         Toast.makeText(this, "تم تسجيل الاوردر كمرتجع جزئي", Toast.LENGTH_SHORT).show();

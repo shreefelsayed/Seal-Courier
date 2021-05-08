@@ -28,20 +28,20 @@ public class Wallet {
 
     // ----- Add Money to Delv on Recived
     public void addRecivedMoney(String id, Order orderData) {
-        if(UserInFormation.getReciveMoney() != 0) {
-            int onRecivMoney = UserInFormation.getReciveMoney();
+        if(UserInFormation.getUser().getPickUpMoney() != 0) {
+            int onRecivMoney = UserInFormation.getUser().getPickUpMoney();
             uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.child("walletmoney").exists()) {
                         int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
                         uDatabase.child(id).child("walletmoney").setValue(currentValue + onRecivMoney);
-                        if (UserInFormation.getId().equals(id))
-                            UserInFormation.setWalletmoney(String.valueOf((currentValue + onRecivMoney)));
+                        if (UserInFormation.getUser().getId().equals(id))
+                            UserInFormation.getUser().setWalletmoney((currentValue + onRecivMoney));
                     } else {
                         uDatabase.child(id).child("walletmoney").setValue(onRecivMoney);
-                        if (UserInFormation.getId().equals(id))
-                            UserInFormation.setWalletmoney(String.valueOf((onRecivMoney)));
+                        if (UserInFormation.getUser().getId().equals(id))
+                            UserInFormation.getUser().setWalletmoney(onRecivMoney);
                     }
 
                     addToUser(id, onRecivMoney, orderData, "recived");
@@ -57,20 +57,20 @@ public class Wallet {
 
     // ----- Add Money to Delv on Denied
     public void addDeniedMoney(String id, Order orderData) {
-        if(UserInFormation.getDeniedMoney() != 0) {
-            int onDeniedMoney = UserInFormation.getDeniedMoney();
+        if(UserInFormation.getUser().getDeniedMoney() != 0) {
+            int onDeniedMoney = UserInFormation.getUser().getDeniedMoney();
             uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.child("walletmoney").exists()) {
                         int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
                         uDatabase.child(id).child("walletmoney").setValue(currentValue + onDeniedMoney);
-                        if (UserInFormation.getId().equals(id))
-                            UserInFormation.setWalletmoney(String.valueOf((currentValue + onDeniedMoney)));
+                        if (UserInFormation.getUser().getId().equals(id))
+                            UserInFormation.getUser().setWalletmoney((currentValue + onDeniedMoney));
                     } else {
                         uDatabase.child(id).child("walletmoney").setValue(onDeniedMoney);
-                        if (UserInFormation.getId().equals(id))
-                            UserInFormation.setWalletmoney(String.valueOf((onDeniedMoney)));
+                        if (UserInFormation.getUser().getId().equals(id))
+                            UserInFormation.getUser().setWalletmoney(onDeniedMoney);
                     }
 
                     addToUser(id, onDeniedMoney, orderData, "denied");
@@ -93,10 +93,10 @@ public class Wallet {
                     int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
                     uDatabase.child(id).child("walletmoney").setValue(currentValue + money);
 
-                    if (UserInFormation.getId().equals(id)) UserInFormation.setWalletmoney(String.valueOf((currentValue + money)));
+                    if (UserInFormation.getUser().getId().equals(id)) UserInFormation.getUser().setWalletmoney((currentValue + money));
                 } else {
                     uDatabase.child(id).child("walletmoney").setValue(money);
-                    if (UserInFormation.getId().equals(id)) UserInFormation.setWalletmoney(String.valueOf((money)));
+                    if (UserInFormation.getUser().getId().equals(id)) UserInFormation.getUser().setWalletmoney(money);
                 }
 
                 addBounsToUser(id, money, "bouns");
@@ -122,19 +122,19 @@ public class Wallet {
 
     // ----- Add Money to Delv
     public void addDelvMoney(String id, Order orderData) {
-        if(UserInFormation.getDelvMoney() != 0) {
-            int onDelvMoney = UserInFormation.getDelvMoney();
+        if(UserInFormation.getUser().getDeliverMoney() != 0) {
+            int onDelvMoney = UserInFormation.getUser().getDeliverMoney();
             uDatabase.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.child("walletmoney").exists()) {
                         int currentValue = Integer.parseInt(Objects.requireNonNull(snapshot.child("walletmoney").getValue()).toString());
                         uDatabase.child(id).child("walletmoney").setValue(currentValue + onDelvMoney);
-                        if (UserInFormation.getId().equals(id)) UserInFormation.setWalletmoney(String.valueOf(currentValue + onDelvMoney));
+                        if (UserInFormation.getUser().getId().equals(id)) UserInFormation.getUser().setWalletmoney((currentValue + onDelvMoney));
                     } else {
                         uDatabase.child(id).child("walletmoney").setValue(onDelvMoney);
-                        if (UserInFormation.getId().equals(id))
-                            UserInFormation.setWalletmoney(String.valueOf((onDelvMoney)));
+                        if (UserInFormation.getUser().getId().equals(id))
+                            UserInFormation.getUser().setWalletmoney(onDelvMoney);
                     }
 
                     Timber.i("Added Money to Wallet");
@@ -173,8 +173,7 @@ public class Wallet {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 

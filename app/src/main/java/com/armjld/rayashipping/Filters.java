@@ -241,7 +241,7 @@ public class Filters extends AppCompatActivity {
         }
 
         updateNone(filterList.size());
-        if (UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getUser().getAccountType().equals("Supervisor")) {
             MyAdapter filterAdapter = new MyAdapter(Filters.this, filterList, "Home");
             recyclerView.setAdapter(filterAdapter);
         } else {
@@ -260,7 +260,7 @@ public class Filters extends AppCompatActivity {
     private void updateNone(int listSize) {
         if (listSize > 0) {
             EmptyPanel.setVisibility(View.GONE);
-            if(UserInFormation.getAccountType().equals("Supervisor")) {
+            if(UserInFormation.getUser().getAccountType().equals("Supervisor")) {
                 btnAsignAll.setVisibility(View.VISIBLE);
             }
         } else {

@@ -60,7 +60,7 @@ public class chatsAdapter extends RecyclerView.Adapter<chatsAdapter.MyViewHolder
         Log.i(TAG, talkerID);
 
         holder.myview.setOnClickListener(v -> {
-            FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("chats").child(chat.getUserId()).child("newMsg").setValue("false");
+            FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).child("chats").child(chat.getUserId()).child("newMsg").setValue("false");
             Intent intent = new Intent(context, Messages.class);
             intent.putExtra("roomid", chat.getRoomid());
             intent.putExtra("rid", chat.getUserId());
@@ -100,7 +100,7 @@ public class chatsAdapter extends RecyclerView.Adapter<chatsAdapter.MyViewHolder
                     String startDate = Objects.requireNonNull(ds.child("timestamp").getValue()).toString();
                     holder.txtNotidate.setText(_cacu.setPostDate(startDate));
 
-                    if (Objects.requireNonNull(ds.child("newMsg").getValue()).toString().equals("true") && !ds.child("senderid").getValue().toString().equals(UserInFormation.getId())) {
+                    if (Objects.requireNonNull(ds.child("newMsg").getValue()).toString().equals("true") && !ds.child("senderid").getValue().toString().equals(UserInFormation.getUser().getId())) {
                         unRead = true;
                         holder.indec.setVisibility(View.VISIBLE);
                     } else {

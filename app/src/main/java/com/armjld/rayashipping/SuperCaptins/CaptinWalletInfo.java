@@ -53,14 +53,14 @@ public class CaptinWalletInfo extends AppCompatActivity {
         TextView title = findViewById(R.id.toolbar_title);
         title.setText("المحفظه");
 
-        if (UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getUser().getAccountType().equals("Supervisor")) {
             uId = user.getId();
             walletMoney = user.getWalletmoney() + "";
             packMoney = user.getPackMoney();
         } else {
-            uId = UserInFormation.getId();
-            walletMoney = UserInFormation.getWalletmoney();
-            packMoney = UserInFormation.getPackMoney();
+            uId = UserInFormation.getUser().getId();
+            walletMoney = UserInFormation.getUser().getWalletmoney() + "";
+            packMoney = UserInFormation.getUser().getPackMoney();
         }
 
         btnBack = findViewById(R.id.btnBack);
@@ -86,16 +86,16 @@ public class CaptinWalletInfo extends AppCompatActivity {
         swipeRefresh.setRefreshing(true);
 
         swipeRefresh.setOnRefreshListener(() -> {
-            if (UserInFormation.getAccountType().equals("Supervisor")) {
+            if (UserInFormation.getUser().getAccountType().equals("Supervisor")) {
                 refreshData();
-            } else if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+            } else if (UserInFormation.getUser().getAccountType().equals("Delivery Worker")) {
                 capRefresh();
             }
         });
 
         // --- Click to Pay Pack Money
         linPack.setOnClickListener(v -> {
-            if (UserInFormation.getAccountType().equals("Supervisor") && !packMoney.equals("0")) {
+            if (UserInFormation.getUser().getAccountType().equals("Supervisor") && !packMoney.equals("0")) {
                 BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(this).setMessage("هل قمت باستلام من " + user.getName() + " مبلغ " + packMoney + " ج مستحقات التسليم ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                     EnvioMoney envioMoney = new EnvioMoney(this);
                     envioMoney.payPackMoney(user, packMoney);
@@ -108,7 +108,7 @@ public class CaptinWalletInfo extends AppCompatActivity {
 
         // --- Click to Pay Bouns Money
         linBouns.setOnClickListener(v -> {
-            if (UserInFormation.getAccountType().equals("Supervisor") && !walletMoney.equals("0")) {
+            if (UserInFormation.getUser().getAccountType().equals("Supervisor") && !walletMoney.equals("0")) {
                 BottomSheetMaterialDialog mBottomSheetDialog = new BottomSheetMaterialDialog.Builder(this).setMessage("هل قمت بتسليم " + user.getName() + " مبلغ " + walletMoney + " ج ؟").setCancelable(true).setPositiveButton("نعم", R.drawable.ic_tick_green, (dialogInterface, which) -> {
                     EnvioMoney envioMoney = new EnvioMoney(this);
                     envioMoney.payBouns(user, walletMoney);
@@ -147,7 +147,7 @@ public class CaptinWalletInfo extends AppCompatActivity {
 
     private void capRefresh() {
         swipeRefresh.setRefreshing(true);
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UserData _user = snapshot.getValue(UserData.class);
@@ -156,8 +156,8 @@ public class CaptinWalletInfo extends AppCompatActivity {
                 walletMoney = String.valueOf(_user.getWalletmoney());
                 packMoney = _user.getPackMoney();
 
-                UserInFormation.setWalletmoney(walletMoney);
-                UserInFormation.setPackMoney(packMoney);
+                UserInFormation.getUser().setWalletmoney(Integer.parseInt(walletMoney));
+                UserInFormation.getUser().setPackMoney(packMoney);
 
 
                 txtBouns.setText(walletMoney + " ج");

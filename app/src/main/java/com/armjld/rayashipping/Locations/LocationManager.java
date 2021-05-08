@@ -45,7 +45,7 @@ public class LocationManager {
         if (loc == null) {
             return false;
         } else {
-            Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("locations").child(id);
+            Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).child("locations").child(id);
             Bdatabase.child("lattude").setValue(loc.getLattude());
             Bdatabase.child("lontude").setValue(loc.getLontude());
             Bdatabase.child("address").setValue(loc.getAddress());
@@ -64,7 +64,7 @@ public class LocationManager {
         loc = locHolder.stream().filter(x -> x.getId().equals(id)).findFirst().get();
 
         locHolder.remove(loc);
-        String uId = UserInFormation.getId();
+        String uId = UserInFormation.getUser().getId();
 
         if (uId == null || uId.isEmpty()) {
             return false;

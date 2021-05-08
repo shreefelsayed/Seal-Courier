@@ -69,7 +69,7 @@ public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder
                     break;
                 }
                 /*case "order": {
-                    if(UserInFormation.getAccountType().equals("Delivery Worker")) {
+                    if(UserInFormation.getUser().getAccountType().equals("Delivery Worker")) {
                         // ---------- Check For Order Avillabilty -------- //
                         Data orderData = null;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -113,7 +113,7 @@ public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder
                 }
 
                 case "wallet" : {
-                    if(UserInFormation.getAccountType().equals("Supervisor")) {
+                    if(UserInFormation.getUser().getAccountType().equals("Supervisor")) {
                         context.startActivity(new Intent(context, MyWallet.class));
                     }
                     break;
@@ -125,14 +125,14 @@ public class NotiAdaptere extends RecyclerView.Adapter<NotiAdaptere.MyViewHolder
                 }*/
 
                 case "filter": {
-                    if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+                    if (UserInFormation.getUser().getAccountType().equals("Delivery Worker")) {
                         context.startActivity(new Intent(context, Filters.class));
                     }
                     break;
                 }
 
                 case "fbgroup": {
-                    if (UserInFormation.getAccountType().equals("Delivery Worker")) {
+                    if (UserInFormation.getUser().getAccountType().equals("Delivery Worker")) {
                         openWebURL("https://www.facebook.com/groups/3563137860431456/");
                     }
                     break;

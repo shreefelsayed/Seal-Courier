@@ -27,7 +27,7 @@ import java.util.Objects;
 public class ChangePassword extends Activity {
 
 
-    private final String uId = UserInFormation.getId();
+    private final String uId = UserInFormation.getUser().getId();
     EditText txtOldPass, txtPass1, txtPass2;
     Button confirm;
     private FirebaseAuth mAuth;
@@ -91,7 +91,7 @@ public class ChangePassword extends Activity {
                 return;
             }
 
-            if (!strOldPass.equals(UserInFormation.getPass())) {
+            if (!strOldPass.equals(UserInFormation.getUser().getMpass())) {
                 tlOldPass.setError("اكلمة المرور القديمة خاطئة");
                 txtOldPass.requestFocus();
                 return;
@@ -106,13 +106,13 @@ public class ChangePassword extends Activity {
             mdialog.setMessage("جاري تغيير الرقم السري ...");
             mdialog.show();
 
-            AuthCredential credential = EmailAuthProvider.getCredential(UserInFormation.getEmail(), UserInFormation.getPass()); // Current Login Credentials \\
+            AuthCredential credential = EmailAuthProvider.getCredential(UserInFormation.getUser().getEmail(), UserInFormation.getUser().getMpass()); // Current Login Credentials \\
             Objects.requireNonNull(mAuth.getCurrentUser()).reauthenticate(credential).addOnCompleteListener(reAuth -> {
                 if (reAuth.isSuccessful()) {
                     mAuth.getCurrentUser().updatePassword(strPass1).addOnCompleteListener(changePass -> {
                         if (changePass.isSuccessful()) {
                             uDatabase.child(uId).child("mpass").setValue(strPass1);
-                            UserInFormation.setPass(strPass1);
+                            UserInFormation.getUser().setMpass(strPass1);
                             mdialog.dismiss();
                             Toast.makeText(this, "تم تغيير الرقم السري", Toast.LENGTH_SHORT).show();
                             finish();

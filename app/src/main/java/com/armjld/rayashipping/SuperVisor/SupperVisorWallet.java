@@ -60,8 +60,8 @@ public class SupperVisorWallet extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> finish());
 
-        walletMoney = UserInFormation.getWalletmoney();
-        packMoney = UserInFormation.getPackMoney();
+        walletMoney = UserInFormation.getUser().getWalletmoney() + "";
+        packMoney = UserInFormation.getUser().getPackMoney();
 
         txtBouns.setText(walletMoney + " ج");
         txtMoney.setText(packMoney + " ج");
@@ -82,7 +82,7 @@ public class SupperVisorWallet extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void refreshData() {
         swipeRefresh.setRefreshing(true);
-        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UserData user = snapshot.getValue(UserData.class);
@@ -91,13 +91,13 @@ public class SupperVisorWallet extends AppCompatActivity {
                 walletMoney = String.valueOf(user.getWalletmoney());
                 packMoney = user.getPackMoney();
 
-                UserInFormation.setWalletmoney(walletMoney);
-                UserInFormation.setPackMoney(packMoney);
+                UserInFormation.getUser().setWalletmoney(Integer.parseInt(walletMoney));
+                UserInFormation.getUser().setPackMoney(packMoney);
 
                 txtBouns.setText(walletMoney + " ج");
                 txtMoney.setText(packMoney + " ج");
 
-                getMoney(UserInFormation.getId());
+                getMoney(UserInFormation.getUser().getId());
             }
 
             @Override

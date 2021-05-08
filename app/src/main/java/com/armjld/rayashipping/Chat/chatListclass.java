@@ -21,7 +21,7 @@ public class chatListclass {
     private DatabaseReference Bdatabase;
 
     public void dlevarychat(String id) {
-        String uId = UserInFormation.getId();
+        String uId = UserInFormation.getUser().getId();
         Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("orders");
         Bdatabase.orderByChild("uAccepted").equalTo(uId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -52,7 +52,7 @@ public class chatListclass {
     }
 
     public void supplierchat(String id) {
-        String uId = UserInFormation.getId();
+        String uId = UserInFormation.getUser().getId();
         Bdatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("orders");
         Bdatabase.orderByChild("uId").equalTo(uId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

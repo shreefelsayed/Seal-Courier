@@ -125,7 +125,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
 
         btnMessage.setOnClickListener(v -> {
             chatListclass _chatList = new chatListclass();
-            _chatList.startChating(UserInFormation.getId(), user.getId(), this);
+            _chatList.startChating(UserInFormation.getUser().getId(), user.getId(), this);
             Messages.cameFrom = "Profile";
         });
 
@@ -367,7 +367,7 @@ public class MapCaptinTrack extends FragmentActivity implements OnMapReadyCallba
                 currentLocation = location;
                 LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-                FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getId()).child("latLang").setValue(String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()));
+                FirebaseDatabase.getInstance().getReference().child("Pickly").child("users").child(UserInFormation.getUser().getId()).child("latLang").setValue(String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude()));
             }
         });
     }

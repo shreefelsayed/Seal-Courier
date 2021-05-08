@@ -85,7 +85,7 @@ public class SettingFragment extends Fragment {
 
         uDatabase = FirebaseDatabase.getInstance().getReference().child("Pickly").child("users");
 
-        uId = UserInFormation.getId();
+        uId = UserInFormation.getUser().getId();
         mdialog = new ProgressDialog(getActivity());
 
         txtName = view.findViewById(R.id.txtName);
@@ -133,7 +133,7 @@ public class SettingFragment extends Fragment {
         txtAbout.setOnClickListener(v -> startActivity(new Intent(getActivity(), About.class)));
 
         linWallet.setOnClickListener(v -> {
-            if(UserInFormation.getAccountType().equals("Delivery Worker")) {
+            if(UserInFormation.getUser().getAccountType().equals("Delivery Worker")) {
                 startActivity(new Intent(getActivity(), CaptinWalletInfo.class));
 
             } else {
@@ -141,7 +141,7 @@ public class SettingFragment extends Fragment {
             }
         });
 
-        txtWalletMoney.setText(UserInFormation.getPackMoney());
+        txtWalletMoney.setText(UserInFormation.getUser().getPackMoney());
 
         txtShare.setOnClickListener(v -> {
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
@@ -155,10 +155,10 @@ public class SettingFragment extends Fragment {
         switchNotiGov.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 uDatabase.child(uId).child("sendOrderNoti").setValue("true");
-                UserInFormation.setSendGovNoti("true");
+                UserInFormation.getUser().setSendOrderNoti("true");
             } else {
                 uDatabase.child(uId).child("sendOrderNoti").setValue("false");
-                UserInFormation.setSendGovNoti("false");
+                UserInFormation.getUser().setSendOrderNoti("false");
             }
         });
 
@@ -166,17 +166,17 @@ public class SettingFragment extends Fragment {
         switchNotiCity.setOnCheckedChangeListener((compoundButton, b) -> {
             if (b) {
                 uDatabase.child(uId).child("sendOrderNotiCity").setValue("true");
-                UserInFormation.setSendCityNoti("true");
+                UserInFormation.getUser().setSendOrderNotiCity("true");
             } else {
                 uDatabase.child(uId).child("sendOrderNotiCity").setValue("false");
-                UserInFormation.setSendCityNoti("false");
+                UserInFormation.getUser().setSendOrderNotiCity("false");
             }
         });
 
         /*txtReports.setOnClickListener(v-> {
-            if(UserInFormation.getAccountType().equals("Delivery Worker")) {
+            if(UserInFormation.getUser().getAccountType().equals("Delivery Worker")) {
                 startActivity(new Intent(getActivity(), delv_statics.class));
-            } else if(UserInFormation.getAccountType().equals("Supplier")) {
+            } else if(UserInFormation.getUser().getAccountType().equals("Supplier")) {
                 startActivity(new Intent(getActivity(), sup_statics.class));
             }
         });*/
@@ -200,12 +200,12 @@ public class SettingFragment extends Fragment {
     // ------------ Set User Data ----------- //
     @SuppressLint("SetTextI18n")
     private void setUserData() {
-        txtName.setText(UserInFormation.getUserName());
-        Picasso.get().load(Uri.parse(UserInFormation.getUserURL())).into(imgPPP);
-        switchNotiGov.setChecked(UserInFormation.getSendGovNoti().equals("true"));
-        switchNotiCity.setChecked(UserInFormation.getSendCityNoti().equals("true"));
+        txtName.setText(UserInFormation.getUser().getName());
+        Picasso.get().load(Uri.parse(UserInFormation.getUser().getPpURL())).into(imgPPP);
+        switchNotiGov.setChecked(UserInFormation.getUser().getSendOrderNoti().equals("true"));
+        switchNotiCity.setChecked(UserInFormation.getUser().getSendOrderNotiCity().equals("true"));
 
-        if (UserInFormation.getAccountType().equals("Supervisor")) {
+        if (UserInFormation.getUser().getAccountType().equals("Supervisor")) {
             txtType.setText("مشرف");
         } else {
             txtType.setText("مندوب شحن");
@@ -290,7 +290,7 @@ public class SettingFragment extends Fragment {
     private void getDownUrl(final String uIDd, StorageReference reference) {
         reference.getDownloadUrl().addOnSuccessListener(uri -> {
             uDatabase.child(uIDd).child("ppURL").setValue(uri.toString());
-            UserInFormation.setUserURL(uri.toString());
+            UserInFormation.getUser().setPpURL(uri.toString());
             Toast.makeText(getActivity(), "تم تغيير البيانات بنجاح", Toast.LENGTH_SHORT).show();
             mdialog.dismiss();
         });

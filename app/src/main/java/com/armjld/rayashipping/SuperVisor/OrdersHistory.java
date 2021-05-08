@@ -53,7 +53,7 @@ public class OrdersHistory extends AppCompatActivity {
 
         btnBack.setOnClickListener(v-> finish());
 
-        if(!UserInFormation.getAccountType().equals("Supervisor")) {
+        if(!UserInFormation.getUser().getAccountType().equals("Supervisor")) {
             btnAdd.setVisibility(View.GONE);
         }
 
